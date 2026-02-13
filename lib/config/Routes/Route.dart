@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../screens/splash_screen/view/SplashScreen.dart';
 import 'RouteName.dart';
-
+//
 class Routes{
 static Route<dynamic> generateRoute(RouteSettings setting){
   switch (setting.name){
