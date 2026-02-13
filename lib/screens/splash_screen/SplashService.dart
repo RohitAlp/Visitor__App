@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../config/Routes/RouteName.dart';
+
 
 
 
@@ -13,11 +15,11 @@ class SplashService {
     Timer(
       const Duration(seconds: 3),
           () {
-        // Navigator.pushNamedAndRemoveUntil(
-        //   context,
-        //   RouteName.loginScreen,
-        //       (route) => false,
-        // );
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RouteName.loginScreen,
+              (route) => false,
+        );
         }
     );
   }
