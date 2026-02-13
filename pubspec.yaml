@@ -37,6 +37,7 @@ dependencies:
   bloc: ^9.2.0
   equatable: ^2.0.8
   flutter_secure_storage: ^10.0.0
+  dio: ^5.9.1
 
 dev_dependencies:
   flutter_test:
