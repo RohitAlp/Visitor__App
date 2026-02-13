@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'Routes/Route.dart';
-import 'Routes/RouteName.dart';
+import 'config/Routes/Route.dart';
+import 'config/Routes/RouteName.dart';
+
+
 
 void main() {
   runApp(const MyApp());
