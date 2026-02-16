@@ -1,14 +1,11 @@
 import 'package:dio/dio.dart';
 
 class ApiService {
-  static final ApiService _instance = ApiService._internal();
-  factory ApiService() => _instance;
-
   late Dio _dio;
 
-  ApiService._internal() {
+  ApiService() {
     BaseOptions options = BaseOptions(
-      baseUrl: "https://your-base-url.com/api/",
+      baseUrl: "https://your-base-url.com", // change this
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       headers: {
@@ -18,22 +15,17 @@ class ApiService {
     );
 
     _dio = Dio(options);
-
-    _dio.interceptors.add(LogInterceptor(
-      requestBody: true,
-      responseBody: true,
-    ));
   }
 
-  Future<Response?> getRequest({
-    required String endpoint,
+  Future<Response?> requestGET({
+    required String path,
     String? token,
-    Map<String, dynamic>? queryParams,
+    Map<String, dynamic>? queryParameters,
   }) async {
     try {
       final response = await _dio.get(
-        endpoint,
-        queryParameters: queryParams,
+        path,
+        queryParameters: queryParameters,
         options: Options(
           headers: {
             if (token != null) "Authorization": "Bearer $token",
@@ -48,14 +40,14 @@ class ApiService {
     }
   }
 
-  Future<Response?> postRequest({
-    required String endpoint,
-    required Map<String, dynamic> data,
+  Future<Response?> requestPOST({
+    required String path,
+    required dynamic data,
     String? token,
   }) async {
     try {
       final response = await _dio.post(
-        endpoint,
+        path,
         data: data,
         options: Options(
           headers: {
