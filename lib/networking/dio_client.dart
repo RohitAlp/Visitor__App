@@ -5,7 +5,7 @@ class ApiService {
 
   ApiService() {
     BaseOptions options = BaseOptions(
-      baseUrl: "https://your-base-url.com", // change this
+      baseUrl: "https://your-base-url.com",
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       headers: {
