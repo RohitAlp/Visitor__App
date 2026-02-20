@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'app_localization/language/language_bloc.dart';
 import 'config/Routes/Route.dart';
 import 'config/Routes/RouteName.dart';
+import 'database/DatabaseHelper.dart';
 import 'l10n/app_localizations.dart';
 
-void main() {
+void main() async{
+
+  await DatabaseHelper.initDatabase();
+
   runApp(const MyApp());
 }
 
@@ -24,12 +29,14 @@ class MyApp extends StatelessWidget {
           if (state is LanguageLoaded) {
             locale = state.locale;
           }
-
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Visitor App',
             theme: ThemeData(
               colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+              textTheme: GoogleFonts.poppinsTextTheme(),
+
+              primaryTextTheme: GoogleFonts.poppinsTextTheme(),
             ),
             locale: locale,
             localizationsDelegates: const [
