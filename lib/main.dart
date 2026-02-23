@@ -9,6 +9,7 @@ import 'l10n/app_localizations.dart';
 
 void main() {
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
