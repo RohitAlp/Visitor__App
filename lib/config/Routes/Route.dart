@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:visitorapp/screens/Login/Login_screen.dart';
-import '../../screens/splash_screen/view/SplashScreen.dart';
+import '../../screens/dashboard/dashboard_screen.dart';
+import '../../screens/splash_screen/SplashScreen.dart';
 import '../../screens/settings/settings_screen.dart';
 import 'RouteName.dart';
 
@@ -13,6 +14,8 @@ class Routes {
         return MaterialPageRoute(builder: (context) => LoginScreen());
       case RouteName.settingsScreen:
         return MaterialPageRoute(builder: (context) => SettingsScreen());
+      case RouteName.dashboardScreen:
+        return MaterialPageRoute(builder: (context) => DashboardScreen());
 
       default:
         return MaterialPageRoute(

@@ -11,7 +11,6 @@ import 'l10n/app_localizations.dart';
 
 void main() async{
   runApp(const MyApp());
-  await DatabaseHelper.initDatabase();
 }
 
 class MyApp extends StatelessWidget {
@@ -31,10 +30,11 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Visitor App',
             theme: ThemeData(
-              colorScheme: .fromSeed(seedColor: Colors.white),
+              colorScheme: .fromSeed(seedColor: Colors.deepPurple),
               textTheme: GoogleFonts.poppinsTextTheme(),
               primaryTextTheme: GoogleFonts.poppinsTextTheme(),
-            ),
+              scaffoldBackgroundColor: Colors.white,
+          ),
             locale: locale,
             localizationsDelegates: const [
               AppLocalizations.delegate,
