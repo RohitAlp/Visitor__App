@@ -38,8 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        backgroundColor: Colors.grey[200],
-        body: IndexedStack(
+         body: IndexedStack(
           index: _selectedIndex,
           children: _pages,
         ),
@@ -47,8 +46,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           items: _navItems,
           selectedIndex: _selectedIndex,
           onTap: (index) => setState(() => _selectedIndex = index),
-          barColor: const Color(0xFFB05A00),
-          bubbleColor: const Color(0xFF8B4500),
+          barColor: const Color(0xFFC5610F),
+          bubbleColor: const Color(0xFFC5610F),
         ),
       ),
     );
