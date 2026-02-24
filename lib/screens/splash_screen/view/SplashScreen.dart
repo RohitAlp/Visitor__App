@@ -26,7 +26,7 @@ class _SplashscreenState extends State<Splashscreen> {
           style: TextStyle(
             fontSize: 36,
             fontWeight: FontWeight.bold,
-            color: Colors.blue, // change if needed
+            color: Colors.blue,
             letterSpacing: 1.5,
           ),
         ),
