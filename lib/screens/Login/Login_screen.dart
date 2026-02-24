@@ -18,9 +18,10 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             const SizedBox(height: 24),
             Center(
-              child: SvgPicture.asset(
-                'assets/image/Applogo.svg',
+              child: Image.asset(
+                'assets/image/Applogo.png',
                 height: 120,
+                width: 200,
               ),
             ),
             const SizedBox(height: 20),
