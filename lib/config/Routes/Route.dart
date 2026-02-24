@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:visitorapp/screens/Login/Login_screen.dart';
-
 import '../../screens/splash_screen/view/SplashScreen.dart';
 import '../../screens/settings/settings_screen.dart';
 import 'RouteName.dart';
