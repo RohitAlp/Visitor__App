@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../widgets/custom_bottom_bar.dart';
-
+import '../Notice/notice.dart';
+import '../payment/payment.dart';
+import '../profile/profile.dart';
+import '../services/services.dart';
 
 void main() => runApp(const MaterialApp(home: DashboardScreen()));
 
@@ -22,17 +25,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
     NavItemData(icon: Icons.person_outline,   activeIcon: Icons.person,         label: 'Profile'),
   ];
 
+  late final List<Widget> _pages = <Widget>[
+    const _DashboardHomePage(),
+    const Payment(),
+    const Notice(),
+    const Services(),
+    const Profile(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
       child: Scaffold(
         backgroundColor: Colors.grey[200],
-        body: Center(
-          child: Text(
-            _navItems[_selectedIndex].label,
-            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-          ),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _pages,
         ),
         bottomNavigationBar: CustomAnimatedNavBar(
           items: _navItems,
@@ -41,6 +50,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
           barColor: const Color(0xFFB05A00),
           bubbleColor: const Color(0xFF8B4500),
         ),
+      ),
+    );
+  }
+}
+
+class _DashboardHomePage extends StatelessWidget {
+  const _DashboardHomePage();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text(
+        'Home',
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
       ),
     );
   }

@@ -54,18 +54,8 @@ class Payment extends StatelessWidget {
                 ),
               ),
 
-              const Spacer(),
 
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
 
-                  },
-                  child: const Text('Pay Now'),
-                ),
-              ),
             ],
           ),
         ),
