@@ -13,11 +13,6 @@ class DatabaseHelper {
       version: 1,
       onCreate: (db, version) async {
         await db.execute(UserTable.createTable);
-        // await db.execute(UserTable.createTable);
-        // await db.execute(UserTable.createTable);
-        // await db.execute(UserTable.createTable);
-        // await db.execute(UserTable.createTable);
-        // await db.execute(UserTable.createTable);
       },
     );
   }

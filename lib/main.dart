@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'app_localization/language/language_bloc.dart';
 import 'config/Routes/Route.dart';
 import 'config/Routes/RouteName.dart';
@@ -9,11 +10,7 @@ import 'database/DatabaseHelper.dart';
 import 'l10n/app_localizations.dart';
 
 void main() async{
-
- 
-
   runApp(const MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
@@ -35,9 +32,9 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               colorScheme: .fromSeed(seedColor: Colors.deepPurple),
               textTheme: GoogleFonts.poppinsTextTheme(),
-
               primaryTextTheme: GoogleFonts.poppinsTextTheme(),
-            ),
+              scaffoldBackgroundColor: Colors.white,
+          ),
             locale: locale,
             localizationsDelegates: const [
               AppLocalizations.delegate,

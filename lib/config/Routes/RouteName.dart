@@ -7,4 +7,5 @@ class RouteName{
   static const String noticeScreen = 'noticeScreen';
   static const String servicesScreen = 'servicesScreen';
   static const String profileScreen = 'profileScreen';
+
 }
