@@ -19,18 +19,14 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           children: [
             const SizedBox(height: 24),
-
-
             Center(
-              child: SvgPicture.asset(
-                'assets/image/Applogo.svg',
+              child: Image.asset(
+                'assets/image/Applogo.png',
                 height: 120,
+                width: 200,
               ),
             ),
-
-            const SizedBox(height: 40),
-
-            // 🔹 Login Button
+            const SizedBox(height: 20),
             Center(
               child: InkWell(
                 onTap: () {

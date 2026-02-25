@@ -10,6 +10,7 @@ import 'database/DatabaseHelper.dart';
 import 'l10n/app_localizations.dart';
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

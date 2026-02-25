@@ -148,7 +148,7 @@ class _CustomAnimatedNavBarState extends State<CustomAnimatedNavBar>
             // ── Bubble ──
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOutCubic,
+             curve: Curves.easeOutCubic,
               left: bubbleLeft,
               top: 0,
               child: ScaleTransition(

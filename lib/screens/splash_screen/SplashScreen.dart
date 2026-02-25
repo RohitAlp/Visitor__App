@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'SplashService.dart';
 
 class Splashscreen extends StatefulWidget {
@@ -22,9 +21,10 @@ class _SplashscreenState extends State<Splashscreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body:  Center(
-        child: SvgPicture.asset(
-          'assets/image/Applogo.svg',
-          height: 120,
+        child: Image.asset(
+          'assets/image/Applogo.png',
+          height: 400,
+          width: 300,
         ),
       ),
     );
