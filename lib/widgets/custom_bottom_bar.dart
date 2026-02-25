@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class NavItemData {
-  final IconData icon;
-  final IconData activeIcon;
+  final IconData? icon;
+  final IconData? activeIcon;
+  final String? assetIcon;
+  final String? activeAssetIcon;
+  final bool tintAsset;
   final String label;
-  const NavItemData({required this.icon, required this.activeIcon, required this.label});
+
+  const NavItemData({
+    this.icon,
+    this.activeIcon,
+    this.assetIcon,
+    this.activeAssetIcon,
+    this.tintAsset = false,
+    required this.label,
+  }) : assert(
+          (icon != null && activeIcon != null) ||
+              (assetIcon != null && (activeAssetIcon != null || assetIcon != null)),
+          'Provide either icon+activeIcon or assetIcon(+activeAssetIcon).',
+        );
 }
 
 class CustomAnimatedNavBar extends StatefulWidget {
@@ -32,6 +48,50 @@ class _CustomAnimatedNavBarState extends State<CustomAnimatedNavBar>
   late AnimationController _controller;
   late Animation<double> _scaleAnim;
 
+  Widget _buildIconWidget(
+    NavItemData item, {
+    required bool isActive,
+    required Color color,
+    required double size,
+  }) {
+    final String? assetPath = isActive
+        ? (item.activeAssetIcon ?? item.assetIcon)
+        : item.assetIcon;
+    final IconData? iconData = isActive ? item.activeIcon : item.icon;
+
+    if (assetPath != null) {
+      if (assetPath.toLowerCase().endsWith('.svg')) {
+        return SvgPicture.asset(
+          assetPath,
+          width: size,
+          height: size,
+          colorFilter: item.tintAsset
+              ? ColorFilter.mode(color, BlendMode.srcIn)
+              : null,
+          placeholderBuilder: (_) => Icon(
+            iconData ?? Icons.help_outline,
+            color: color,
+            size: size,
+          ),
+        );
+      }
+
+      return Image.asset(
+        assetPath,
+        width: size,
+        height: size,
+        color: item.tintAsset ? color : null,
+        errorBuilder: (_, __, ___) => Icon(
+          iconData ?? Icons.help_outline,
+          color: color,
+          size: size,
+        ),
+      );
+    }
+
+    return Icon(iconData, color: color, size: size);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -42,7 +102,7 @@ class _CustomAnimatedNavBarState extends State<CustomAnimatedNavBar>
     _scaleAnim = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: 0.6, end: 1.2), weight: 55),
       TweenSequenceItem(tween: Tween(begin: 1.2, end: 1.0), weight: 45),
-    ]).animate(CurvedAnimation(parent: _controller, curve: Curves. easeOut));
+    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
     _controller.forward();
   }
 
@@ -117,8 +177,12 @@ class _CustomAnimatedNavBarState extends State<CustomAnimatedNavBar>
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 if (!isSelected)
-                                  Icon(widget.items[index].icon,
-                                      color: Colors.white70, size: 22),
+                                  _buildIconWidget(
+                                    widget.items[index],
+                                    isActive: false,
+                                    color: Colors.white70,
+                                    size: 22,
+                                  ),
                                 if (isSelected) const SizedBox(height: 22),
                                 const SizedBox(height: 4),
                                 Text(
@@ -148,7 +212,7 @@ class _CustomAnimatedNavBarState extends State<CustomAnimatedNavBar>
             // ── Bubble ──
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
-             curve: Curves.easeOutCubic,
+              curve: Curves.easeOutCubic,
               left: bubbleLeft,
               top: 0,
               child: ScaleTransition(
@@ -167,8 +231,9 @@ class _CustomAnimatedNavBarState extends State<CustomAnimatedNavBar>
                       ),
                     ],
                   ),
-                  child: Icon(
-                    widget.items[widget.selectedIndex].activeIcon,
+                  child: _buildIconWidget(
+                    widget.items[widget.selectedIndex],
+                    isActive: true,
                     color: Colors.white,
                     size: 26,
                   ),

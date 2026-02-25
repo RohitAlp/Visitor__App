@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../widgets/custom_bottom_bar.dart';
+import '../../config/Routes/RouteName.dart';
 import '../Notice/notice.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
@@ -19,7 +20,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
 
   final List<NavItemData> _navItems = [
-    NavItemData(icon: Icons.home_outlined,    activeIcon: Icons.home,           label: 'Home'),
+    //  NavItemData(assetIcon: 'assets/image/home-01.svg', activeAssetIcon: 'assets/image/home-01.svg', label: 'Home'),
+    NavItemData(icon: Icons.home_outlined,   activeIcon: Icons.home, label: 'Home'),
     NavItemData(icon: Icons.currency_rupee,   activeIcon: Icons.currency_rupee, label: 'Payment'),
     NavItemData(icon: Icons.volume_up_outlined, activeIcon: Icons.volume_up,    label: 'Notice'),
     NavItemData(icon: Icons.people_outline,   activeIcon: Icons.people,         label: 'Services'),
@@ -39,7 +41,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return SafeArea(
       top: false,
       child: Scaffold(
-         body: IndexedStack(
+        backgroundColor: Colors.white,
+        body: IndexedStack(
           index: _selectedIndex,
           children: _pages,
         ),
@@ -134,20 +137,29 @@ class _DashboardHomePage extends StatelessWidget {
           //   ),
           // ),
           SafeArea(
-            child: SingleChildScrollView(
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                    SizedBox(height: 10),
-                        _buildHeader(),
-                  const SizedBox(height: 25),
-                         _buildQuickActionsGrid(),
                   const SizedBox(height: 10),
-                        _buildMaintenanceCard(),
-                  const SizedBox(height: 15),
-                        _buildRecentActivity(),
-                  const SizedBox(height: 100),
+                  _buildHeader(context),
+                  const SizedBox(height: 25),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildQuickActionsGrid(),
+                          const SizedBox(height: 10),
+                          _buildMaintenanceCard(),
+                          const SizedBox(height: 15),
+                          _buildRecentActivity(),
+                          const SizedBox(height: 100),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -157,7 +169,7 @@ class _DashboardHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -179,9 +191,15 @@ class _DashboardHomePage extends StatelessWidget {
             const SizedBox(width: 10),
             Stack(
               children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: SvgPicture.asset('assets/image/Header.svg',),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, RouteName.notificationScreen);
+                  },
+                  customBorder: const CircleBorder(),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: SvgPicture.asset('assets/image/Header.svg'),
+                  ),
                 ),
                 Positioned(
                   right: 8,
@@ -211,8 +229,9 @@ class _DashboardHomePage extends StatelessWidget {
     ];
 
     return GridView.builder(
+
       shrinkWrap: true,
-      padding: const EdgeInsets.all(20), // Essential for shadow visibility
+      padding: const EdgeInsets.all(20),
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
@@ -225,6 +244,7 @@ class _DashboardHomePage extends StatelessWidget {
         final item = items[index];
 
         return Container(
+          color: Colors.white,
           width: 100,
           height: 107,
           child: Stack(
@@ -305,6 +325,7 @@ class _DashboardHomePage extends StatelessWidget {
               ),
             ],
           ),
+
         );
       },
     );
@@ -314,7 +335,7 @@ class _DashboardHomePage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF5F5),
+        color: const Color(0xFFFAF5F6),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.red.withOpacity(0.1)),
       ),
@@ -331,7 +352,7 @@ class _DashboardHomePage extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 1),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -341,14 +362,14 @@ class _DashboardHomePage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           SizedBox(
-           // width: double.infinity,
+            // width: double.infinity,
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFDC2F2F),
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.symmetric(vertical: 12,horizontal: 20),
+                padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 18),
               ),
               child: const Text("Pay Now", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
