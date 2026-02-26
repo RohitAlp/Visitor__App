@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../widgets/custom_bottom_bar.dart';
-import '../../config/Routes/RouteName.dart';
 import '../Notice/notice.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
@@ -20,8 +19,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
 
   final List<NavItemData> _navItems = [
-    //  NavItemData(assetIcon: 'assets/image/home-01.svg', activeAssetIcon: 'assets/image/home-01.svg', label: 'Home'),
-    NavItemData(icon: Icons.home_outlined,   activeIcon: Icons.home, label: 'Home'),
+    NavItemData(icon: Icons.home_outlined,    activeIcon: Icons.home,           label: 'Home'),
     NavItemData(icon: Icons.currency_rupee,   activeIcon: Icons.currency_rupee, label: 'Payment'),
     NavItemData(icon: Icons.volume_up_outlined, activeIcon: Icons.volume_up,    label: 'Notice'),
     NavItemData(icon: Icons.people_outline,   activeIcon: Icons.people,         label: 'Services'),
@@ -41,8 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        backgroundColor: Colors.white,
-        body: IndexedStack(
+         body: IndexedStack(
           index: _selectedIndex,
           children: _pages,
         ),
@@ -68,98 +65,85 @@ class _DashboardHomePage extends StatelessWidget {
       body: Stack(
         children: [
 
-          // Positioned(
-          //   top: -100,
-          //   left: 0,
-          //   right: 0,
-          //   child: ClipRRect(
-          //     borderRadius: const BorderRadius.vertical(bottom: Radius.circular(150)),
-          //     child: Container(
-          //       height: 200,
-          //       decoration: BoxDecoration(
-          //         gradient: LinearGradient(
-          //           begin: Alignment.topLeft,
-          //           end: Alignment.bottomRight,
-          //           colors: [
-          //             const Color(0xFFF7EEE7),
-          //             const Color(0xFFF4EAE0),
-          //           ],
-          //         ),
-          //       ),
-          //       child: Stack(
-          //         clipBehavior: Clip.none,
-          //         children: [
-          //           Positioned(
-          //             top: -260,
-          //             right: -170,
-          //             child: Container(
-          //               width: 520,
-          //               height: 520,
-          //               decoration: BoxDecoration(
-          //                 shape: BoxShape.circle,
-          //                 gradient: RadialGradient(
-          //                   colors: [
-          //                     const Color(0xFFE9D5C7).withValues(alpha: 0.55),
-          //                     const Color(0xFFE9D5C7).withValues(alpha: 0.2),
-          //                     Colors.transparent,
-          //                   ],
-          //                   stops: const [0.0, 0.55, 1.0],
-          //                   center: Alignment.center,
-          //                   radius: 0.85,
-          //                 ),
-          //               ),
-          //             ),
-          //           ),
-          //           Positioned(
-          //             top: -170,
-          //             left: -140,
-          //             child: Container(
-          //               width: 360,
-          //               height: 360,
-          //               decoration: BoxDecoration(
-          //                 shape: BoxShape.circle,
-          //                 gradient: RadialGradient(
-          //                   colors: [
-          //                     const Color(0xFFF1E3D7).withValues(alpha: 0.65),
-          //                     const Color(0xFFF1E3D7).withValues(alpha: 0.2),
-          //                     Colors.transparent,
-          //                   ],
-          //                   stops: const [0.0, 0.6, 1.0],
-          //                   center: Alignment.center,
-          //                   radius: 0.9,
-          //                 ),
-          //               ),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          Positioned(
+            top: -100,
+            left: 0,
+            right: 0,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(150)),
+              child: Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      const Color(0xFFF7EEE7),
+                      const Color(0xFFF4EAE0),
+                    ],
+                  ),
+                ),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned(
+                      top: -120,
+                      right: -80,
+                      child: Container(
+                        width: 380,
+                        height: 380,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              const Color(0xFFE9D5C7).withOpacity(0.65),
+                              const Color(0xFFD8B9A1).withOpacity(0.55),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: -60,
+                      left: -100,
+                      child: Container(
+                        width: 260,
+                        height: 260,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            colors: [
+                              const Color(0xFFF3E3D7).withOpacity(0.8),
+                              const Color(0xFFEAD4C5).withOpacity(0.6),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           SafeArea(
-            child: Padding(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 10),
-                  _buildHeader(context),
+                  _buildHeader(),
+                  const SizedBox(height: 30),
+                  _buildQuickActionsGrid(),
                   const SizedBox(height: 25),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildQuickActionsGrid(),
-                          const SizedBox(height: 10),
-                          _buildMaintenanceCard(),
-                          const SizedBox(height: 15),
-                          _buildRecentActivity(),
-                          const SizedBox(height: 100),
-                        ],
-                      ),
-                    ),
-                  ),
+                  _buildMaintenanceCard(),
+                  const SizedBox(height: 25),
+                  _buildRecentActivity(),
+                  const SizedBox(height: 100),
                 ],
               ),
             ),
@@ -169,15 +153,19 @@ class _DashboardHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-
-        Image.asset(
-          'assets/image/Applogo.png',
-          height: 40,
-          //fit: BoxFit.contain,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "PUNEET",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFFC5610F), letterSpacing: 1.2),
+            ),
+            const Text("URBAN SPACES", style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500)),
+          ],
         ),
         Row(
           children: [
@@ -191,24 +179,14 @@ class _DashboardHomePage extends StatelessWidget {
             const SizedBox(width: 10),
             Stack(
               children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, RouteName.notificationScreen);
-                  },
-                  customBorder: const CircleBorder(),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: SvgPicture.asset('assets/image/Header.svg'),
-                  ),
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.notifications_none, color: Colors.blueGrey[800]),
                 ),
                 Positioned(
                   right: 8,
                   top: 8,
-                  child: Container(
-                    height: 8,
-                    width: 8,
-                    decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                  ),
+                  child: Container(height: 8, width: 8, decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle)),
                 )
               ],
             )
@@ -220,18 +198,17 @@ class _DashboardHomePage extends StatelessWidget {
 
   Widget _buildQuickActionsGrid() {
     final List<Map<String, dynamic>> items = [
-      {'icon': 'assets/image/Vector.svg', 'label': 'Visitors'},
-      {'icon': 'assets/image/Notice.svg', 'label': 'Notices'},
-      {'icon': 'assets/image/complaints.svg', 'label': 'Complaints'},
-      {'icon': 'assets/image/Group.svg', 'label': 'Amenities'},
-      {'icon': 'assets/image/deliveries.svg', 'label': 'Deliveries'},
-      {'icon': 'assets/image/Documents.svg', 'label': 'Documents'},
+      {'icon': 'assets/images/visitors.svg', 'label': 'Visitors'},
+      {'icon': 'assets/images/notices.svg', 'label': 'Notices'},
+      {'icon': 'assets/images/complaints.svg', 'label': 'Complaints'},
+      {'icon': 'assets/images/amenities.svg', 'label': 'Amenities'},
+      {'icon': 'assets/images/deliveries.svg', 'label': 'Deliveries'},
+      {'icon': 'assets/images/documents.svg', 'label': 'Documents'},
     ];
 
     return GridView.builder(
-
       shrinkWrap: true,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20), // Essential for shadow visibility
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
@@ -244,7 +221,6 @@ class _DashboardHomePage extends StatelessWidget {
         final item = items[index];
 
         return Container(
-          color: Colors.white,
           width: 100,
           height: 107,
           child: Stack(
@@ -325,7 +301,6 @@ class _DashboardHomePage extends StatelessWidget {
               ),
             ],
           ),
-
         );
       },
     );
@@ -335,7 +310,7 @@ class _DashboardHomePage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFFFAF5F6),
+        color: const Color(0xFFFFF5F5),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.red.withOpacity(0.1)),
       ),
@@ -352,7 +327,7 @@ class _DashboardHomePage extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 1),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -362,14 +337,14 @@ class _DashboardHomePage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           SizedBox(
-            // width: double.infinity,
+            width: double.infinity,
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFDC2F2F),
+                backgroundColor: const Color(0xFFD32F2F),
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 18),
+                padding: const EdgeInsets.symmetric(vertical: 12),
               ),
               child: const Text("Pay Now", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
@@ -409,7 +384,7 @@ class _DashboardHomePage extends StatelessWidget {
           Icon(icon, color: color, size: 20),
           const SizedBox(width: 15),
           Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w500))),
-          Text(time, style: const TextStyle(color: Colors.black87, fontSize: 12)),
+          Text(time, style: const TextStyle(color: Colors.grey, fontSize: 12)),
         ],
       ),
     );

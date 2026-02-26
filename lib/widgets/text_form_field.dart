@@ -8,7 +8,7 @@ class CustomTextField extends StatefulWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final String? Function(String?)? validator;
-  final Function(String) onChanged; // ✅ onChanged added
+  final Function(String) onChanged;
   final bool? readOnly;
   final int? maxLines;
 
