@@ -51,6 +51,15 @@ class EditGuardAddressEvent extends EditguardsEvent{
   List<Object> get props => [address];
 }
 
+class EditGuardPhotoEvent extends EditguardsEvent {
+  final String photoBase64;
+
+  const EditGuardPhotoEvent(this.photoBase64);
+
+  @override
+  List<Object> get props => [photoBase64];
+}
+
 class UpdateGuardDetailsEvent extends EditguardsEvent {
   const UpdateGuardDetailsEvent();
 }

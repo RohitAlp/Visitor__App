@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visitorapp/config/Routes/RouteName.dart';
 
 import '../../../../constants/app_colors.dart';
+import 'edit_guards_details_form/bloc/editguards_bloc.dart';
+import 'edit_guards_details_form/edit_security_guards_form.dart';
 
 class SecurityGuard {
   final String name;
@@ -415,9 +418,18 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                         return _OwnerCard(
                           owner: owner,
                           onEdit: () {
-                            Navigator.pushNamed(
+                            // Navigator.pushNamed(
+                            //   context,
+                            //   RouteName.EditSecurityGuardsForm,
+                            // );
+                            Navigator.push(
                               context,
-                              RouteName.EditSecurityGuardsForm,
+                              MaterialPageRoute(
+                                builder: (_) => BlocProvider(
+                                  create: (_) => EditguardsBloc(),
+                                  child: const EditSecurityGuardsForm(),
+                                ),
+                              ),
                             );
                           },
                           onDelete: () => _deleteOwner(owner),

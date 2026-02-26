@@ -8,7 +8,7 @@ class CustomTextField extends StatefulWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final String? Function(String?)? validator;
-  final Function(String) onChanged;
+  final Function(String) onChanged; // ✅ onChanged added
   final bool? readOnly;
   final int? maxLines;
 
@@ -52,7 +52,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
       readOnly: widget.readOnly ?? false,
       maxLines: widget.maxLines ?? 1,
       decoration: InputDecoration(
-        isDense: true, // ✅ makes field compact
         hintText: widget.hintText ?? '',
         hintStyle: const TextStyle(
           fontSize: 14,
@@ -77,7 +76,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
             : widget.suffixIcon,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
-          vertical: 8,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
