@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../constants/app_colors.dart';
+import '../../../../config/Routes/RouteName.dart';
 
 class FlatOwner {
   final String name;
@@ -120,13 +121,18 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
   }
 
   void _editOwner(FlatOwner owner) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Editing ${owner.name}'),
-        backgroundColor: primaryLight,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
+    final parts = owner.flat.split('-');
+    String flatNumber = parts.isNotEmpty ? parts.last.replaceAll(RegExp(r'\\D'), '') : '';
+    final digits = owner.phone.replaceAll(RegExp(r'\\D'), '');
+    final mobile = digits.length > 10 ? digits.substring(digits.length - 10) : digits;
+    Navigator.pushNamed(
+      context,
+      RouteName.AddFlatOwnerForm,
+      arguments: {
+        'name': owner.name,
+        'flatNumber': flatNumber.isNotEmpty ? flatNumber : owner.flat,
+        'mobile': mobile,
+      },
     );
   }
 
@@ -186,14 +192,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                           scale: _fabAnimation,
                           child: GestureDetector(
                             onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: const Text('Add new flat owner'),
-                                  backgroundColor: primaryColor,
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                ),
-                              );
+                              Navigator.pushNamed(context, RouteName.AddFlatOwnerForm);
                             },
                             child: Container(
                               width: 42,

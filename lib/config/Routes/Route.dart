@@ -6,6 +6,7 @@ import '../../screens/dashboard/dashboard_screen.dart';
 import '../../screens/society_admin/Manage User/manage_users_screen.dart';
 import '../../screens/society_admin/Manage User/Add_flat_owner/flat_owner_list.dart';
 import '../../screens/society_admin/Manage User/security_guards/edit_guards_details_form/edit_security_guards_form.dart';
+import '../../screens/society_admin/Manage%20User/Add_flat_owner/Add_flat_owner_form.dart';
 import '../../screens/splash_screen/SplashScreen.dart';
 
 import '../../screens/Notification/Notificarion.dart';
@@ -39,6 +40,15 @@ class Routes {
         return MaterialPageRoute(builder: (context) => const SecurityGuardsScreen());
       case RouteName.EditSecurityGuardsForm:
         return MaterialPageRoute(builder: (context) => const EditSecurityGuardsForm());
+      case RouteName.AddFlatOwnerForm:
+        final args = setting.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (context) => AddFlatOwnerForm(
+            initialName: args?['name'] as String?,
+            initialMobile: args?['mobile'] as String?,
+            initialFlatNumber: args?['flatNumber'] as String?,
+          ),
+        );
 
       default:
         return MaterialPageRoute(

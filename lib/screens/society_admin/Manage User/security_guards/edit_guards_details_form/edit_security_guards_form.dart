@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/screens/society_admin/Manage%20User/security_guards/edit_guards_details_form/bloc/editguards_bloc.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 
+import '../../../../../utils/enum.dart';
 import '../../../../../widgets/text_form_field.dart';
 
 class EditSecurityGuardsForm extends StatefulWidget {
@@ -14,102 +16,244 @@ class EditSecurityGuardsForm extends StatefulWidget {
 }
 
 class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: 'Edit Guards Details'),
-      body: SafeArea(
-          child: BlocProvider(
-            create: (context) => EditguardsBloc(), child: Form(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Guard Information',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(height: 22),
+    return BlocProvider(
+      create: (_) => EditguardsBloc(),
+      child: Scaffold(
+        appBar: CustomAppBar(title: 'Edit Guards Details'),
 
-                    Text('Guard Name'),
-                    SizedBox(height: 8),
-                    BlocBuilder<EditguardsBloc, EditguardsState>(
-                      builder: (context, state) {
-                        return CustomTextField(
-                          hintText: "Enter Guard Name",
-                          onChanged: (v) {
-                            context.read<EditguardsBloc>().add(
-                                EditGuardNameEvent(v));
-                          },
-                        );
-                      },
-                    ),
+        body: BlocListener<EditguardsBloc, EditguardsState>(
+          listenWhen: (previous, current) =>
+          previous.status != current.status,
+          listener: (context, state) {
 
-                    SizedBox(height: 16),
-                    Text('Guard ID'),
-                    SizedBox(height: 8),
-                    BlocBuilder<EditguardsBloc, EditguardsState>(
-                      builder: (context, state) {
-                        return CustomTextField(
-                          hintText: "Enter Guard ID",
-                          onChanged: (v) {
-                            context.read<EditguardsBloc>().add(
-                                EditGuardIDEvent(v));
-                          },
-                        );
-                      },
-                    ),
+            if (state.status == Status.success) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Guard updated successfully'),
+                  backgroundColor: Colors.green,
+                ),
+              );
 
-                    SizedBox(height: 16),
-                    Text('Guard Mobile Number'),
-                    SizedBox(height: 8),
-                    BlocBuilder<EditguardsBloc, EditguardsState>(
-                      builder: (context, state) {
-                        return CustomTextField(
-                          hintText: "Enter Mobile Number",
-                          keyboardType: TextInputType.phone,
-                          onChanged: (v) {
-                            context.read<EditguardsBloc>().add(
-                                EditGuardMobileNumberEvent(v));
-                          },
-                        );
-                      },
-                    ),
+              Navigator.pop(context); // go back
+            }
 
-                    SizedBox(height: 16),
-                    Text('Guard Email ID'),
-                    SizedBox(height: 8),
-                    BlocBuilder<EditguardsBloc, EditguardsState>(
-                      builder: (context, state) {
-                        return CustomTextField(
-                          hintText: "Enter Email",
-                          keyboardType: TextInputType.emailAddress,
-                          onChanged: (v) {},
-                        );
-                      },
-                    ),
+            if (state.status == Status.error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage ?? 'Something went wrong'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
 
-                    SizedBox(height: 16),
-                    Text('Guard Address'),
-                    SizedBox(height: 8),
-                    BlocBuilder<EditguardsBloc, EditguardsState>(
-                      builder: (context, state) {
-                        return CustomTextField(
-                          hintText: "Enter Address",
-                          maxLines: 3,
-                          onChanged: (v) {},
-                        );
-                      },
+          child: SafeArea(
+            child: Container(
+              color: const Color(0xFFF5F5F5),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          const Text(
+                            'Guard Information',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          _buildLabel("Guard Name"),
+                          const SizedBox(height: 6),
+                          CustomTextField(
+                            hintText: "Enter Name",
+                            onChanged: (v) {
+                              context.read<EditguardsBloc>()
+                                  .add(EditGuardNameEvent(v));
+                            },
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          _buildLabel("Guard ID"),
+                          const SizedBox(height: 6),
+                          CustomTextField(
+                            hintText: "Enter ID",
+                            onChanged: (v) {
+                              context.read<EditguardsBloc>()
+                                  .add(EditGuardIDEvent(v));
+                            },
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          _buildLabel("Guard Mobile Number"),
+                          const SizedBox(height: 6),
+                          CustomTextField(
+                            hintText: "Enter Mobile Number",
+                            keyboardType: TextInputType.phone,
+                            onChanged: (v) {
+                              context.read<EditguardsBloc>()
+                                  .add(EditGuardMobileNumberEvent(v));
+                            },
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          /// Email
+                          _buildLabel("Guard Email ID", isRequired: false),
+                          const SizedBox(height: 6),
+                          CustomTextField(
+                            hintText: "Enter Email",
+                            keyboardType: TextInputType.emailAddress,
+                            onChanged: (v) {},
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          /// Address
+                          _buildLabel("Guard Address"),
+                          const SizedBox(height: 6),
+                          CustomTextField(
+                            hintText: "Enter Address",
+                            maxLines: 2,
+                            onChanged: (v) {},
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          const Text(
+                            "Upload Photo",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+
+                          Container(
+                            height: 100,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                style: BorderStyle.solid,
+                              ),
+                              color: Colors.grey.shade50,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.upload_file,
+                                  size: 30,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  "Tap to upload or drag and drop",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                const Text(
+                                  "PNG, JPG or PDF (max. 5MB)",
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),)
+          ),
+        ),
+
+        bottomNavigationBar:
+        BlocBuilder<EditguardsBloc, EditguardsState>(
+          builder: (context, state) {
+            return Container(
+              color: const Color(0xFFF5F5F5),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              child: SizedBox(
+                height: 45,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFCC6A00),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: state.status == Status.loading
+                      ? null
+                      : () {
+                    if (_formKey.currentState!.validate()) {
+                      context.read<EditguardsBloc>().add(
+                        const UpdateGuardDetailsEvent(),
+                      );
+                    }
+                  },
+                  child: state.status == Status.loading
+                      ? const CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                      : const Text(
+                    'Update Security Guard',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
+}
+Widget _buildLabel(String text, {bool isRequired = true}) {
+  return RichText(
+    text: TextSpan(
+      text: text,
+      style: const TextStyle(
+        color: Colors.black,
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+      ),
+      children: isRequired
+          ? const [
+        TextSpan(
+          text: " *",
+          style: TextStyle(color: Colors.red),
+        )
+      ]
+          : [],
+    ),
+  );
 }

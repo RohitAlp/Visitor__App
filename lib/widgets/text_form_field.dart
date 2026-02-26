@@ -48,13 +48,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
       keyboardType: widget.keyboardType ?? TextInputType.text,
       obscureText: _obscureText,
       validator: widget.validator,
-      onChanged: widget.onChanged, // ✅ connected here
+      onChanged: widget.onChanged,
       readOnly: widget.readOnly ?? false,
       maxLines: widget.maxLines ?? 1,
       decoration: InputDecoration(
+        isDense: true, // ✅ makes field compact
         hintText: widget.hintText ?? '',
+        hintStyle: const TextStyle(
+          fontSize: 14,
+          color: Colors.grey,
+        ),
         filled: true,
-        fillColor: Colors.grey.shade100,
+        fillColor: Colors.white,
         prefixIcon: widget.prefixIcon,
         suffixIcon: isPasswordField
             ? IconButton(
@@ -72,17 +77,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
             : widget.suffixIcon,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
+          vertical: 8,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: Colors.grey.shade300),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(
             color: Colors.blue,
             width: 1.5,
