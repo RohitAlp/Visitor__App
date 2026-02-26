@@ -43,7 +43,7 @@ class CustomAnimatedNavBar extends StatefulWidget {
   State<CustomAnimatedNavBar> createState() => _CustomAnimatedNavBarState();
 }
 
-class _CustomAnimatedNavBarState extends State<CustomAnimatedNavBar>
+  class _CustomAnimatedNavBarState extends State<CustomAnimatedNavBar>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnim;

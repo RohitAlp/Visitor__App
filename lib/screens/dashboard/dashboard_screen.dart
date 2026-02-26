@@ -409,7 +409,7 @@ class _DashboardHomePage extends StatelessWidget {
           Icon(icon, color: color, size: 20),
           const SizedBox(width: 15),
           Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w500))),
-          Text(time, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          Text(time, style: const TextStyle(color: Colors.black87, fontSize: 12)),
         ],
       ),
     );
