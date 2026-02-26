@@ -1,3 +1,5 @@
+library route_name;
+
 class RouteName{
   static const String splashScreen = 'splashScreen';
   static const String loginScreen = 'loginScreen';
@@ -8,4 +10,6 @@ class RouteName{
   static const String servicesScreen = 'servicesScreen';
   static const String profileScreen = 'profileScreen';
   static const String notificationScreen = 'notificationScreen';
+  static const String manageUsersSocietyAdmin = 'manageUsersSocietyAdmin';
+  static const String FlatOwnersScreen = 'flatOwnersListScreen';
 }
