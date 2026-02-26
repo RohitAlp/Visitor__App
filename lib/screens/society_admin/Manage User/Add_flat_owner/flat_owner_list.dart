@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../constants/app_colors.dart';
+
 class FlatOwner {
   final String name;
   final String flat;
@@ -135,7 +137,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
     return SafeArea(
 
       child: Scaffold(
-        backgroundColor: bgColor,
+        backgroundColor: AppColors.bgColor,
         body: CustomScrollView(
           slivers: [
             // App Bar
