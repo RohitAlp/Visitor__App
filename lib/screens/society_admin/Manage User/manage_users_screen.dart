@@ -1,35 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 
 import '../../../config/Routes/RouteName.dart';
 
-class ManageUsersScreen extends StatelessWidget {
-  const ManageUsersScreen({super.key});
+class ManageUsersScreen extends StatefulWidget {
+  final int type;
 
+  const ManageUsersScreen({super.key,required this.type});
+
+  @override
+  State<ManageUsersScreen> createState() => _ManageUsersScreenState();
+}
+
+class _ManageUsersScreenState extends State<ManageUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const CustomAppBar(
-        title: "Manage Users",
-        showBackButton: false,
-      ),
+      backgroundColor: AppColors.bgColor,
+      appBar: const CustomAppBar(title: "Manage Users", showBackButton: false),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Text(
-              "Manage Users",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(Icons.arrow_back),
+                ),
+                SizedBox(width: 8),
+                if(widget.type == 1)
+                  Text(
+                    "Manage Users",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  )
+                else
+                  Text(
+                    "Manage Property",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+              ],
             ),
           ),
 
-          /// Grid
           Expanded(
             child: GridView.count(
               padding: const EdgeInsets.all(12),
@@ -37,7 +62,8 @@ class ManageUsersScreen extends StatelessWidget {
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
               childAspectRatio: 1,
-              children: [
+              children: widget.type == 1
+                  ? [
                 _UserCard(
                   icon: Icons.people_outline,
                   title: "Flat Owners\n(Residents)",
@@ -57,15 +83,17 @@ class ManageUsersScreen extends StatelessWidget {
                   icon: Icons.build_outlined,
                   title: "Vendors",
                 ),
-                const _UserCard(
+              ]
+                  : const [
+                _UserCard(
                   icon: Icons.build_outlined,
                   title: "Manage Wings",
                 ),
-                const _UserCard(
+                _UserCard(
                   icon: Icons.build_outlined,
                   title: "Manage Floors",
                 ),
-                const _UserCard(
+                _UserCard(
                   icon: Icons.build_outlined,
                   title: "Manage Flats",
                 ),
@@ -77,6 +105,7 @@ class ManageUsersScreen extends StatelessWidget {
     );
   }
 }
+
 
 class _UserCard extends StatelessWidget {
   final IconData icon;

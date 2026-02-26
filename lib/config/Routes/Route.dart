@@ -23,7 +23,10 @@ class Routes {
       case RouteName.dashboardScreen:
         return MaterialPageRoute(builder: (context) => DashboardScreen());
       case RouteName.manageUsersSocietyAdmin:
-        return MaterialPageRoute(builder: (context) => ManageUsersScreen());
+        final args = setting.arguments as int;
+        return MaterialPageRoute(
+          builder: (_) => ManageUsersScreen(type: args),
+        );
 
       case RouteName.FlatOwnersScreen:
         return MaterialPageRoute(builder: (context) => const FlatOwnersScreen());

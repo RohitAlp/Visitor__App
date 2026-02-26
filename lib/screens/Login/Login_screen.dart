@@ -34,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     context,
                     // RouteName.dashboardScreen,
                     RouteName.manageUsersSocietyAdmin,
+                    arguments: 1,
                   );
                 },
                 child: Container(
