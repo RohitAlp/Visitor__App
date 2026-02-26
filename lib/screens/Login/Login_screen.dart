@@ -32,7 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    RouteName.dashboardScreen,
+                    // RouteName.dashboardScreen,
+                    RouteName.manageUsersSocietyAdmin,
                   );
                 },
                 child: Container(

@@ -8,4 +8,5 @@ class RouteName{
   static const String servicesScreen = 'servicesScreen';
   static const String profileScreen = 'profileScreen';
   static const String notificationScreen = 'notificationScreen';
+  static const String manageUsersSocietyAdmin = 'manageUsersSocietyAdmin';
 }
