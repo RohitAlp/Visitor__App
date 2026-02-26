@@ -13,16 +13,19 @@ class EditguardsBloc extends Bloc<EditguardsEvent, EditguardsState> {
       emit(state.copyWith(guardName: event.guardName));
     });
     on<EditGuardIDEvent>((event, emit) {
-      emit(state.copyWith(guardName: event.guardID));
+      emit(state.copyWith(guardID: event.guardID));
     });
     on<EditGuardEmailEvent>((event, emit) {
-      emit(state.copyWith(guardName: event.email));
+      emit(state.copyWith(guardEmail: event.email));
     });
     on<EditGuardMobileNumberEvent>((event, emit) {
-      emit(state.copyWith(guardName: event.editGuradMobileNumber));
+      emit(state.copyWith(guardMobileNumber: event.editGuradMobileNumber));
     });
     on<EditGuardAddressEvent>((event, emit) {
-      emit(state.copyWith(guardName: event.address));
+      emit(state.copyWith(guardAddress: event.address));
+    });
+    on<EditGuardPhotoEvent>((event, emit) {
+      emit(state.copyWith(guardPhotoBase64: event.photoBase64));
     });
   }
 }

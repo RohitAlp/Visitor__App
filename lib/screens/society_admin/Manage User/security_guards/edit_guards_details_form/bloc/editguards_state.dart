@@ -6,6 +6,7 @@ class EditguardsState extends Equatable {
   final String guardMobileNumber;
   final String guardEmail;
   final String guardAddress;
+  final String? guardPhotoBase64;
   final Status status;
   final String? errorMessage;
 
@@ -18,6 +19,7 @@ class EditguardsState extends Equatable {
      this.guardMobileNumber = '',
      this.guardEmail = '',
      this.guardAddress = '',
+     this.guardPhotoBase64,
     this.errorMessage,
 
   });
@@ -28,6 +30,7 @@ class EditguardsState extends Equatable {
     final String? guardMobileNumber,
     final String? guardEmail,
     final String? guardAddress,
+    final String? guardPhotoBase64,
     String? errorMessage,
 
   }) {
@@ -38,11 +41,12 @@ class EditguardsState extends Equatable {
           guardMobileNumber ?? guardMobileNumber ?? this.guardMobileNumber,
       guardEmail: guardEmail ?? this.guardEmail,
       guardAddress: guardAddress ?? this.guardAddress,
+      guardPhotoBase64: guardPhotoBase64 ?? this.guardPhotoBase64,
       errorMessage: errorMessage,
 
     );
   }
 
   @override
-  List<Object?> get props => [guardName, guardID, guardMobileNumber, guardEmail, guardAddress, errorMessage];
+  List<Object?> get props => [guardName, guardID, guardMobileNumber, guardEmail, guardAddress, guardPhotoBase64, errorMessage];
 }
