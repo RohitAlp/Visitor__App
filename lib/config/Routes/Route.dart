@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:visitorapp/screens/Login/Login_screen.dart';
+import 'package:visitorapp/screens/society_admin/Manage%20User/security_guards/security_guards_screen.dart';
 
 import '../../screens/dashboard/dashboard_screen.dart';
 import '../../screens/society_admin/Manage User/manage_users_screen.dart';
@@ -33,6 +34,8 @@ class Routes {
 
       case RouteName.notificationScreen:
         return MaterialPageRoute(builder: (context) => const NotificationScreen());
+      case RouteName.SecurityGuardsScreen:
+        return MaterialPageRoute(builder: (context) => const SecurityGuardsScreen());
 
       default:
         return MaterialPageRoute(

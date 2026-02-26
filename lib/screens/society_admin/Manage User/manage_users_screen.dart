@@ -71,9 +71,12 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                     Navigator.pushNamed(context, RouteName.FlatOwnersScreen);
                   },
                 ),
-                const _UserCard(
+                 _UserCard(
                   icon: Icons.shield_outlined,
                   title: "Security Guards",
+                  onTap: () {
+                    Navigator.pushNamed(context, RouteName.SecurityGuardsScreen);
+                  },
                 ),
                 const _UserCard(
                   icon: Icons.work_outline,

@@ -12,4 +12,5 @@ class RouteName{
   static const String notificationScreen = 'notificationScreen';
   static const String manageUsersSocietyAdmin = 'manageUsersSocietyAdmin';
   static const String FlatOwnersScreen = 'flatOwnersListScreen';
+  static const String SecurityGuardsScreen = 'SecurityGuardsScreen';
 }
