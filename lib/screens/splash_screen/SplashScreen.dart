@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../SplashService.dart';
+import 'SplashService.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -20,15 +20,11 @@ class _SplashscreenState extends State<Splashscreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Text(
-          'Visitor',
-          style: TextStyle(
-            fontSize: 36,
-            fontWeight: FontWeight.bold,
-            color: Colors.blue,
-            letterSpacing: 1.5,
-          ),
+      body:  Center(
+        child: Image.asset(
+          'assets/image/Applogo.png',
+          height: 400,
+          width: 300,
         ),
       ),
     );

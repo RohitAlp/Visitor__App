@@ -10,9 +10,7 @@ import 'database/DatabaseHelper.dart';
 import 'l10n/app_localizations.dart';
 
 void main() async{
-
-  await DatabaseHelper.initDatabase();
-
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -35,9 +33,9 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               colorScheme: .fromSeed(seedColor: Colors.deepPurple),
               textTheme: GoogleFonts.poppinsTextTheme(),
-
               primaryTextTheme: GoogleFonts.poppinsTextTheme(),
-            ),
+              scaffoldBackgroundColor: Colors.white,
+          ),
             locale: locale,
             localizationsDelegates: const [
               AppLocalizations.delegate,

@@ -98,49 +98,49 @@ abstract class AppLocalizations {
     Locale('hi'),
   ];
 
-  /// The title of the application
+  /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
   /// **'Visitor App'**
   String get appTitle;
 
-  /// Settings screen title
+  /// No description provided for @settings.
   ///
   /// In en, this message translates to:
   /// **'Settings'**
   String get settings;
 
-  /// Language selection label
+  /// No description provided for @language.
   ///
   /// In en, this message translates to:
   /// **'Language'**
   String get language;
 
-  /// Language selection dialog title
+  /// No description provided for @selectLanguage.
   ///
   /// In en, this message translates to:
   /// **'Select Language'**
   String get selectLanguage;
 
-  /// English language name
+  /// No description provided for @english.
   ///
   /// In en, this message translates to:
   /// **'English'**
   String get english;
 
-  /// Hindi language name
+  /// No description provided for @hindi.
   ///
   /// In en, this message translates to:
   /// **'Hindi'**
   String get hindi;
 
-  /// Login button text
+  /// No description provided for @login.
   ///
   /// In en, this message translates to:
   /// **'Login'**
   String get login;
 
-  /// Welcome message
+  /// No description provided for @welcome.
   ///
   /// In en, this message translates to:
   /// **'Welcome'**

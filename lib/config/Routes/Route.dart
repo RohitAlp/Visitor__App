@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:visitorapp/screens/Login/Login_screen.dart';
 
-import '../../screens/splash_screen/view/SplashScreen.dart';
+import '../../screens/dashboard/dashboard_screen.dart';
+import '../../screens/splash_screen/SplashScreen.dart';
+import '../../screens/Notice/notice.dart';
+import '../../screens/payment/payment.dart';
+import '../../screens/profile/profile.dart';
+import '../../screens/services/services.dart';
+import '../../screens/Notification/Notificarion.dart';
+
 import '../../screens/settings/settings_screen.dart';
 import 'RouteName.dart';
 
@@ -14,6 +21,11 @@ class Routes {
         return MaterialPageRoute(builder: (context) => LoginScreen());
       case RouteName.settingsScreen:
         return MaterialPageRoute(builder: (context) => SettingsScreen());
+      case RouteName.dashboardScreen:
+        return MaterialPageRoute(builder: (context) => DashboardScreen());
+
+      case RouteName.notificationScreen:
+        return MaterialPageRoute(builder: (context) => const NotificationScreen());
 
       default:
         return MaterialPageRoute(
