@@ -5,6 +5,7 @@ import 'package:visitorapp/screens/society_admin/Manage%20User/security_guards/s
 import '../../screens/dashboard/dashboard_screen.dart';
 import '../../screens/society_admin/Manage User/manage_users_screen.dart';
 import '../../screens/society_admin/Manage User/Add_flat_owner/flat_owner_list.dart';
+import '../../screens/society_admin/Manage User/security_guards/edit_guards_details_form/edit_security_guards_form.dart';
 import '../../screens/splash_screen/SplashScreen.dart';
 
 import '../../screens/Notification/Notificarion.dart';
@@ -36,6 +37,8 @@ class Routes {
         return MaterialPageRoute(builder: (context) => const NotificationScreen());
       case RouteName.SecurityGuardsScreen:
         return MaterialPageRoute(builder: (context) => const SecurityGuardsScreen());
+      case RouteName.EditSecurityGuardsForm:
+        return MaterialPageRoute(builder: (context) => const EditSecurityGuardsForm());
 
       default:
         return MaterialPageRoute(

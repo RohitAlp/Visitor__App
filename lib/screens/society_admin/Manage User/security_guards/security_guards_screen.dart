@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:visitorapp/config/Routes/RouteName.dart';
 
 import '../../../../constants/app_colors.dart';
 
@@ -25,10 +26,7 @@ class SecurityGuardsScreen extends StatefulWidget {
 
 class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
     with TickerProviderStateMixin {
-
-
   final List<SecurityGuard> _allGuards = const [
-
     SecurityGuard(
       name: 'Rajesh Kumar',
       phone: '+91 98765 43210',
@@ -76,8 +74,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
 
   List<SecurityGuard> get _filteredGuards {
     return _allGuards.where((owner) {
-      final matchesWing =
-          _selectedWing == 'All';
+      final matchesWing = _selectedWing == 'All';
       final matchesSearch =
           _searchQuery.isEmpty ||
           owner.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
@@ -115,7 +112,10 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text(
           'Delete Owner',
-          style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.textDark),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            color: AppColors.textDark,
+          ),
         ),
         content: Text(
           'Are you sure you want to remove ${owner.name}?',
@@ -124,7 +124,10 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel', style: TextStyle(color: AppColors.textLight)),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppColors.textLight),
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -149,17 +152,6 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
             child: const Text('Delete', style: TextStyle(color: Colors.white)),
           ),
         ],
-      ),
-    );
-  }
-
-  void _editOwner(SecurityGuard owner) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Editing ${owner.name}'),
-        backgroundColor: AppColors.primaryLight,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
@@ -237,14 +229,19 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                               height: 42,
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [AppColors.primaryLight, AppColors.primaryColor],
+                                  colors: [
+                                    AppColors.primaryLight,
+                                    AppColors.primaryColor,
+                                  ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),
                                 borderRadius: BorderRadius.circular(14),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.primaryColor.withOpacity(0.45),
+                                    color: AppColors.primaryColor.withOpacity(
+                                      0.45,
+                                    ),
                                     blurRadius: 16,
                                     offset: const Offset(0, 6),
                                   ),
@@ -401,7 +398,10 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                           const SizedBox(height: 6),
                           const Text(
                             'Try adjusting your search or filters',
-                            style: TextStyle(fontSize: 13, color: AppColors.textLight),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: AppColors.textLight,
+                            ),
                           ),
                         ],
                       ),
@@ -414,7 +414,12 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                         final owner = filtered[index];
                         return _OwnerCard(
                           owner: owner,
-                          onEdit: () => _editOwner(owner),
+                          onEdit: () {
+                            Navigator.pushNamed(
+                              context,
+                              RouteName.EditSecurityGuardsForm,
+                            );
+                          },
                           onDelete: () => _deleteOwner(owner),
                           index: index,
                         );
@@ -458,7 +463,6 @@ class _OwnerCardState extends State<_OwnerCard>
   static const Color textLight = Color(0xFF9C8872);
 
   bool _pressed = false;
-
 
   @override
   void initState() {
@@ -524,9 +528,7 @@ class _OwnerCardState extends State<_OwnerCard>
                     width: 52,
                     height: 52,
                     decoration: BoxDecoration(
-
                       borderRadius: BorderRadius.circular(16),
-
                     ),
                     child: Center(
                       child: Text(
