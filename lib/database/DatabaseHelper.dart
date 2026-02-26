@@ -14,10 +14,6 @@ class DatabaseHelper {
       onCreate: (db, version) async {
         await db.execute(UserTable.createTable);
         // await db.execute(UserTable.createTable);
-        // await db.execute(UserTable.createTable);
-        // await db.execute(UserTable.createTable);
-        // await db.execute(UserTable.createTable);
-        // await db.execute(UserTable.createTable);
       },
     );
   }
