@@ -90,12 +90,12 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                   },
                 ),
               ]
-                  :   [
+                  :  [
                 _UserCard(
                   icon: Icons.build_outlined,
                   title: "Manage Tower",
                   onTap: () {
-                    Navigator.pushNamed(context, RouteName.VendorsScreens);
+                    Navigator.pushNamed(context, RouteName.ManageTowersScreen);
                   },
                 ),_UserCard(
                   icon: Icons.build_outlined,

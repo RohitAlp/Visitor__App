@@ -16,4 +16,5 @@ class RouteName{
   static const String EditSecurityGuardsForm = 'EditSecurityGuardsForm';
   static const String AddFlatOwnerForm = 'AddFlatOwnerForm';
   static const String VendorsScreens = 'VendorsScreens';
+  static const String ManageTowersScreen = 'ManageTowersScreen';
 }
