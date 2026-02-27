@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visitorapp/config/Routes/RouteName.dart';
+import 'package:visitorapp/screens/society_admin/Manage%20User/Vendors/edit_vendor/edit_vendor_form.dart';
 
 import '../../../../constants/app_colors.dart';
+import 'edit_vendor/bloc/edit_vendor_bloc.dart' show EditVendorBloc;
 
 
 class Venders {
@@ -165,90 +167,7 @@ class _VendorsScreensState extends State<VendorsScreens>
   }
 
 
-  IconData _getIconForService(String service) {
-    switch (service.toLowerCase()) {
-      case 'plumbing services':
-        return Icons.plumbing;
-      case 'electrical services':
-        return Icons.electrical_services;
-      case 'housekeeping services':
-        return Icons.cleaning_services;
-      case 'carpentry services':
-        return Icons.carpenter;
-      case 'appliance repair services':
-        return Icons.home_repair_service;
-      default:
-        return Icons.room_service;
-    }
-  }
 
-  Widget _buildFilterOption({
-    required String title,
-    required IconData icon,
-    required int count,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: isSelected ? AppColors.primaryColor.withOpacity(0.15) : AppColors.cardBg,
-            borderRadius: BorderRadius.circular(12),
-            border: isSelected 
-                ? Border.all(color: AppColors.primaryColor, width: 1)
-                : Border.all(color: Colors.transparent),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: isSelected ? AppColors.primaryColor : AppColors.primaryColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(
-                  icon,
-                  size: 20,
-                  color: isSelected ? Colors.white : AppColors.primaryColor,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: isSelected ? AppColors.primaryColor : AppColors.textDark,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: isSelected ? AppColors.primaryColor : AppColors.bgColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  count.toString(),
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: isSelected ? Colors.white : AppColors.textMid,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -554,19 +473,16 @@ class _VendorsScreensState extends State<VendorsScreens>
                   return _OwnerCard(
                     owner: owner,
                     onEdit: () {
-                      // Navigator.pushNamed(
-                      //   context,
-                      //   RouteName.EditSecurityGuardsForm,
-                      // );
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (_) => BlocProvider(
-                      //       create: (_) => EditguardsBloc(),
-                      //       child: const EditSecurityGuardsForm(),
-                      //     ),
-                      //   ),
-                      // );
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider(
+                            create: (_) => EditVendorBloc(),
+                            child: const EditVendorsForm(),
+                          ),
+                        ),
+                      );
                     },
                     onDelete: () => _deleteOwner(owner),
                     index: index,
@@ -677,6 +593,7 @@ class _OwnerCardState extends State<_OwnerCard>
                     height: 52,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
+                      color: AppColors.bgColor
                     ),
                     child: Center(
                       child: Text(

@@ -6,30 +6,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:visitorapp/constants/app_colors.dart';
+import 'package:visitorapp/screens/society_admin/Manage%20User/Vendors/edit_vendor/bloc/edit_vendor_bloc.dart';
 import 'package:visitorapp/screens/society_admin/Manage%20User/security_guards/edit_guards_details_form/bloc/editguards_bloc.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 
-import '../../../../../utils/Validations.dart' show AppValidators;
 import '../../../../../utils/enum.dart';
+import '../../../../../utils/Validations.dart';
 import '../../../../../widgets/text_form_field.dart';
 
-class EditSecurityGuardsForm extends StatefulWidget {
-  const EditSecurityGuardsForm({super.key});
+class EditVendorsForm extends StatefulWidget {
+  const EditVendorsForm({super.key});
 
   @override
-  State<EditSecurityGuardsForm> createState() => _EditSecurityGuardsFormState();
+  State<EditVendorsForm> createState() => _EditVendorsFormState();
 }
 
-class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
+class _EditVendorsFormState extends State<EditVendorsForm> {
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _imagePicker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Edit Guards Details'),
+      appBar: CustomAppBar(title: 'Edit Vendor'),
 
-      body: BlocListener<EditguardsBloc, EditguardsState>(
+      body: BlocListener<EditVendorBloc, EditVendorState>(
         listenWhen: (previous, current) =>
         previous.status != current.status,
         listener: (context, state) {
@@ -74,7 +75,7 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
                       children: [
 
                         const Text(
-                          'Guard Information',
+                          'Vendor Information',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -82,70 +83,75 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
                         ),
                         const SizedBox(height: 16),
 
-                        _buildLabel("Guard Name"),
+                        _buildLabel("Vendor Name"),
                         const SizedBox(height: 6),
                         CustomTextField(
                           hintText: "Enter Name",
+                          validator: AppValidators.validateName,
                           onChanged: (v) {
-                            context.read<EditguardsBloc>()
-                                .add(EditGuardNameEvent(v));
+                            context.read<EditVendorBloc>()
+                                .add(VenderNameEvent(v));
                           },
                         ),
 
                         const SizedBox(height: 16),
 
-                        _buildLabel("Guard ID"),
+                        _buildLabel("Vendor ID"),
                         const SizedBox(height: 6),
                         CustomTextField(
                           hintText: "Enter ID",
+                          validator: AppValidators.validateVendorId,
                           onChanged: (v) {
-                            context.read<EditguardsBloc>()
-                                .add(EditGuardIDEvent(v));
+                            context.read<EditVendorBloc>()
+                                .add(VenderIdEvent(v));
                           },
                         ),
 
                         const SizedBox(height: 16),
 
-                        _buildLabel("Guard Mobile Number"),
+                        _buildLabel("Vendor Mobile Number"),
                         const SizedBox(height: 6),
                         CustomTextField(
                           hintText: "Enter Mobile Number",
                           keyboardType: TextInputType.phone,
+                          validator: AppValidators.validateMobile,
                           onChanged: (v) {
-                            context.read<EditguardsBloc>()
-                                .add(EditGuardMobileNumberEvent(v));
+                            context.read<EditVendorBloc>()
+                                .add(VenderMobileNumberEvent(v));
                           },
                         ),
 
                         const SizedBox(height: 16),
 
-                        _buildLabel("Guard Email ID", isRequired: false),
+                        _buildLabel("Vendor Email ID", isRequired: false),
                         const SizedBox(height: 6),
                         CustomTextField(
                           hintText: "Enter Email",
                           keyboardType: TextInputType.emailAddress,
                           validator: AppValidators.validateOptionalEmail,
                           onChanged: (v) {
-                            // Add email event if needed
+                            context.read<EditVendorBloc>()
+                                .add(VenderEmailEvent(v));
                           },
                         ),
 
                         const SizedBox(height: 16),
 
-                        _buildLabel("Guard Address"),
+                        _buildLabel("Vendor Address"),
                         const SizedBox(height: 6),
                         CustomTextField(
                           hintText: "Enter Address",
                           maxLines: 2,
                           validator: AppValidators.validateAddress,
                           onChanged: (v) {
-                            // Add address event if needed
+                            context.read<EditVendorBloc>()
+                                .add(VenderAddressEvent(v));
                           },
                         ),
 
                         const SizedBox(height: 16),
 
-                        BlocBuilder<EditguardsBloc, EditguardsState>(
+                        BlocBuilder<EditVendorBloc, EditVendorState>(
                           builder: (context, state) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,8 +159,8 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
                                 const Text(
                                   "Upload Photo",
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -171,8 +177,8 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
                                       ),
                                       color: Colors.grey.shade50,
                                     ),
-                                    child: state.guardPhotoBase64 != null
-                                        ? _buildDocumentPreview(state.guardPhotoBase64!)
+                                    child: state.vendorPhotoBase64 != null
+                                        ? _buildDocumentPreview(state.vendorPhotoBase64!)
                                         : _buildUploadPlaceholder(),
                                   ),
                                 ),
@@ -191,7 +197,7 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
       ),
 
       bottomNavigationBar:
-      BlocBuilder<EditguardsBloc, EditguardsState>(
+      BlocBuilder<EditVendorBloc, EditVendorState>(
         builder: (context, state) {
           return SafeArea(
             child: Container(
@@ -210,8 +216,8 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
                       ? null
                       : () {
                     if (_formKey.currentState!.validate()) {
-                      context.read<EditguardsBloc>().add(
-                        const UpdateGuardDetailsEvent(),
+                      context.read<EditVendorBloc>().add(
+                        const UpdateVendorDetailsEvent(),
                       );
                     }
                   },
@@ -319,7 +325,7 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
         final extension = pickedFile.path.split('.').last.toLowerCase();
         final formattedBase64 = 'data:image/$extension;base64,$base64String';
 
-        context.read<EditguardsBloc>().add(EditGuardPhotoEvent(formattedBase64));
+        context.read<EditVendorBloc>().add(VenderPhotoEvent(formattedBase64));
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -345,7 +351,7 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
         final base64String = base64Encode(bytes);
         final formattedBase64 = 'data:application/pdf;base64,$base64String';
 
-        context.read<EditguardsBloc>().add(EditGuardPhotoEvent(formattedBase64));
+        context.read<EditVendorBloc>().add(VenderPhotoEvent(formattedBase64));
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

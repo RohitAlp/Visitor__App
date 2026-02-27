@@ -74,9 +74,9 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
       final matchesWing = _selectedWing == 'All';
       final matchesSearch =
           _searchQuery.isEmpty ||
-          owner.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          owner.shift.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          owner.phone.contains(_searchQuery);
+              owner.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              owner.shift.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              owner.phone.contains(_searchQuery);
       return matchesWing && matchesSearch;
     }).toList();
   }
@@ -291,16 +291,16 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                           ),
                           suffixIcon: _searchQuery.isNotEmpty
                               ? GestureDetector(
-                                  onTap: () {
-                                    _searchController.clear();
-                                    setState(() => _searchQuery = '');
-                                  },
-                                  child: const Icon(
-                                    Icons.close_rounded,
-                                    color: AppColors.textLight,
-                                    size: 18,
-                                  ),
-                                )
+                            onTap: () {
+                              _searchController.clear();
+                              setState(() => _searchQuery = '');
+                            },
+                            child: const Icon(
+                              Icons.close_rounded,
+                              color: AppColors.textLight,
+                              size: 18,
+                            ),
+                          )
                               : null,
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.symmetric(
@@ -366,72 +366,72 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
             // Owner List
             filtered.isEmpty
                 ? SliverFillRemaining(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryColor.withOpacity(0.08),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.person_search_rounded,
-                              size: 40,
-                              color: AppColors.primaryColor,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          const Text(
-                            'No Guards found',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textDark,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          const Text(
-                            'Try adjusting your search or filters',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: AppColors.textLight,
-                            ),
-                          ),
-                        ],
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor.withOpacity(0.08),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.person_search_rounded,
+                        size: 40,
+                        color: AppColors.primaryColor,
                       ),
                     ),
-                  )
-                : SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final owner = filtered[index];
-                        return _OwnerCard(
-                          owner: owner,
-                          onEdit: () {
-                            // Navigator.pushNamed(
-                            //   context,
-                            //   RouteName.EditSecurityGuardsForm,
-                            // );
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => BlocProvider(
-                                  create: (_) => EditguardsBloc(),
-                                  child: const EditSecurityGuardsForm(),
-                                ),
-                              ),
-                            );
-                          },
-                          onDelete: () => _deleteOwner(owner),
-                          index: index,
-                        );
-                      }, childCount: filtered.length),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'No Guards found',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textDark,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Try adjusting your search or filters',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppColors.textLight,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+                : SliverPadding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final owner = filtered[index];
+                  return _OwnerCard(
+                    owner: owner,
+                    onEdit: () {
+                      // Navigator.pushNamed(
+                      //   context,
+                      //   RouteName.EditSecurityGuardsForm,
+                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider(
+                            create: (_) => EditguardsBloc(),
+                            child: const EditSecurityGuardsForm(),
+                          ),
+                        ),
+                      );
+                    },
+                    onDelete: () => _deleteOwner(owner),
+                    index: index,
+                  );
+                }, childCount: filtered.length),
+              ),
+            ),
           ],
         ),
       ),
@@ -680,12 +680,12 @@ class _ActionButtonState extends State<_ActionButton> {
           borderRadius: BorderRadius.circular(10),
           boxShadow: _hovered
               ? [
-                  BoxShadow(
-                    color: widget.color.withOpacity(0.4),
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
-                ]
+            BoxShadow(
+              color: widget.color.withOpacity(0.4),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ]
               : null,
         ),
         child: Icon(
