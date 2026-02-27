@@ -23,135 +23,6 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _imagePicker = ImagePicker();
 
-  Future<void> _pickImage() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text('Take Photo'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _captureImage();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Choose from Gallery'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _pickFromGallery();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.picture_as_pdf),
-                title: const Text('Choose PDF'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _pickPDF();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _captureImage() async {
-    try {
-      final XFile? pickedFile = await _imagePicker.pickImage(
-        source: ImageSource.camera,
-        maxWidth: 1920,
-        maxHeight: 1080,
-        imageQuality: 85,
-      );
-
-      if (pickedFile != null) {
-        final File imageFile = File(pickedFile.path);
-        final bytes = await imageFile.readAsBytes();
-        final base64String = base64Encode(bytes);
-        
-        final extension = pickedFile.path.split('.').last.toLowerCase();
-        final formattedBase64 = 'data:image/$extension;base64,$base64String';
-        
-        context.read<EditguardsBloc>().add(EditGuardPhotoEvent(formattedBase64));
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error capturing image: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  Future<void> _pickFromGallery() async {
-    try {
-      final XFile? pickedFile = await _imagePicker.pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 1920,
-        maxHeight: 1080,
-        imageQuality: 85,
-      );
-
-      if (pickedFile != null) {
-        final File imageFile = File(pickedFile.path);
-        final bytes = await imageFile.readAsBytes();
-        final base64String = base64Encode(bytes);
-        
-        final extension = pickedFile.path.split('.').last.toLowerCase();
-        final formattedBase64 = 'data:image/$extension;base64,$base64String';
-        
-        context.read<EditguardsBloc>().add(EditGuardPhotoEvent(formattedBase64));
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error picking image: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  Future<void> _pickPDF() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf'],
-        allowMultiple: false,
-      );
-
-      if (result != null && result.files.single.path != null) {
-        final File pdfFile = File(result.files.single.path!);
-        final bytes = await pdfFile.readAsBytes();
-        final base64String = base64Encode(bytes);
-        final formattedBase64 = 'data:application/pdf;base64,$base64String';
-        
-        context.read<EditguardsBloc>().add(EditGuardPhotoEvent(formattedBase64));
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('PDF uploaded successfully'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error picking PDF: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,7 +41,7 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
               ),
             );
 
-            Navigator.pop(context); // go back
+            Navigator.pop(context);
           }
 
           if (state.status == Status.error) {
@@ -247,7 +118,6 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
 
                         const SizedBox(height: 16),
 
-                        /// Email
                         _buildLabel("Guard Email ID", isRequired: false),
                         const SizedBox(height: 6),
                         CustomTextField(
@@ -258,7 +128,6 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
 
                         const SizedBox(height: 16),
 
-                        /// Address
                         _buildLabel("Guard Address"),
                         const SizedBox(height: 6),
                         CustomTextField(
@@ -358,6 +227,136 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
       ),
     );
   }
+
+  Future<void> _pickImage() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Take Photo'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _captureImage();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Choose from Gallery'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _pickFromGallery();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.picture_as_pdf),
+                title: const Text('Choose PDF'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _pickPDF();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _captureImage() async {
+    try {
+      final XFile? pickedFile = await _imagePicker.pickImage(
+        source: ImageSource.camera,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        imageQuality: 85,
+      );
+
+      if (pickedFile != null) {
+        final File imageFile = File(pickedFile.path);
+        final bytes = await imageFile.readAsBytes();
+        final base64String = base64Encode(bytes);
+
+        final extension = pickedFile.path.split('.').last.toLowerCase();
+        final formattedBase64 = 'data:image/$extension;base64,$base64String';
+
+        context.read<EditguardsBloc>().add(EditGuardPhotoEvent(formattedBase64));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error capturing image: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _pickFromGallery() async {
+    try {
+      final XFile? pickedFile = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        imageQuality: 85,
+      );
+
+      if (pickedFile != null) {
+        final File imageFile = File(pickedFile.path);
+        final bytes = await imageFile.readAsBytes();
+        final base64String = base64Encode(bytes);
+
+        final extension = pickedFile.path.split('.').last.toLowerCase();
+        final formattedBase64 = 'data:image/$extension;base64,$base64String';
+
+        context.read<EditguardsBloc>().add(EditGuardPhotoEvent(formattedBase64));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error picking image: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _pickPDF() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+        allowMultiple: false,
+      );
+
+      if (result != null && result.files.single.path != null) {
+        final File pdfFile = File(result.files.single.path!);
+        final bytes = await pdfFile.readAsBytes();
+        final base64String = base64Encode(bytes);
+        final formattedBase64 = 'data:application/pdf;base64,$base64String';
+
+        context.read<EditguardsBloc>().add(EditGuardPhotoEvent(formattedBase64));
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('PDF uploaded successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error picking PDF: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
 }
 
 Widget _buildDocumentPreview(String base64String){
@@ -392,7 +391,6 @@ Widget _buildDocumentPreview(String base64String){
         ),
       );
     }
-    // It's an image
     else {
       return ClipRRect(
         borderRadius: BorderRadius.circular(12),

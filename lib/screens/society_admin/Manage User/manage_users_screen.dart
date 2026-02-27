@@ -82,9 +82,12 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                   icon: Icons.work_outline,
                   title: "Support Staff",
                 ),
-                const _UserCard(
+                 _UserCard(
                   icon: Icons.build_outlined,
                   title: "Vendors",
+                  onTap: () {
+                    Navigator.pushNamed(context, RouteName.VendorsScreens);
+                  },
                 ),
               ]
                   : const [
