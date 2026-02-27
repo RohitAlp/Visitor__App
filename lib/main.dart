@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget {
             title: 'Visitor App',
             theme: ThemeData(
               colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-              textTheme: GoogleFonts.poppinsTextTheme(),
-              primaryTextTheme: GoogleFonts.poppinsTextTheme(),
+              textTheme: GoogleFonts.mulishTextTheme(),
+              primaryTextTheme: GoogleFonts.mulishTextTheme(),
               scaffoldBackgroundColor: Colors.white,
           ),
             locale: locale,
