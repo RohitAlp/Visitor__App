@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 20),
-            
+
                 CommonTextField(
                   hintText: "Enter mobile number",
                   prefixIcon: Icons.phone,
@@ -141,10 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         const Text(
                           "Yet to receive OTP? ",
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.black54,
-                          ),
+                          style: TextStyle(fontSize: 13, color: Colors.black54),
                         ),
                         GestureDetector(
                           onTap: _canResend ? _onResend : null,
@@ -179,7 +176,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 Center(
                   child: InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, RouteName.dashboardScreen);
+                      Navigator.pushNamed(
+                        context,
+                        RouteName.manageUsersSocietyAdmin,
+                        arguments: 1
+                      );
                     },
                     child: Container(
                       height: 50,
