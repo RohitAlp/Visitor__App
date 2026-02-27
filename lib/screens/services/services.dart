@@ -7,7 +7,9 @@ class Services extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notice'),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        title: const Text('Service'),
         centerTitle: true,
       ),
       body: SafeArea(

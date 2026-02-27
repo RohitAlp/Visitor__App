@@ -7,6 +7,8 @@ class Payment extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
         title: const Text('Payment'),
         centerTitle: true,
       ),
@@ -54,18 +56,8 @@ class Payment extends StatelessWidget {
                 ),
               ),
 
-              const Spacer(),
 
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
 
-                  },
-                  child: const Text('Pay Now'),
-                ),
-              ),
             ],
           ),
         ),

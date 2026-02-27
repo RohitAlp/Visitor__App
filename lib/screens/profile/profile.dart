@@ -7,7 +7,9 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notice'),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        title: const Text('Profile'),
         centerTitle: true,
       ),
       body: SafeArea(
