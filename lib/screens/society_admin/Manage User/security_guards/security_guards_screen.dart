@@ -10,13 +10,11 @@ class SecurityGuard {
   final String name;
   final String shift;
   final String phone;
-  final String avatarInitials;
 
   const SecurityGuard({
     required this.name,
     required this.shift,
     required this.phone,
-    required this.avatarInitials,
   });
 }
 
@@ -33,42 +31,38 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
     SecurityGuard(
       name: 'Rajesh Kumar',
       phone: '+91 98765 43210',
-      avatarInitials: 'RK',
       shift: '06:00 AM - 02:00 PM',
     ),
     SecurityGuard(
       name: 'Priya Sharma',
       phone: '+91 98765 43211',
-      avatarInitials: 'PS',
       shift: '06:00 AM - 02:00 PM',
     ),
 
     SecurityGuard(
       name: 'Amit Patel',
       phone: '+91 98765 43212',
-      avatarInitials: 'AP',
       shift: '02:00 PM - 10:00 PM',
     ),
     SecurityGuard(
       name: 'Sneha Reddy',
       phone: '+91 98765 43213',
-      avatarInitials: 'SR',
       shift: '02:00 PM - 10:00 PM',
     ),
 
     SecurityGuard(
       name: 'Vikram Singh',
       phone: '+91 98765 43214',
-      avatarInitials: 'VS',
       shift: '10:00 PM - 06:00 AM',
     ),
     SecurityGuard(
       name: 'Meera Joshi',
       phone: '+91 98765 43215',
-      avatarInitials: 'MJ',
       shift: '10:00 PM - 06:00 AM',
     ),
   ];
+
+
   String _selectedWing = 'All';
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
@@ -324,7 +318,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                     Row(
                       children: [
                         Text(
-                          '${filtered.length} Owner${filtered.length != 1 ? 's' : ''}',
+                          '${filtered.length} Guard${filtered.length != 1 ? 's' : ''}',
                           style: const TextStyle(
                             fontSize: 13,
                             color: AppColors.textLight,
@@ -544,7 +538,7 @@ class _OwnerCardState extends State<_OwnerCard>
                     ),
                     child: Center(
                       child: Text(
-                        widget.owner.avatarInitials,
+                        _getInitials(widget.owner.name),
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
@@ -641,7 +635,15 @@ class _OwnerCardState extends State<_OwnerCard>
     );
   }
 }
+String _getInitials(String name) {
+  final words = name.trim().split(' ');
 
+  if (words.length == 1) {
+    return words.first.substring(0, 1).toUpperCase();
+  }
+
+  return (words.first[0] + words.last[0]).toUpperCase();
+}
 class _ActionButton extends StatefulWidget {
   final IconData icon;
   final Color color;

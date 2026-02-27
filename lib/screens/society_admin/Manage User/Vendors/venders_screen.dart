@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:visitorapp/config/Routes/RouteName.dart';
 
 import '../../../../constants/app_colors.dart';
-import '../../../../config/Routes/RouteName.dart';
 
-class Vendors {
+
+class Venders {
   final String name;
-  final String flat;
+  final String services;
   final String phone;
-  final String wing;
-  final String avatarInitials;
 
-  const Vendors({
+  const Venders({
     required this.name,
-    required this.flat,
+    required this.services,
     required this.phone,
-    required this.wing,
-    required this.avatarInitials,
   });
 }
 
@@ -28,41 +26,50 @@ class VendorsScreens extends StatefulWidget {
 
 class _VendorsScreensState extends State<VendorsScreens>
     with TickerProviderStateMixin {
-  static const Color primaryColor = Color(0xFFC5610F);
-  static const Color primaryLight = Color(0xFFE8832A);
-  static const Color bgColor = Color(0xFFF5F0EB);
-  static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color textDark = Color(0xFF1A1208);
-  static const Color textMid = Color(0xFF6B5A47);
-  static const Color textLight = Color(0xFF9C8872);
+  final List<Venders> _allGuards = const [
+    Venders(
+      name: 'ShreeRam Plumbing Services',
+      phone: '+91 98765 43210',
+      services: 'Plumbing Services',
+    ),
+    Venders(
+      name: 'Powerfix Electricals',
+      phone: '+91 98765 43211',
+      services: 'Electrical Services',
+    ),
 
-  final List<Vendors> _allVendors = const [
-    Vendors(name: 'Rajesh Kumar', flat: 'Flat A-302', phone: '+91 98765 43210', wing: 'A', avatarInitials: 'RK'),
-    Vendors(name: 'Priya Sharma', flat: 'Flat B-501', phone: '+91 98765 43211', wing: 'B', avatarInitials: 'PS'),
-    Vendors(name: 'Amit Patel', flat: 'Flat C-204', phone: '+91 98765 43212', wing: 'C', avatarInitials: 'AP'),
-    Vendors(name: 'Sneha Reddy', flat: 'Flat A-101', phone: '+91 98765 43213', wing: 'A', avatarInitials: 'SR'),
-    Vendors(name: 'Vikram Singh', flat: 'Flat D-403', phone: '+91 98765 43214', wing: 'D', avatarInitials: 'VS'),
-    Vendors(name: 'Meera Joshi', flat: 'Flat B-201', phone: '+91 98765 43215', wing: 'B', avatarInitials: 'MJ'),
-    Vendors(name: 'Karan Mehta', flat: 'Flat C-305', phone: '+91 98765 43216', wing: 'C', avatarInitials: 'KM'),
-    Vendors(name: 'Anita Gupta', flat: 'Flat A-404', phone: '+91 98765 43217', wing: 'A', avatarInitials: 'AG'),
+    Venders(
+      name: 'Greenleaf Cleaning Co.',
+      phone: '+91 98765 43212',
+      services: 'Housekeeping Services',
+    ),
+    Venders(
+      name: 'BuildRight Carpentry',
+      phone: '+91 98765 43213',
+      services: 'Carpentry Services',
+    ),
+
+    Venders(
+      name: 'Cool Air AC Services',
+      phone: '+91 98765 43214',
+      services: 'Appliance Repair Services',
+    ),
+
   ];
-
   String _selectedWing = 'All';
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
   late AnimationController _fabController;
   late Animation<double> _fabAnimation;
 
-  final List<String> _wings = ['All', 'A Wing', 'B Wing', 'C Wing', 'D Wing'];
-
-  List<Vendors> get _filteredOwners {
-    return _allVendors.where((owner) {
-      final matchesWing = _selectedWing == 'All' ||
-          owner.wing == _selectedWing.replaceAll(' Wing', '');
-      final matchesSearch = _searchQuery.isEmpty ||
-          owner.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          owner.flat.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          owner.phone.contains(_searchQuery);
+  List<Venders> get _filteredVenders {
+    return _allGuards.where((owner) {
+      final matchesWing = _selectedWing == 'All';
+      final matchesSearch =
+          _searchQuery.isEmpty ||
+              owner.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              owner.services.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              owner.phone.contains(_searchQuery);
       return matchesWing && matchesSearch;
     }).toList();
   }
@@ -74,7 +81,10 @@ class _VendorsScreensState extends State<VendorsScreens>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    _fabAnimation = CurvedAnimation(parent: _fabController, curve: Curves.elasticOut);
+    _fabAnimation = CurvedAnimation(
+      parent: _fabController,
+      curve: Curves.elasticOut,
+    );
     _fabController.forward();
   }
 
@@ -85,31 +95,47 @@ class _VendorsScreensState extends State<VendorsScreens>
     super.dispose();
   }
 
-  void _deleteOwner(Vendors owner) {
+  void _deleteOwner(Venders owner) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Delete Owner', style: TextStyle(fontWeight: FontWeight.w700, color: textDark)),
-        content: Text('Are you sure you want to remove ${owner.name}?', style: const TextStyle(color: textMid)),
+        title: const Text(
+          'Delete Vendor',
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            color: AppColors.textDark,
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to remove ${owner.name}?',
+          style: const TextStyle(color: AppColors.textMid),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel', style: TextStyle(color: textLight)),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppColors.textLight),
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: primaryColor,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              backgroundColor: AppColors.primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
             onPressed: () {
               Navigator.pop(ctx);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('${owner.name} removed'),
-                  backgroundColor: primaryColor,
+                  backgroundColor: AppColors.primaryColor,
                   behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               );
             },
@@ -120,35 +146,16 @@ class _VendorsScreensState extends State<VendorsScreens>
     );
   }
 
-  void _editOwner(Vendors owner) {
-    final parts = owner.flat.split('-');
-    String flatNumber = parts.isNotEmpty ? parts.last.replaceAll(RegExp(r'\\D'), '') : '';
-    final digits = owner.phone.replaceAll(RegExp(r'\\D'), '');
-    final mobile = digits.length > 10 ? digits.substring(digits.length - 10) : digits;
-    Navigator.pushNamed(
-      context,
-      RouteName.AddFlatOwnerForm,
-      arguments: {
-        'name': owner.name,
-        'flatNumber': flatNumber.isNotEmpty ? flatNumber : owner.flat,
-        'mobile': mobile,
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final filtered = _filteredOwners;
+    final filtered = _filteredVenders;
 
     return SafeArea(
-
       child: Scaffold(
         backgroundColor: AppColors.bgColor,
         body: CustomScrollView(
           slivers: [
             // App Bar
-
-
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
@@ -164,7 +171,7 @@ class _VendorsScreensState extends State<VendorsScreens>
                             width: 36,
                             height: 36,
                             decoration: BoxDecoration(
-                              color: cardBg,
+                              color: AppColors.cardBg,
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
@@ -174,16 +181,20 @@ class _VendorsScreensState extends State<VendorsScreens>
                                 ),
                               ],
                             ),
-                            child: const Icon(Icons.arrow_back_ios_rounded, size: 16, color: textDark),
+                            child: const Icon(
+                              Icons.arrow_back_ios_rounded,
+                              size: 16,
+                              color: AppColors.textDark,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 12),
                         const Text(
-                          'Flat Owners',
+                          'Security Guards',
                           style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
-                            color: textDark,
+                            color: AppColors.textDark,
                             letterSpacing: -0.8,
                           ),
                         ),
@@ -192,27 +203,45 @@ class _VendorsScreensState extends State<VendorsScreens>
                           scale: _fabAnimation,
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(context, RouteName.AddFlatOwnerForm);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text('Add new flat owner'),
+                                  backgroundColor: AppColors.primaryColor,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              );
                             },
                             child: Container(
                               width: 42,
                               height: 42,
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [primaryLight, primaryColor],
+                                  colors: [
+                                    AppColors.primaryLight,
+                                    AppColors.primaryColor,
+                                  ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),
                                 borderRadius: BorderRadius.circular(14),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: primaryColor.withOpacity(0.45),
+                                    color: AppColors.primaryColor.withOpacity(
+                                      0.45,
+                                    ),
                                     blurRadius: 16,
                                     offset: const Offset(0, 6),
                                   ),
                                 ],
                               ),
-                              child: const Icon(Icons.add_rounded, color: Colors.white, size: 24),
+                              child: const Icon(
+                                Icons.add_rounded,
+                                color: Colors.white,
+                                size: 24,
+                              ),
                             ),
                           ),
                         ),
@@ -222,110 +251,114 @@ class _VendorsScreensState extends State<VendorsScreens>
                     const SizedBox(height: 20),
 
                     // Search Bar
-                    Container(
-                      decoration: BoxDecoration(
-                        color: cardBg,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.06),
-                            blurRadius: 16,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: (val) => setState(() => _searchQuery = val),
-                        style: const TextStyle(fontSize: 14, color: textDark, fontWeight: FontWeight.w500),
-                        decoration: InputDecoration(
-                          hintText: 'Search by owner name...',
-                          hintStyle: const TextStyle(color: textLight, fontSize: 14),
-                          prefixIcon: const Icon(Icons.search_rounded, color: primaryColor, size: 22),
-                          suffixIcon: _searchQuery.isNotEmpty
-                              ? GestureDetector(
-                            onTap: () {
-                              _searchController.clear();
-                              setState(() => _searchQuery = '');
-                            },
-                            child: const Icon(Icons.close_rounded, color: textLight, size: 18),
-                          )
-                              : null,
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Wing Filter
-                    SizedBox(
-                      height: 42,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _wings.length,
-                        separatorBuilder: (_, __) => const SizedBox(width: 8),
-                        itemBuilder: (context, i) {
-                          final wing = _wings[i];
-                          final isSelected = _selectedWing == wing;
-                          return GestureDetector(
-                            onTap: () => setState(() => _selectedWing = wing),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 250),
-                              curve: Curves.easeInOut,
-                              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                              decoration: BoxDecoration(
-                                gradient: isSelected
-                                    ? const LinearGradient(
-                                  colors: [primaryLight, primaryColor],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
+                    Row(
+                      children: [
+                        /// 🔍 Search Field
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.cardBg,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.06),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: TextField(
+                              controller: _searchController,
+                              onChanged: (val) => setState(() => _searchQuery = val),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: AppColors.textDark,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: 'Search by guard name...',
+                                hintStyle: const TextStyle(
+                                  color: AppColors.textLight,
+                                  fontSize: 14,
+                                ),
+                                prefixIcon: const Icon(
+                                  Icons.search_rounded,
+                                  color: AppColors.primaryColor,
+                                  size: 22,
+                                ),
+                                suffixIcon: _searchQuery.isNotEmpty
+                                    ? GestureDetector(
+                                  onTap: () {
+                                    _searchController.clear();
+                                    setState(() => _searchQuery = '');
+                                  },
+                                  child: const Icon(
+                                    Icons.close_rounded,
+                                    color: AppColors.textLight,
+                                    size: 18,
+                                  ),
                                 )
                                     : null,
-                                color: isSelected ? null : cardBg,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: isSelected
-                                    ? [
-                                  BoxShadow(
-                                    color: primaryColor.withOpacity(0.4),
-                                    blurRadius: 12,
-                                    offset: const Offset(0, 4),
-                                  )
-                                ]
-                                    : [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 2),
-                                  )
-                                ],
-                              ),
-                              child: Text(
-                                wing,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  color: isSelected ? Colors.white : textMid,
-                                  letterSpacing: 0.2,
+                                border: InputBorder.none,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
                                 ),
                               ),
                             ),
-                          );
-                        },
-                      ),
+                          ),
+                        ),
+
+                        const SizedBox(width: 12),
+
+                        /// ⚙️ Advanced Filter Button
+                        GestureDetector(
+                          onTap: () {
+                            // TODO: Open bottom sheet or dialog
+                            print("Advanced Filter Clicked");
+                          },
+                          child: Container(
+                            height: 54,
+                            width: 54,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [
+                                  AppColors.primaryLight,
+                                  AppColors.primaryColor,
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primaryColor.withOpacity(0.4),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.filter_list,
+                              color: Colors.white,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
 
                     const SizedBox(height: 16),
 
-                    // Count badge
+                    const SizedBox(height: 16),
+
                     Row(
                       children: [
                         Text(
-                          '${filtered.length} Owner${filtered.length != 1 ? 's' : ''}',
+                          '${filtered.length} Vendor${filtered.length != 1 ? 's' : ''}',
                           style: const TextStyle(
                             fontSize: 13,
-                            color: textLight,
+                            color: AppColors.textLight,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -340,16 +373,19 @@ class _VendorsScreensState extends State<VendorsScreens>
                               });
                             },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
-                                color: primaryColor.withOpacity(0.1),
+                                color: AppColors.primaryColor.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: const Text(
                                 'Clear filters',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: primaryColor,
+                                  color: AppColors.primaryColor,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -375,24 +411,31 @@ class _VendorsScreensState extends State<VendorsScreens>
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.08),
+                        color: AppColors.primaryColor.withOpacity(0.08),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.person_search_rounded, size: 40, color: primaryColor),
+                      child: const Icon(
+                        Icons.person_search_rounded,
+                        size: 40,
+                        color: AppColors.primaryColor,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     const Text(
-                      'No owners found',
+                      'No Guards found',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        color: textDark,
+                        color: AppColors.textDark,
                       ),
                     ),
                     const SizedBox(height: 6),
                     const Text(
                       'Try adjusting your search or filters',
-                      style: TextStyle(fontSize: 13, color: textLight),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppColors.textLight,
+                      ),
                     ),
                   ],
                 ),
@@ -401,18 +444,29 @@ class _VendorsScreensState extends State<VendorsScreens>
                 : SliverPadding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
               sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                    final owner = filtered[index];
-                    return _OwnerCard(
-                      owner: owner,
-                      onEdit: () => _editOwner(owner),
-                      onDelete: () => _deleteOwner(owner),
-                      index: index,
-                    );
-                  },
-                  childCount: filtered.length,
-                ),
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final owner = filtered[index];
+                  return _OwnerCard(
+                    owner: owner,
+                    onEdit: () {
+                      // Navigator.pushNamed(
+                      //   context,
+                      //   RouteName.EditSecurityGuardsForm,
+                      // );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (_) => BlocProvider(
+                      //       create: (_) => EditguardsBloc(),
+                      //       child: const EditSecurityGuardsForm(),
+                      //     ),
+                      //   ),
+                      // );
+                    },
+                    onDelete: () => _deleteOwner(owner),
+                    index: index,
+                  );
+                }, childCount: filtered.length),
               ),
             ),
           ],
@@ -423,7 +477,7 @@ class _VendorsScreensState extends State<VendorsScreens>
 }
 
 class _OwnerCard extends StatefulWidget {
-  final Vendors owner;
+  final Venders owner;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final int index;
@@ -439,7 +493,8 @@ class _OwnerCard extends StatefulWidget {
   State<_OwnerCard> createState() => _OwnerCardState();
 }
 
-class _OwnerCardState extends State<_OwnerCard> with SingleTickerProviderStateMixin {
+class _OwnerCardState extends State<_OwnerCard>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _slideAnimation;
   late Animation<double> _fadeAnimation;
@@ -452,17 +507,6 @@ class _OwnerCardState extends State<_OwnerCard> with SingleTickerProviderStateMi
 
   bool _pressed = false;
 
-  // Wing colors
-  Color get _wingColor {
-    switch (widget.owner.wing) {
-      case 'A': return const Color(0xFF2563EB);
-      case 'B': return const Color(0xFF059669);
-      case 'C': return const Color(0xFF7C3AED);
-      case 'D': return const Color(0xFFDC2626);
-      default: return primaryColor;
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -470,10 +514,14 @@ class _OwnerCardState extends State<_OwnerCard> with SingleTickerProviderStateMi
       vsync: this,
       duration: const Duration(milliseconds: 400),
     );
-    _slideAnimation = Tween<double>(begin: 40, end: 0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    _slideAnimation = Tween<double>(
+      begin: 40,
+      end: 0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
     );
-    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
 
     Future.delayed(Duration(milliseconds: 60 * widget.index), () {
       if (mounted) _controller.forward();
@@ -523,27 +571,14 @@ class _OwnerCardState extends State<_OwnerCard> with SingleTickerProviderStateMi
                     width: 52,
                     height: 52,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          _wingColor.withOpacity(0.15),
-                          _wingColor.withOpacity(0.08),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: _wingColor.withOpacity(0.2),
-                        width: 1.5,
-                      ),
                     ),
                     child: Center(
                       child: Text(
-                        widget.owner.avatarInitials,
+                        _getInitials(widget.owner.name),
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
-                          color: _wingColor,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -558,28 +593,13 @@ class _OwnerCardState extends State<_OwnerCard> with SingleTickerProviderStateMi
                       children: [
                         Row(
                           children: [
-                            Text(
-                              widget.owner.name,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: textDark,
-                                letterSpacing: -0.3,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: _wingColor.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
+                            Expanded(
                               child: Text(
-                                widget.owner.wing,
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w800,
-                                  color: _wingColor,
+                                widget.owner.name,
+                                softWrap: true,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
@@ -588,10 +608,14 @@ class _OwnerCardState extends State<_OwnerCard> with SingleTickerProviderStateMi
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            Icon(Icons.apartment_rounded, size: 13, color: primaryColor.withOpacity(0.7)),
+                            Icon(
+                              Icons.room_service_sharp,
+                              size: 13,
+                              color: primaryColor.withOpacity(0.7),
+                            ),
                             const SizedBox(width: 4),
                             Text(
-                              widget.owner.flat,
+                              widget.owner.services,
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: textMid,
@@ -603,7 +627,11 @@ class _OwnerCardState extends State<_OwnerCard> with SingleTickerProviderStateMi
                         const SizedBox(height: 3),
                         Row(
                           children: [
-                            Icon(Icons.phone_rounded, size: 13, color: primaryColor.withOpacity(0.7)),
+                            Icon(
+                              Icons.phone_rounded,
+                              size: 13,
+                              color: primaryColor.withOpacity(0.7),
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               widget.owner.phone,
@@ -644,13 +672,25 @@ class _OwnerCardState extends State<_OwnerCard> with SingleTickerProviderStateMi
     );
   }
 }
+String _getInitials(String name) {
+  final words = name.trim().split(' ');
 
+  if (words.length == 1) {
+    return words.first.substring(0, 1).toUpperCase();
+  }
+
+  return (words.first[0] + words.last[0]).toUpperCase();
+}
 class _ActionButton extends StatefulWidget {
   final IconData icon;
   final Color color;
   final VoidCallback onTap;
 
-  const _ActionButton({required this.icon, required this.color, required this.onTap});
+  const _ActionButton({
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
 
   @override
   State<_ActionButton> createState() => _ActionButtonState();
@@ -681,7 +721,7 @@ class _ActionButtonState extends State<_ActionButton> {
               color: widget.color.withOpacity(0.4),
               blurRadius: 10,
               offset: const Offset(0, 3),
-            )
+            ),
           ]
               : null,
         ),
