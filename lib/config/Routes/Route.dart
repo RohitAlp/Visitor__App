@@ -4,8 +4,10 @@ import 'package:visitorapp/screens/society_admin/Manage%20User/security_guards/s
 
 import '../../screens/dashboard/dashboard_screen.dart';
 import '../../screens/society_admin/Manage Property/Manage Tower/Add_tower.dart';
+import '../../screens/society_admin/Manage Property/manage_wings/edit_wing_form/edit_wing_form.dart';
+import '../../screens/society_admin/Manage Property/manage_wings/manage_wing_screen.dart';
 import '../../screens/society_admin/Manage User/Vendors/venders_screen.dart';
-import '../../screens/society_admin/Manage User/manage_users_screen.dart';
+import '../../screens/society_admin/manage_users_screen.dart';
 import '../../screens/society_admin/Manage User/Add_flat_owner/flat_owner_list.dart';
 import '../../screens/society_admin/Manage User/security_guards/edit_guards_details_form/edit_security_guards_form.dart';
 import '../../screens/society_admin/Manage%20User/Add_flat_owner/Add_flat_owner_form.dart';
@@ -46,6 +48,10 @@ class Routes {
         return MaterialPageRoute(builder: (context) => const EditSecurityGuardsForm());
       case RouteName.VendorsScreens:
         return MaterialPageRoute(builder: (context) => const VendorsScreens());
+      case RouteName.ManageWingScreen:
+        return MaterialPageRoute(builder: (context) => const ManageWingScreen());
+      case RouteName.EditWingForm:
+        return MaterialPageRoute(builder: (context) => const EditWingForm());
       case RouteName.AddFlatOwnerForm:
         final args = setting.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
