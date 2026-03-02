@@ -6,6 +6,7 @@ import '../../screens/dashboard/dashboard_screen.dart';
 import '../../screens/society_admin/Manage Property/Manage Flats/flat_list.dart';
 import '../../screens/society_admin/Manage Property/Manage Tower/Add_tower.dart';
 import '../../screens/society_admin/Manage Property/Manage Tower/add_tower_form.dart';
+import '../../screens/society_admin/Manage Property/manage_amanities/amanities_screen.dart';
 import '../../screens/society_admin/Manage Property/manage_floors/manage_floors_screen.dart';
 import '../../screens/society_admin/Manage Property/manage_wings/edit_wing_form/edit_wing_form.dart';
 import '../../screens/society_admin/Manage Property/manage_wings/manage_wing_screen.dart';
@@ -62,6 +63,8 @@ class Routes {
         return MaterialPageRoute(builder: (context) => const EditWingForm());
       case RouteName.ManageFloorsScreen:
         return MaterialPageRoute(builder: (context) => const ManageFloorsScreen());
+      case RouteName.ManageAmanitiesScreen:
+        return MaterialPageRoute(builder: (context) => const ManageAmanitiesScreen());
       case RouteName.AddFlatOwnerForm:
         final args = setting.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(

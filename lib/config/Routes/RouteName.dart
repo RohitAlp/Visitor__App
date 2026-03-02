@@ -22,4 +22,5 @@ class RouteName{
   static const String AddTowerForm = 'AddTowerForm';
   static const String ManageFlatsScreen = 'ManageFlatsScreen';
   static const String ManageFloorsScreen = 'ManageFloorsScreen';
+  static const String ManageAmanitiesScreen = 'ManageAmanitiesScreen';
 }

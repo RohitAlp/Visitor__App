@@ -119,6 +119,13 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                     Navigator.pushNamed(context, RouteName.ManageFlatsScreen);
                   },
                 ),
+                _UserCard(
+                  icon: Icons.build_outlined,
+                  title: "Manage Amenities",
+                  onTap: () {
+                    Navigator.pushNamed(context, RouteName.ManageAmanitiesScreen);
+                  },
+                ),
               ],
             ),
           ),
