@@ -21,4 +21,5 @@ class RouteName{
   static const String EditWingForm = 'EditWingForm';
   static const String AddTowerForm = 'AddTowerForm';
   static const String ManageFlatsScreen = 'ManageFlatsScreen';
+  static const String ManageFloorsScreen = 'ManageFloorsScreen';
 }

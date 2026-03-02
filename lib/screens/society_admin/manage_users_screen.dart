@@ -108,6 +108,9 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 _UserCard(
                   icon: Icons.build_outlined,
                   title: "Manage Floors",
+                  onTap: () {
+                    Navigator.pushNamed(context, RouteName.ManageFloorsScreen);
+                  },
                 ),
                 _UserCard(
                   icon: Icons.build_outlined,
