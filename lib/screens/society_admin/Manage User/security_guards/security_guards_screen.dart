@@ -10,12 +10,22 @@ class SecurityGuard {
   final String name;
   final String shift;
   final String phone;
+  final String avatarInitials;
 
   const SecurityGuard({
     required this.name,
     required this.shift,
     required this.phone,
+    required this.avatarInitials,
   });
+
+  static const Color primaryColor = Color(0xFFC5610F);
+  static const Color cardBg = Color(0xFFFFFFFF);
+  static const Color textDark = Color(0xFF1A1208);
+  static const Color textMid = Color(0xFF6B5A47);
+  static const Color textLight = Color(0xFF9C8872);
+
+
 }
 
 class SecurityGuardsScreen extends StatefulWidget {
@@ -27,57 +37,75 @@ class SecurityGuardsScreen extends StatefulWidget {
 
 class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
     with TickerProviderStateMixin {
+  static const Color primaryColor = Color(0xFFC5610F);
+  static const Color primaryLight = Color(0xFFE8832A);
+  static const Color bgColor = Color(0xFFF5F0EB);
+  static const Color cardBg = Color(0xFFFFFFFF);
+  static const Color textDark = Color(0xFF1A1208);
+  static const Color textMid = Color(0xFF6B5A47);
+  static const Color textLight = Color(0xFF9C8872);
   final List<SecurityGuard> _allGuards = const [
     SecurityGuard(
       name: 'Rajesh Kumar',
       phone: '+91 98765 43210',
       shift: '06:00 AM - 02:00 PM',
+      avatarInitials: 'RK',
     ),
     SecurityGuard(
       name: 'Priya Sharma',
       phone: '+91 98765 43211',
       shift: '06:00 AM - 02:00 PM',
+      avatarInitials: 'PS',
     ),
 
     SecurityGuard(
       name: 'Amit Patel',
       phone: '+91 98765 43212',
       shift: '02:00 PM - 10:00 PM',
+      avatarInitials: 'AP',
     ),
     SecurityGuard(
       name: 'Sneha Reddy',
       phone: '+91 98765 43213',
       shift: '02:00 PM - 10:00 PM',
+      avatarInitials: 'SR',
     ),
 
     SecurityGuard(
       name: 'Vikram Singh',
       phone: '+91 98765 43214',
       shift: '10:00 PM - 06:00 AM',
+      avatarInitials: 'VS',
     ),
     SecurityGuard(
       name: 'Meera Joshi',
       phone: '+91 98765 43215',
       shift: '10:00 PM - 06:00 AM',
+      avatarInitials: 'MJ',
     ),
   ];
 
 
-  String _selectedWing = 'All';
+  String _selectedShift = 'All';
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
   late AnimationController _fabController;
   late Animation<double> _fabAnimation;
 
+  final List<String> _shifts = ['All', 'Morning', 'Afternoon', 'Night'];
+
   List<SecurityGuard> get _filteredGuards {
-    return _allGuards.where((owner) {
-      final matchesWing = _selectedWing == 'All';
+    return _allGuards.where((guard) {
+      final matchesShift = _selectedShift == 'All' ||
+          (_selectedShift == 'Morning' && guard.shift.contains('06:00 AM - 02:00 PM')) ||
+          (_selectedShift == 'Afternoon' && guard.shift.contains('02:00 PM - 10:00 PM')) ||
+          (_selectedShift == 'Night' && guard.shift.contains('10:00 PM - 06:00 AM'));
       final matchesSearch =
           _searchQuery.isEmpty ||
-              owner.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              owner.shift.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              owner.phone.contains(_searchQuery);
-      return matchesWing && matchesSearch;
+              guard.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              guard.shift.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              guard.phone.contains(_searchQuery);
+      return matchesShift && matchesSearch;
     }).toList();
   }
 
@@ -102,20 +130,20 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
     super.dispose();
   }
 
-  void _deleteOwner(SecurityGuard owner) {
+  void _deleteGuard(SecurityGuard guard) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text(
-          'Delete Owner',
+          'Delete Guard',
           style: TextStyle(
             fontWeight: FontWeight.w700,
             color: AppColors.textDark,
           ),
         ),
         content: Text(
-          'Are you sure you want to remove ${owner.name}?',
+          'Are you sure you want to remove ${guard.name}?',
           style: const TextStyle(color: AppColors.textMid),
         ),
         actions: [
@@ -137,7 +165,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
               Navigator.pop(ctx);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('${owner.name} removed'),
+                  content: Text('${guard.name} removed'),
                   backgroundColor: AppColors.primaryColor,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
@@ -208,16 +236,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                         scale: _fabAnimation,
                         child: GestureDetector(
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text('Add new flat owner'),
-                                backgroundColor: AppColors.primaryColor,
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            );
+                            Navigator.pushNamed(context, RouteName.AddFlatOwnerForm);
                           },
                           child: Container(
                             width: 42,
@@ -258,46 +277,32 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                   // Search Bar
                   Container(
                     decoration: BoxDecoration(
-                      color: AppColors.cardBg,
+                      color: cardBg,
                       borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
+                          color: Color(0x66000000),
+                          blurRadius: 3,
+                          spreadRadius: 0,
+                          offset: Offset(0, 0),
                         ),
                       ],
                     ),
                     child: TextField(
                       controller: _searchController,
                       onChanged: (val) => setState(() => _searchQuery = val),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.textDark,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: const TextStyle(fontSize: 14, color: textDark, fontWeight: FontWeight.w500),
                       decoration: InputDecoration(
                         hintText: 'Search by guard name...',
-                        hintStyle: const TextStyle(
-                          color: AppColors.textLight,
-                          fontSize: 14,
-                        ),
-                        prefixIcon: const Icon(
-                          Icons.search_rounded,
-                          color: AppColors.primaryColor,
-                          size: 22,
-                        ),
+                        hintStyle: const TextStyle(color: textLight, fontSize: 14),
+                        prefixIcon: const Icon(Icons.search_rounded, color: primaryColor, size: 22),
                         suffixIcon: _searchQuery.isNotEmpty
                             ? GestureDetector(
                           onTap: () {
                             _searchController.clear();
                             setState(() => _searchQuery = '');
                           },
-                          child: const Icon(
-                            Icons.close_rounded,
-                            color: AppColors.textLight,
-                            size: 18,
-                          ),
+                          child: const Icon(Icons.close_rounded, color: textLight, size: 18),
                         )
                             : null,
                         border: InputBorder.none,
@@ -311,6 +316,65 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
 
                   const SizedBox(height: 16),
 
+                  SizedBox(
+                    height: 40,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _shifts.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 8),
+                      itemBuilder: (context, i) {
+                        final shift = _shifts[i];
+                        final isSelected = _selectedShift == shift;
+                        return GestureDetector(
+                          onTap: () => setState(() => _selectedShift = shift),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 250),
+                            curve: Curves.easeInOut,
+                            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                            margin: const EdgeInsets.symmetric(vertical: 2),
+                            decoration: BoxDecoration(
+                              gradient: isSelected
+                                  ? const LinearGradient(
+                                colors: [primaryLight, primaryColor],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              )
+                                  : null,
+                              color: isSelected ? null : cardBg,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: isSelected
+                                  ? [
+                                BoxShadow(
+                                  color: primaryColor.withOpacity(0.3),
+                                  blurRadius: 12,
+                                  spreadRadius: 1,
+                                  offset: const Offset(0, 0),
+                                )
+                              ]
+                                  : [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.4),
+                                  blurRadius: 2,
+                                  spreadRadius: 0,
+                                  offset: const Offset(0, 0),
+                                ),
+                              ],
+                            ),
+                            child: Text(
+                              shift,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: isSelected ? Colors.white : textMid,
+                                letterSpacing: 0.2,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
                   const SizedBox(height: 16),
 
                   Row(
@@ -319,16 +383,16 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                         '${filtered.length} Guard${filtered.length != 1 ? 's' : ''}',
                         style: const TextStyle(
                           fontSize: 13,
-                          color: AppColors.textLight,
+                          color: textLight,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       const Spacer(),
-                      if (_selectedWing != 'All' || _searchQuery.isNotEmpty)
+                      if (_selectedShift != 'All' || _searchQuery.isNotEmpty)
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              _selectedWing = 'All';
+                              _selectedShift = 'All';
                               _searchQuery = '';
                               _searchController.clear();
                             });
@@ -392,21 +456,18 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                     const SizedBox(height: 6),
                     const Text(
                       'Try adjusting your search or filters',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: AppColors.textLight,
-                      ),
+                      style: TextStyle(fontSize: 13, color: textLight),
                     ),
                   ],
                 ),
               )
                   : ListView.builder(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
                 itemCount: filtered.length,
                 itemBuilder: (context, index) {
-                  final owner = filtered[index];
-                  return _OwnerCard(
-                    owner: owner,
+                  final guard = filtered[index];
+                  return _GuardCard(
+                    guard: guard,
                     onEdit: () {
                       Navigator.push(
                         context,
@@ -418,7 +479,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                         ),
                       );
                     },
-                    onDelete: () => _deleteOwner(owner),
+                    onDelete: () => _deleteGuard(guard),
                     index: index,
                   );
                 },
@@ -431,24 +492,24 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
   }
 }
 
-class _OwnerCard extends StatefulWidget {
-  final SecurityGuard owner;
+class _GuardCard extends StatefulWidget {
+  final SecurityGuard guard;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final int index;
 
-  const _OwnerCard({
-    required this.owner,
+  const _GuardCard({
+    required this.guard,
     required this.onEdit,
     required this.onDelete,
     required this.index,
   });
 
   @override
-  State<_OwnerCard> createState() => _OwnerCardState();
+  State<_GuardCard> createState() => _GuardCardState();
 }
 
-class _OwnerCardState extends State<_OwnerCard>
+class _GuardCardState extends State<_GuardCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _slideAnimation;
@@ -498,7 +559,7 @@ class _OwnerCardState extends State<_OwnerCard>
         child: Opacity(opacity: _fadeAnimation.value, child: child),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.only(bottom: 8, top: 2),
         child: GestureDetector(
           onTapDown: (_) => setState(() => _pressed = true),
           onTapUp: (_) => setState(() => _pressed = false),
@@ -509,32 +570,46 @@ class _OwnerCardState extends State<_OwnerCard>
             decoration: BoxDecoration(
               color: cardBg,
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Color(0x66000000).withOpacity(0.2)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(_pressed ? 0.03 : 0.07),
-                  blurRadius: _pressed ? 8 : 20,
-                  offset: Offset(0, _pressed ? 2 : 8),
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 6,
+                  spreadRadius: 0,
+                  offset: const Offset(0, 0),
                 ),
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               child: Row(
                 children: [
-                  // Avatar
                   Container(
-                    width: 52,
-                    height: 52,
+                    width: 45,
+                    height: 45,
                     decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          primaryColor.withOpacity(0.15),
+                          primaryColor.withOpacity(0.08),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: primaryColor.withOpacity(0.2),
+                        width: 1.5,
+                      ),
                     ),
                     child: Center(
                       child: Text(
-                        _getInitials(widget.owner.name),
+                        widget.guard.avatarInitials,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
 
+                          color: primaryColor,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -550,12 +625,28 @@ class _OwnerCardState extends State<_OwnerCard>
                         Row(
                           children: [
                             Text(
-                              widget.owner.name,
+                              widget.guard.name,
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
                                 color: textDark,
                                 letterSpacing: -0.3,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: primaryColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                _getShiftType(widget.guard.shift),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w800,
+                                  color: primaryColor,
+                                ),
                               ),
                             ),
                           ],
@@ -570,7 +661,7 @@ class _OwnerCardState extends State<_OwnerCard>
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              widget.owner.shift,
+                              widget.guard.shift,
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: textMid,
@@ -589,7 +680,7 @@ class _OwnerCardState extends State<_OwnerCard>
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              widget.owner.phone,
+                              widget.guard.phone,
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: textLight,
@@ -636,6 +727,13 @@ String _getInitials(String name) {
 
   return (words.first[0] + words.last[0]).toUpperCase();
 }
+String _getShiftType(String shift) {
+  if (shift.contains('06:00 AM - 02:00 PM')) return 'Morning';
+  if (shift.contains('02:00 PM - 10:00 PM')) return 'Afternoon';
+  if (shift.contains('10:00 PM - 06:00 AM')) return 'Night';
+  return 'Unknown';
+}
+
 class _ActionButton extends StatefulWidget {
   final IconData icon;
   final Color color;

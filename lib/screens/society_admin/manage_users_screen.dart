@@ -160,8 +160,8 @@ class _UserCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: const [
               BoxShadow(
-                color: Color(0x26000000),
-                blurRadius: 4,
+                color: Color(0x66000000),
+                blurRadius: 3,
                 spreadRadius: 0,
                 offset: Offset(0, 0),
               ),

@@ -282,11 +282,12 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                         decoration: BoxDecoration(
                           color: AppColors.cardBg,
                           borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.06),
-                              blurRadius: 16,
-                              offset: const Offset(0, 4),
+                              color: Color(0x66000000),
+                              blurRadius: 4,
+                              spreadRadius: 0,
+                              offset: Offset(0, 0),
                             ),
                           ],
                         ),
@@ -567,11 +568,12 @@ class _FlatCardState extends State<_FlatCard> with SingleTickerProviderStateMixi
             decoration: BoxDecoration(
               color: AppColors.cardBg,
               borderRadius: BorderRadius.circular(20),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
-                  color: Colors.black.withOpacity(_pressed ? 0.03 : 0.07),
-                  blurRadius: _pressed ? 8 : 20,
-                  offset: Offset(0, _pressed ? 2 : 8),
+                  color: Color(0x66000000),
+                  blurRadius: 4,
+                  spreadRadius: 0,
+                  offset: Offset(0, 0),
                 ),
               ],
             ),

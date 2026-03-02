@@ -217,11 +217,12 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                     decoration: BoxDecoration(
                       color: cardBg,
                       borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
+                          color: Color(0x66000000),
+                          blurRadius: 3,
+                          spreadRadius: 0,
+                          offset: Offset(0, 0),
                         ),
                       ],
                     ),
@@ -251,7 +252,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                   const SizedBox(height: 16),
 
                   SizedBox(
-                    height: 42,
+                    height: 40,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: _wings.length,
@@ -265,6 +266,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                             duration: const Duration(milliseconds: 250),
                             curve: Curves.easeInOut,
                             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                            margin: const EdgeInsets.symmetric(vertical: 2),
                             decoration: BoxDecoration(
                               gradient: isSelected
                                   ? const LinearGradient(
@@ -278,17 +280,19 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                               boxShadow: isSelected
                                   ? [
                                 BoxShadow(
-                                  color: primaryColor.withOpacity(0.4),
+                                  color: primaryColor.withOpacity(0.3),
                                   blurRadius: 12,
-                                  offset: const Offset(0, 4),
+                                  spreadRadius: 1,
+                                  offset: const Offset(0, 0),
                                 )
                               ]
                                   : [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 2),
-                                )
+                                  color: Colors.black.withOpacity(0.4),
+                                  blurRadius: 2,
+                                  spreadRadius: 0,
+                                  offset: const Offset(0, 0),
+                                ),
                               ],
                             ),
                             child: Text(
@@ -386,7 +390,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                 ),
               )
                   : ListView.builder(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
                 itemCount: filtered.length,
                 itemBuilder: (context, index) {
                   final owner = filtered[index];
@@ -478,7 +482,7 @@ class _OwnerCardState extends State<_OwnerCard> with SingleTickerProviderStateMi
         child: Opacity(opacity: _fadeAnimation.value, child: child),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.only(bottom: 8, top: 2),
         child: GestureDetector(
           onTapDown: (_) => setState(() => _pressed = true),
           onTapUp: (_) => setState(() => _pressed = false),
@@ -489,22 +493,24 @@ class _OwnerCardState extends State<_OwnerCard> with SingleTickerProviderStateMi
             decoration: BoxDecoration(
               color: cardBg,
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Color(0x66000000).withOpacity(0.2)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(_pressed ? 0.03 : 0.07),
-                  blurRadius: _pressed ? 8 : 20,
-                  offset: Offset(0, _pressed ? 2 : 8),
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 6,
+                  spreadRadius: 0,
+                  offset: const Offset(0, 0),
                 ),
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               child: Row(
                 children: [
                   // Avatar
                   Container(
-                    width: 52,
-                    height: 52,
+                    width: 45,
+                    height: 45,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
