@@ -10,7 +10,8 @@ class CommonTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool obscureText;
   final int? maxLength;
-  final bool isRequired; // ⭐ NEW
+  final bool isRequired;
+  final bool readOnly;
 
   const CommonTextField({
     super.key,
@@ -24,6 +25,7 @@ class CommonTextField extends StatelessWidget {
     this.obscureText = false,
     this.maxLength,
     this.isRequired = false,
+    this.readOnly = false,
   });
 
   @override
@@ -37,7 +39,7 @@ class CommonTextField extends StatelessWidget {
       keyboardType: keyboardType,
       obscureText: obscureText,
       maxLength: maxLength,
-
+      readOnly: readOnly,
       decoration: InputDecoration(
         counterText: "",
 

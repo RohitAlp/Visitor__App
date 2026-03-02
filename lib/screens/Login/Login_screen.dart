@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../config/Routes/RouteName.dart';
 import '../../constants/app_colors.dart';
+import '../../constants/utils.dart';
 import '../../widgets/CommonTextField.dart';
 import '../../widgets/common_otp_field.dart';
 
@@ -21,17 +22,49 @@ class _LoginScreenState extends State<LoginScreen> {
   int _secondsRemaining = 30;
   Timer? _timer;
   bool _canResend = false;
-
+  bool _otpSent = false;
+  String _enteredOtp = "";
   @override
   void initState() {
     super.initState();
     _startTimer();
   }
 
+  void _sendOtp() {
+    if (mobileController.text.length < 10) {
+      Utils.showToast(
+        context,
+        message: "Enter valid mobile number",
+      );
+      return;
+    }
+
+    setState(() {
+      _otpSent = true;
+    });
+
+    _startTimer();
+  }
+
+  void _verifyOtp() {
+    if (_enteredOtp.isEmpty || _enteredOtp.length < 4) {
+      Utils.showToast(
+        context,
+        message: "Please enter OTP",
+        backgroundColor: Colors.red,
+      );
+      return;
+    }
+      Navigator.pushNamed(
+      context,
+      RouteName.manageUsersSocietyAdmin,
+      arguments: 2,
+    );
+  }
+
   void _startTimer() {
     _secondsRemaining = 30;
     _canResend = false;
-
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_secondsRemaining == 0) {
@@ -48,8 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onResend() {
-    // 👉 Call resend OTP API here
-
     _startTimer();
   }
 
@@ -104,6 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: mobileController,
                   keyboardType: TextInputType.phone,
                   maxLength: 10,
+                  readOnly: _otpSent,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Mobile number is required";
@@ -114,73 +146,66 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: CommonOtpField(
-                    length: 4,
-                    onCompleted: (otp) {
-                      print("OTP: $otp");
-                    },
-                  ),
-                ),
-                Column(
-                  children: [
-                    /// ⏱️ TIMER
-                    Text(
-                      "00:${_secondsRemaining.toString().padLeft(2, '0')}",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.appPrimaryColor,
-                      ),
+                if (_otpSent) ...[
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: CommonOtpField(
+                      length: 4,
+                      onCompleted: (otp) {
+                        _enteredOtp = otp;
+                      },
                     ),
-                    const SizedBox(height: 6),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Yet to receive OTP? ",
-                          style: TextStyle(fontSize: 13, color: Colors.black54),
+                  ),
+                  Column(
+                    children: [
+                      /// ⏱️ TIMER
+                      Text(
+                        "00:${_secondsRemaining.toString().padLeft(2, '0')}",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.appPrimaryColor,
                         ),
-                        GestureDetector(
-                          onTap: _canResend ? _onResend : null,
-                          child: Text(
-                            "Resend OTP",
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Yet to receive OTP? ",
                             style: TextStyle(
                               fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: _canResend
-                                  ? AppColors.appPrimaryColor
-                                  : Colors.grey,
+                              color: Colors.black54,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 15),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Verify OTP",
-                    style: TextStyle(
-                      color: AppColors.appPrimaryColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
+                          GestureDetector(
+                            onTap: _canResend ? _onResend : null,
+                            child: Text(
+                              "Resend OTP",
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: _canResend
+                                    ? AppColors.appPrimaryColor
+                                    : Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(height: 15),
+                ],
+                SizedBox(height: 30),
                 Center(
                   child: InkWell(
                     onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        RouteName.manageUsersSocietyAdmin,
-                        arguments: 2 
-                      );
+                      if (!_otpSent) {
+                        _sendOtp();
+                      } else {
+                        _verifyOtp();
+                      }
                     },
                     child: Container(
                       height: 50,
@@ -191,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        'Login',
+                        _otpSent ? 'Verify OTP' : 'Send OTP',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
