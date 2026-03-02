@@ -3,7 +3,9 @@ import 'package:visitorapp/screens/Login/Login_screen.dart';
 import 'package:visitorapp/screens/society_admin/Manage%20User/security_guards/security_guards_screen.dart';
 
 import '../../screens/dashboard/dashboard_screen.dart';
+import '../../screens/society_admin/Manage Property/Manage Flats/flat_list.dart';
 import '../../screens/society_admin/Manage Property/Manage Tower/Add_tower.dart';
+import '../../screens/society_admin/Manage Property/Manage Tower/add_tower_form.dart';
 import '../../screens/society_admin/Manage Property/manage_wings/edit_wing_form/edit_wing_form.dart';
 import '../../screens/society_admin/Manage Property/manage_wings/manage_wing_screen.dart';
 import '../../screens/society_admin/Manage User/Vendors/venders_screen.dart';
@@ -39,6 +41,11 @@ class Routes {
         return MaterialPageRoute(builder: (context) => const FlatOwnersScreen());
         case RouteName.ManageTowersScreen:
         return MaterialPageRoute(builder: (context) => const ManageTowersScreen());
+
+      case RouteName.AddTowerForm:
+        return MaterialPageRoute(builder: (context) => const AddTowerForm());
+        case RouteName.ManageFlatsScreen:
+        return MaterialPageRoute(builder: (context) => const ManageFlatsScreen());
 
       case RouteName.notificationScreen:
         return MaterialPageRoute(builder: (context) => const NotificationScreen());

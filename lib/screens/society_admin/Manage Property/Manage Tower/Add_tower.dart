@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../config/Routes/RouteName.dart';
 
 class Tower {
   final String name;
@@ -112,14 +113,13 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
   }
 
   void _editTower(Tower tower) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Editing ${tower.name}'),
-        backgroundColor: primaryLight,
-        behavior: SnackBarBehavior.floating,
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
+    Navigator.pushNamed(
+      context,
+      RouteName.AddTowerForm,
+      arguments: {
+        'isEdit': true,
+        'tower': tower,
+      },
     );
   }
 
@@ -193,15 +193,7 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                           scale: _fabAnimation,
                           child: GestureDetector(
                             onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: const Text('Add new tower'),
-                                  backgroundColor: primaryColor,
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12)),
-                                ),
-                              );
+                              Navigator.pushNamed(context, RouteName.AddTowerForm);
                             },
                             child: Container(
                               width: 42,

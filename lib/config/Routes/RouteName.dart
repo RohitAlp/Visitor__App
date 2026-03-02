@@ -19,4 +19,6 @@ class RouteName{
   static const String ManageTowersScreen = 'ManageTowersScreen';
   static const String ManageWingScreen = 'ManageWingScreen';
   static const String EditWingForm = 'EditWingForm';
+  static const String AddTowerForm = 'AddTowerForm';
+  static const String ManageFlatsScreen = 'ManageFlatsScreen';
 }
