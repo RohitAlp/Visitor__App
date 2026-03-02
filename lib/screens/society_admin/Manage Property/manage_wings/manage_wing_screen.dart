@@ -3,62 +3,53 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visitorapp/config/Routes/RouteName.dart';
 
 import '../../../../constants/app_colors.dart';
-import 'edit_guards_details_form/bloc/editguards_bloc.dart';
-import 'edit_guards_details_form/edit_security_guards_form.dart';
+import 'edit_wing_form/bloc/editwing_bloc.dart';
+import 'edit_wing_form/edit_wing_form.dart';
 
-class SecurityGuard {
-  final String name;
-  final String shift;
-  final String phone;
 
-  const SecurityGuard({
-    required this.name,
-    required this.shift,
-    required this.phone,
+class Wing {
+  final String tower;
+  final String status;
+
+  const Wing({
+    required this.tower,
+    required this.status,
   });
 }
 
-class SecurityGuardsScreen extends StatefulWidget {
-  const SecurityGuardsScreen({super.key});
+class ManageWingScreen extends StatefulWidget {
+  const ManageWingScreen({super.key});
 
   @override
-  State<SecurityGuardsScreen> createState() => _SecurityGuardsScreenState();
+  State<ManageWingScreen> createState() => _ManageWingScreenState();
 }
 
-class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
+class _ManageWingScreenState extends State<ManageWingScreen>
     with TickerProviderStateMixin {
-  final List<SecurityGuard> _allGuards = const [
-    SecurityGuard(
-      name: 'Rajesh Kumar',
-      phone: '+91 98765 43210',
-      shift: '06:00 AM - 02:00 PM',
+  final List<Wing> _allWings = const [
+    Wing(
+      tower: 'Tower A',
+      status: 'Active',
     ),
-    SecurityGuard(
-      name: 'Priya Sharma',
-      phone: '+91 98765 43211',
-      shift: '06:00 AM - 02:00 PM',
+    Wing(
+      tower: 'Tower A',
+      status: 'Active',
     ),
-
-    SecurityGuard(
-      name: 'Amit Patel',
-      phone: '+91 98765 43212',
-      shift: '02:00 PM - 10:00 PM',
+    Wing(
+      tower: 'Tower B',
+      status: 'Inactive',
     ),
-    SecurityGuard(
-      name: 'Sneha Reddy',
-      phone: '+91 98765 43213',
-      shift: '02:00 PM - 10:00 PM',
+    Wing(
+      tower: 'Tower B',
+      status: 'Active',
     ),
-
-    SecurityGuard(
-      name: 'Vikram Singh',
-      phone: '+91 98765 43214',
-      shift: '10:00 PM - 06:00 AM',
+    Wing(
+      tower: 'Tower C',
+      status: 'Active',
     ),
-    SecurityGuard(
-      name: 'Meera Joshi',
-      phone: '+91 98765 43215',
-      shift: '10:00 PM - 06:00 AM',
+    Wing(
+      tower: 'Tower C',
+      status: 'Inactive',
     ),
   ];
 
@@ -69,14 +60,13 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
   late AnimationController _fabController;
   late Animation<double> _fabAnimation;
 
-  List<SecurityGuard> get _filteredGuards {
-    return _allGuards.where((owner) {
+  List<Wing> get _filteredGuards {
+    return _allWings.where((wing) {
       final matchesWing = _selectedWing == 'All';
       final matchesSearch =
           _searchQuery.isEmpty ||
-              owner.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              owner.shift.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              owner.phone.contains(_searchQuery);
+              wing.tower.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              wing.status.toLowerCase().contains(_searchQuery.toLowerCase());
       return matchesWing && matchesSearch;
     }).toList();
   }
@@ -102,20 +92,20 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
     super.dispose();
   }
 
-  void _deleteOwner(SecurityGuard owner) {
+  void _deleteOwner(Wing wing) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text(
-          'Delete Owner',
+          'Delete Wing',
           style: TextStyle(
             fontWeight: FontWeight.w700,
             color: AppColors.textDark,
           ),
         ),
         content: Text(
-          'Are you sure you want to remove ${owner.name}?',
+          'Are you sure you want to remove this wing?',
           style: const TextStyle(color: AppColors.textMid),
         ),
         actions: [
@@ -137,7 +127,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
               Navigator.pop(ctx);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('${owner.name} removed'),
+                  content: Text('Wing removed'),
                   backgroundColor: AppColors.primaryColor,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
@@ -197,7 +187,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                         ),
                         const SizedBox(width: 12),
                         const Text(
-                          'Security Guards',
+                          'Manage Wings',
                           style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
@@ -279,7 +269,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                           fontWeight: FontWeight.w500,
                         ),
                         decoration: InputDecoration(
-                          hintText: 'Search by guard name...',
+                          hintText: 'Search by wing ot tower name...',
                           hintStyle: const TextStyle(
                             color: AppColors.textLight,
                             fontSize: 14,
@@ -318,7 +308,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                     Row(
                       children: [
                         Text(
-                          '${filtered.length} Guard${filtered.length != 1 ? 's' : ''}',
+                          '${filtered.length} Wing${filtered.length != 1 ? 's' : ''}',
                           style: const TextStyle(
                             fontSize: 13,
                             color: AppColors.textLight,
@@ -385,7 +375,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                     ),
                     const SizedBox(height: 16),
                     const Text(
-                      'No Guards found',
+                      'No Wings found',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -408,25 +398,21 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
-                  final owner = filtered[index];
+                  final wing = filtered[index];
                   return _OwnerCard(
-                    owner: owner,
+                    owner: wing,
                     onEdit: () {
-                      // Navigator.pushNamed(
-                      //   context,
-                      //   RouteName.EditSecurityGuardsForm,
-                      // );
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => BlocProvider(
-                            create: (_) => EditguardsBloc(),
-                            child: const EditSecurityGuardsForm(),
+                            create: (_) => EditwingBloc(),
+                            child: const EditWingForm(),
                           ),
                         ),
                       );
                     },
-                    onDelete: () => _deleteOwner(owner),
+                    onDelete: () => _deleteOwner(wing),
                     index: index,
                   );
                 }, childCount: filtered.length),
@@ -440,7 +426,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
 }
 
 class _OwnerCard extends StatefulWidget {
-  final SecurityGuard owner;
+  final Wing owner;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final int index;
@@ -529,23 +515,18 @@ class _OwnerCardState extends State<_OwnerCard>
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  // Avatar
+                  // Wing Icon
                   Container(
                     width: 52,
                     height: 52,
                     decoration: BoxDecoration(
+                      color: AppColors.primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Center(
-                      child: Text(
-                        _getInitials(widget.owner.name),
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-
-                          letterSpacing: -0.5,
-                        ),
-                      ),
+                    child: const Icon(
+                      Icons.apartment_rounded,
+                      color: AppColors.primaryColor,
+                      size: 24,
                     ),
                   ),
                   const SizedBox(width: 14),
@@ -558,7 +539,7 @@ class _OwnerCardState extends State<_OwnerCard>
                         Row(
                           children: [
                             Text(
-                              widget.owner.name,
+                              'Wing',
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
@@ -572,13 +553,13 @@ class _OwnerCardState extends State<_OwnerCard>
                         Row(
                           children: [
                             Icon(
-                              Icons.apartment_rounded,
+                              Icons.location_on_rounded,
                               size: 13,
                               color: primaryColor.withOpacity(0.7),
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              widget.owner.shift,
+                              'Tower: ${widget.owner.tower}',
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: textMid,
@@ -587,24 +568,28 @@ class _OwnerCardState extends State<_OwnerCard>
                             ),
                           ],
                         ),
-                        const SizedBox(height: 3),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.phone_rounded,
-                              size: 13,
-                              color: primaryColor.withOpacity(0.7),
+                        const SizedBox(height: 4),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: widget.owner.status == 'Active'
+                                ? Colors.green.withOpacity(0.1)
+                                : Colors.red.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            widget.owner.status,
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              color: widget.owner.status == 'Active'
+                                  ? Colors.green
+                                  : Colors.red,
                             ),
-                            const SizedBox(width: 4),
-                            Text(
-                              widget.owner.phone,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: textLight,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
@@ -634,15 +619,6 @@ class _OwnerCardState extends State<_OwnerCard>
       ),
     );
   }
-}
-String _getInitials(String name) {
-  final words = name.trim().split(' ');
-
-  if (words.length == 1) {
-    return words.first.substring(0, 1).toUpperCase();
-  }
-
-  return (words.first[0] + words.last[0]).toUpperCase();
 }
 class _ActionButton extends StatefulWidget {
   final IconData icon;

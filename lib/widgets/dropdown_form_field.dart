@@ -25,7 +25,6 @@ class CustomDropdownFormField extends StatelessWidget {
       isExpanded: isExpanded,
       validator: validator,
       onChanged: onChanged,
-      // Logic: Use provided hintText, otherwise default to 'Select'
       hint: Text(hintText ?? 'Select'),
       items: items
           .map((e) => DropdownMenuItem<String>(
@@ -50,7 +49,6 @@ class CustomDropdownFormField extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Colors.blue, width: 1.5),
         ),
-        // Ensures the error text doesn't push the layout too aggressively
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Colors.red, width: 1),

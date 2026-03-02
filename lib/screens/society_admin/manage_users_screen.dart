@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 
-import '../../../config/Routes/RouteName.dart';
+import '../../config/Routes/RouteName.dart';
 
 class ManageUsersScreen extends StatefulWidget {
   final int type;
@@ -90,10 +90,20 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                   },
                 ),
               ]
-                  : const [
+                  :  [
+                _UserCard(
+                  icon: Icons.build_outlined,
+                  title: "Manage Tower",
+                  onTap: () {
+                    Navigator.pushNamed(context, RouteName.ManageTowersScreen);
+                  },
+                ),
                 _UserCard(
                   icon: Icons.build_outlined,
                   title: "Manage Wings",
+                  onTap: () {
+                    Navigator.pushNamed(context, RouteName.ManageWingScreen);
+                  },
                 ),
                 _UserCard(
                   icon: Icons.build_outlined,
@@ -102,6 +112,9 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 _UserCard(
                   icon: Icons.build_outlined,
                   title: "Manage Flats",
+                  onTap: () {
+                    Navigator.pushNamed(context, RouteName.ManageFlatsScreen);
+                  },
                 ),
               ],
             ),
