@@ -272,13 +272,19 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                     // Count
                     Row(
                       children: [
-                        Text(
-                          '${filtered.length} Tower${filtered.length != 1 ? 's' : ''}',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: textLight,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              '${filtered.length} Tower${filtered.length != 1 ? 's' : ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: textLight,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            _buildStatusCounts(filtered),
+                          ],
                         ),
                         const Spacer(),
                         if (_searchQuery.isNotEmpty)
@@ -375,6 +381,71 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
   }
 }
 
+Color _getStatusColor(String status) {
+  switch (status.toLowerCase()) {
+    case 'active':
+      return const Color(0xFF10B981); // Emerald green
+    case 'inactive':
+      return const Color(0xFFF59E0B); // Amber
+    case 'maintenance':
+      return const Color(0xFF3B82F6); // Blue
+    case 'under construction':
+      return const Color(0xFF8B5CF6); // Violet
+    default:
+      return const Color(0xFF6B7280); // Gray
+  }
+}
+Widget _buildStatusCounts(List<Tower> towers) {
+  final statusCounts = <String, int>{};
+
+  for (final tower in towers) {
+    final status = tower.isActive ? 'active' : 'inactive';
+    statusCounts[status] = (statusCounts[status] ?? 0) + 1;
+  }
+
+  final statusEntries = statusCounts.entries.toList()
+    ..sort((a, b) => b.value.compareTo(a.value));
+
+  return Wrap(
+    spacing: 8,
+    runSpacing: 4,
+    children: statusEntries.map((entry) {
+      final status = entry.key;
+      final count = entry.value;
+      final color = _getStatusColor(status);
+
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Text(
+              '${status[0].toUpperCase()}${status.substring(1)}: $count',
+              style: TextStyle(
+                fontSize: 10,
+                color: color,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+    }).toList(),
+  );
+}
 class _TowerCard extends StatefulWidget {
   final Tower tower;
   final VoidCallback onEdit;
@@ -558,14 +629,10 @@ class _TowerCardState extends State<_TowerCard>
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: widget.tower.isActive
-                                ?   Color(0xFF059669).withOpacity(0.1)
-                                : Colors.grey.withOpacity(0.12),
+                            color: _getStatusColor(widget.tower.isActive ? 'active' : 'inactive').withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: widget.tower.isActive
-                                  ? const Color(0xFF059669).withOpacity(0.25)
-                                  : Colors.grey.withOpacity(0.25),
+                              color: _getStatusColor(widget.tower.isActive ? 'active' : 'inactive').withOpacity(0.25),
                               width: 1,
                             ),
                           ),
@@ -576,9 +643,7 @@ class _TowerCardState extends State<_TowerCard>
                                 width: 6,
                                 height: 6,
                                 decoration: BoxDecoration(
-                                  color: widget.tower.isActive
-                                      ?Color(0xFF059669)
-                                      : Colors.grey,
+                                  color: _getStatusColor(widget.tower.isActive ? 'active' : 'inactive'),
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -588,9 +653,7 @@ class _TowerCardState extends State<_TowerCard>
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
-                                  color: widget.tower.isActive
-                                      ? Color(0xFF059669)
-                                      : Colors.grey,
+                                  color: _getStatusColor(widget.tower.isActive ? 'active' : 'inactive'),
                                 ),
                               ),
                             ],

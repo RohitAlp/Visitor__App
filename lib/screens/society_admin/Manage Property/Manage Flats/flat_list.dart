@@ -320,33 +320,15 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                   // Count + stats row
                   Row(
                     children: [
-                      Text(
-                        '${filtered.length} Flat${filtered.length != 1 ? 's' : ''}',
-                        style: const TextStyle(fontSize: 13, color: AppColors.textLight, fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(width: 12),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF059669).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          '${_allFlats.where((f) => f.isOccupied).length} Occupied',
-                          style: const TextStyle(fontSize: 11, color: Color(0xFF059669), fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF59E0B).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          '${_allFlats.where((f) => !f.isOccupied).length} Vacant',
-                          style: const TextStyle(fontSize: 11, color: Color(0xFFF59E0B), fontWeight: FontWeight.w700),
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            '${filtered.length} Flat${filtered.length != 1 ? 's' : ''}',
+                            style: const TextStyle(fontSize: 13, color: AppColors.textLight, fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(width: 4),
+                          _buildStatusCounts(filtered),
+                        ],
                       ),
                       const Spacer(),
                       if (_searchQuery.isNotEmpty)
@@ -429,6 +411,75 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
       ),
     );
   }
+}
+
+Color _getStatusColor(String status) {
+  switch (status.toLowerCase()) {
+    case 'active':
+    case 'occupied':
+      return const Color(0xFF10B981); // Emerald green
+    case 'inactive':
+    case 'vacant':
+      return const Color(0xFFF59E0B); // Amber
+    case 'maintenance':
+      return const Color(0xFF3B82F6); // Blue
+    case 'under construction':
+      return const Color(0xFF8B5CF6); // Violet
+    default:
+      return const Color(0xFF6B7280); // Gray
+  }
+}
+
+Widget _buildStatusCounts(List<Flat> flats) {
+  final statusCounts = <String, int>{};
+
+  for (final flat in flats) {
+    final status = flat.isOccupied ? 'occupied' : 'vacant';
+    statusCounts[status] = (statusCounts[status] ?? 0) + 1;
+  }
+
+  final statusEntries = statusCounts.entries.toList()
+    ..sort((a, b) => b.value.compareTo(a.value));
+
+  return Wrap(
+    spacing: 8,
+    runSpacing: 4,
+    children: statusEntries.map((entry) {
+      final status = entry.key;
+      final count = entry.value;
+      final color = _getStatusColor(status);
+
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Text(
+              '${status[0].toUpperCase()}${status.substring(1)}: $count',
+              style: TextStyle(
+                fontSize: 10,
+                color: color,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+    }).toList(),
+  );
 }
 
 class _FlatCard extends StatefulWidget {
@@ -603,14 +654,10 @@ class _FlatCardState extends State<_FlatCard> with SingleTickerProviderStateMixi
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: widget.flat.isOccupied
-                                ? const Color(0xFF059669).withOpacity(0.1)
-                                : const Color(0xFFF59E0B).withOpacity(0.1),
+                            color: _getStatusColor(widget.flat.isOccupied ? 'occupied' : 'vacant').withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: widget.flat.isOccupied
-                                  ? const Color(0xFF059669).withOpacity(0.25)
-                                  : const Color(0xFFF59E0B).withOpacity(0.25),
+                              color: _getStatusColor(widget.flat.isOccupied ? 'occupied' : 'vacant').withOpacity(0.25),
                               width: 1,
                             ),
                           ),
@@ -621,9 +668,7 @@ class _FlatCardState extends State<_FlatCard> with SingleTickerProviderStateMixi
                                 width: 6,
                                 height: 6,
                                 decoration: BoxDecoration(
-                                  color: widget.flat.isOccupied
-                                      ? const Color(0xFF059669)
-                                      : const Color(0xFFF59E0B),
+                                  color: _getStatusColor(widget.flat.isOccupied ? 'occupied' : 'vacant'),
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -633,9 +678,7 @@ class _FlatCardState extends State<_FlatCard> with SingleTickerProviderStateMixi
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
-                                  color: widget.flat.isOccupied
-                                      ? const Color(0xFF059669)
-                                      : const Color(0xFFF59E0B),
+                                  color: _getStatusColor(widget.flat.isOccupied ? 'occupied' : 'vacant'),
                                 ),
                               ),
                             ],
