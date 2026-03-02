@@ -150,288 +150,284 @@ class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
     final filtered = _filteredAmenities;
 
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       body: SafeArea(
         child: Column(
           children: [
             // Fixed Header
-            Container(
-              color: AppColors.bgColor,
-              child: Column(
-                children: [
-                  // App Bar
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Society Admin',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textDark,
-                            letterSpacing: -0.5,
-                          ),
+            Column(
+              children: [
+                // App Bar
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Society Admin',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textDark,
+                          letterSpacing: -0.5,
                         ),
-                        const Spacer(),
-                        Stack(
-                          children: [
-                            Container(
-                              width: 42,
-                              height: 42,
+                      ),
+                      const Spacer(),
+                      Stack(
+                        children: [
+                          Container(
+                            width: 42,
+                            height: 42,
+                            decoration: BoxDecoration(
+                              color: AppColors.cardBg,
+                              borderRadius: BorderRadius.circular(14),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primaryColor.withOpacity(0.15),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(Icons.notifications_outlined, color: AppColors.primaryColor, size: 22),
+                          ),
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: const BoxDecoration(
+                                color: Color(0xFFFF4444),
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Header Section
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header Row
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () => Navigator.maybePop(context),
+                            child: Container(
+                              width: 36,
+                              height: 36,
                               decoration: BoxDecoration(
                                 color: AppColors.cardBg,
-                                borderRadius: BorderRadius.circular(14),
+                                borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.primaryColor.withOpacity(0.15),
-                                    blurRadius: 12,
-                                    offset: const Offset(0, 4),
+                                    color: Colors.black.withOpacity(0.06),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
                                   ),
                                 ],
                               ),
-                              child: const Icon(Icons.notifications_outlined, color: AppColors.primaryColor, size: 22),
+                              child: const Icon(Icons.arrow_back_ios_rounded, size: 16, color: AppColors.textDark),
                             ),
-                            Positioned(
-                              top: 8,
-                              right: 8,
-                              child: Container(
-                                width: 8,
-                                height: 8,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFFFF4444),
-                                  shape: BoxShape.circle,
+                          ),
+                          const SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Manage Amenities',
+                                style: TextStyle(
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.textDark,
+                                  letterSpacing: -0.8,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Header Section
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Header Row
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () => Navigator.maybePop(context),
+                              // Text(
+                              //   '${_allAmenities.length} amenities',
+                              //   style: const TextStyle(
+                              //     fontSize: 13,
+                              //     color: AppColors.textLight,
+                              //     fontWeight: FontWeight.w500,
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                          const Spacer(),
+                          ScaleTransition(
+                            scale: _fabAnimation,
+                            child: GestureDetector(
+                              onTap: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Text('Add new amenity'),
+                                    backgroundColor: AppColors.primaryColor,
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  ),
+                                );
+                              },
                               child: Container(
-                                width: 36,
-                                height: 36,
+                                width: 42,
+                                height: 42,
                                 decoration: BoxDecoration(
-                                  color: AppColors.cardBg,
-                                  borderRadius: BorderRadius.circular(12),
+                                  gradient: const LinearGradient(
+                                    colors: [AppColors.primaryLight, AppColors.primaryColor],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(14),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.06),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 2),
+                                      color: AppColors.primaryColor.withOpacity(0.45),
+                                      blurRadius: 16,
+                                      offset: const Offset(0, 6),
                                     ),
                                   ],
                                 ),
-                                child: const Icon(Icons.arrow_back_ios_rounded, size: 16, color: AppColors.textDark),
+                                child: const Icon(Icons.add_rounded, color: Colors.white, size: 24),
                               ),
                             ),
-                            const SizedBox(width: 12),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Manage Amenities',
-                                  style: TextStyle(
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppColors.textDark,
-                                    letterSpacing: -0.8,
-                                  ),
-                                ),
-                                // Text(
-                                //   '${_allAmenities.length} amenities',
-                                //   style: const TextStyle(
-                                //     fontSize: 13,
-                                //     color: AppColors.textLight,
-                                //     fontWeight: FontWeight.w500,
-                                //   ),
-                                // ),
-                              ],
-                            ),
-                            const Spacer(),
-                            ScaleTransition(
-                              scale: _fabAnimation,
-                              child: GestureDetector(
-                                onTap: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: const Text('Add new amenity'),
-                                      backgroundColor: AppColors.primaryColor,
-                                      behavior: SnackBarBehavior.floating,
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  width: 42,
-                                  height: 42,
-                                  decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [AppColors.primaryLight, AppColors.primaryColor],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(14),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColors.primaryColor.withOpacity(0.45),
-                                        blurRadius: 16,
-                                        offset: const Offset(0, 6),
-                                      ),
-                                    ],
-                                  ),
-                                  child: const Icon(Icons.add_rounded, color: Colors.white, size: 24),
-                                ),
-                              ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // Search Bar
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.cardBg,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.06),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
                             ),
                           ],
                         ),
-
-                        const SizedBox(height: 20),
-
-                        // Search Bar
-                        Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.cardBg,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.06),
-                                blurRadius: 16,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: TextField(
-                            controller: _searchController,
-                            onChanged: (val) => setState(() => _searchQuery = val),
-                            style: const TextStyle(fontSize: 14, color: AppColors.textDark, fontWeight: FontWeight.w500),
-                            decoration: InputDecoration(
-                              hintText: 'Search by amenity name/category',
-                              hintStyle: const TextStyle(color: AppColors.textLight, fontSize: 14),
-                              prefixIcon: const Icon(Icons.search_rounded, color: AppColors.primaryColor, size: 22),
-                              suffixIcon: _searchQuery.isNotEmpty
-                                  ? GestureDetector(
-                                onTap: () {
-                                  _searchController.clear();
-                                  setState(() => _searchQuery = '');
-                                },
-                                child: const Icon(Icons.close_rounded, color: AppColors.textLight, size: 18),
-                              )
-                                  : null,
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                            ),
+                        child: TextField(
+                          controller: _searchController,
+                          onChanged: (val) => setState(() => _searchQuery = val),
+                          style: const TextStyle(fontSize: 14, color: AppColors.textDark, fontWeight: FontWeight.w500),
+                          decoration: InputDecoration(
+                            hintText: 'Search by amenity name/category',
+                            hintStyle: const TextStyle(color: AppColors.textLight, fontSize: 14),
+                            prefixIcon: const Icon(Icons.search_rounded, color: AppColors.primaryColor, size: 22),
+                            suffixIcon: _searchQuery.isNotEmpty
+                                ? GestureDetector(
+                              onTap: () {
+                                _searchController.clear();
+                                setState(() => _searchQuery = '');
+                              },
+                              child: const Icon(Icons.close_rounded, color: AppColors.textLight, size: 18),
+                            )
+                                : null,
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                           ),
                         ),
+                      ),
 
-                        const SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
-                        // Status Tabs
-                        Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: AppColors.cardBg,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.06),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: Row(
-                              children: ['All', 'Active', 'Maintenance', 'Closed'].map((status) {
-                                final isSelected = _selectedStatus == status;
-                                return Expanded(
-                                  child: GestureDetector(
-                                    onTap: () => setState(() => _selectedStatus = status),
-                                    child: AnimatedContainer(
-                                      duration: const Duration(milliseconds: 200),
-                                      margin: const EdgeInsets.symmetric(horizontal: 2),
-                                      decoration: BoxDecoration(
-                                        color: isSelected ? AppColors.primaryColor : Colors.transparent,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          status,
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w600,
-                                            color: isSelected ? Colors.white : AppColors.textMid,
-                                          ),
+                      // Status Tabs
+                      Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: AppColors.cardBg,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.06),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            children: ['All', 'Active', 'Maintenance', 'Closed'].map((status) {
+                              final isSelected = _selectedStatus == status;
+                              return Expanded(
+                                child: GestureDetector(
+                                  onTap: () => setState(() => _selectedStatus = status),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    margin: const EdgeInsets.symmetric(horizontal: 2),
+                                    decoration: BoxDecoration(
+                                      color: isSelected ? AppColors.primaryColor : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        status,
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w600,
+                                          color: isSelected ? Colors.white : AppColors.textMid,
                                         ),
                                       ),
                                     ),
                                   ),
-                                );
-                              }).toList(),
-                            ),
+                                ),
+                              );
+                            }).toList(),
                           ),
                         ),
+                      ),
 
-                        const SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  '${filtered.length} Amenity${filtered.length != 1 ? 'ies' : ''}',
-                                  style: const TextStyle(fontSize: 13, color: AppColors.textLight, fontWeight: FontWeight.w600),
+                      Row(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                '${filtered.length} Amenity${filtered.length != 1 ? 'ies' : ''}',
+                                style: const TextStyle(fontSize: 13, color: AppColors.textLight, fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(width: 4),
+                              _buildStatusCounts(filtered),
+                            ],
+                          ),
+                          const Spacer(),
+                          if (_searchQuery.isNotEmpty)
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _searchQuery = '';
+                                  _searchController.clear();
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                const SizedBox(width: 4),
-                                _buildStatusCounts(filtered),
-                              ],
-                            ),
-                            const Spacer(),
-                            if (_searchQuery.isNotEmpty)
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _searchQuery = '';
-                                    _searchController.clear();
-                                  });
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primaryColor.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: const Text(
-                                    'Clear',
-                                    style: TextStyle(fontSize: 12, color: AppColors.primaryColor, fontWeight: FontWeight.w600),
-                                  ),
+                                child: const Text(
+                                  'Clear',
+                                  style: TextStyle(fontSize: 12, color: AppColors.primaryColor, fontWeight: FontWeight.w600),
                                 ),
                               ),
-                          ],
-                        ),
+                            ),
+                        ],
+                      ),
 
-                        const SizedBox(height: 16),
-                      ],
-                    ),
+                      const SizedBox(height: 16),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
 
             // Scrollable List

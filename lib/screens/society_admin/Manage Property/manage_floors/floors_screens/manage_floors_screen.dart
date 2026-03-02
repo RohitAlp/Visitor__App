@@ -181,292 +181,288 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
 
         return SafeArea(
           child: Scaffold(
-            backgroundColor: AppColors.bgColor,
             body: Column(
               children: [
                 // Fixed Header
-                Container(
-                  color: AppColors.bgColor,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Header Row
-                        Row(
-                          children: [
-                            GestureDetector(
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header Row
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: AppColors.cardBg,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.06),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(
+                                Icons.arrow_back_ios_rounded,
+                                size: 16,
+                                color: AppColors.textDark,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          const Text(
+                            'Manage Floors',
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.textDark,
+                              letterSpacing: -0.8,
+                            ),
+                          ),
+                          const Spacer(),
+                          ScaleTransition(
+                            scale: _fabAnimation,
+                            child: GestureDetector(
                               onTap: () {
-                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Text('Add new floor'),
+                                    backgroundColor: AppColors.primaryColor,
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                );
                               },
                               child: Container(
-                                width: 36,
-                                height: 36,
+                                width: 42,
+                                height: 42,
                                 decoration: BoxDecoration(
-                                  color: AppColors.cardBg,
-                                  borderRadius: BorderRadius.circular(12),
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      AppColors.primaryLight,
+                                      AppColors.primaryColor,
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(14),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.06),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 2),
+                                      color: AppColors.primaryColor.withOpacity(
+                                        0.45,
+                                      ),
+                                      blurRadius: 16,
+                                      offset: const Offset(0, 6),
                                     ),
                                   ],
                                 ),
                                 child: const Icon(
-                                  Icons.arrow_back_ios_rounded,
-                                  size: 16,
-                                  color: AppColors.textDark,
+                                  Icons.add_rounded,
+                                  color: Colors.white,
+                                  size: 24,
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 12),
-                            const Text(
-                              'Manage Floors',
-                              style: TextStyle(
-                                fontSize: 26,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.textDark,
-                                letterSpacing: -0.8,
-                              ),
-                            ),
-                            const Spacer(),
-                            ScaleTransition(
-                              scale: _fabAnimation,
-                              child: GestureDetector(
-                                onTap: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: const Text('Add new floor'),
-                                      backgroundColor: AppColors.primaryColor,
-                                      behavior: SnackBarBehavior.floating,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  width: 42,
-                                  height: 42,
-                                  decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        AppColors.primaryLight,
-                                        AppColors.primaryColor,
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(14),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColors.primaryColor.withOpacity(
-                                          0.45,
-                                        ),
-                                        blurRadius: 16,
-                                        offset: const Offset(0, 6),
-                                      ),
-                                    ],
-                                  ),
-                                  child: const Icon(
-                                    Icons.add_rounded,
-                                    color: Colors.white,
-                                    size: 24,
-                                  ),
-                                ),
-                              ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.cardBg,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.06),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
                             ),
                           ],
                         ),
-
-                        const SizedBox(height: 20),
-
-                        Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.cardBg,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.06),
-                                blurRadius: 16,
-                                offset: const Offset(0, 4),
+                        child: TextField(
+                          controller: _searchController,
+                          onChanged: (val) {
+                            context.read<ManageFloorsBloc>().add(UpdateSearchQueryEvent(val));
+                          },
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: AppColors.textDark,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: 'Search by tower, wing, floor...',
+                            hintStyle: const TextStyle(
+                              color: AppColors.textLight,
+                              fontSize: 14,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.search_rounded,
+                              color: AppColors.primaryColor,
+                              size: 22,
+                            ),
+                            suffixIcon: state.searchQuery.isNotEmpty
+                                ? GestureDetector(
+                              onTap: () {
+                                _searchController.clear();
+                                context.read<ManageFloorsBloc>().add(const UpdateSearchQueryEvent(''));
+                              },
+                              child: const Icon(
+                                Icons.close_rounded,
+                                color: AppColors.textLight,
+                                size: 18,
                               ),
+                            )
+                                : null,
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: AppColors.cardBg,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: AppColors.textLight.withOpacity(0.2)),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: state.selectedTower,
+                                  isExpanded: true,
+                                  icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.primaryColor),
+                                  style: const TextStyle(
+                                    color: AppColors.textDark,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  hint: const Text('Select Tower'),
+                                  items: state.towers.map((String tower) {
+                                    return DropdownMenuItem<String>(
+                                      value: tower,
+                                      child: Text(tower),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    if (newValue != null) {
+                                      context.read<ManageFloorsBloc>().add(SelectTowerEvent(newValue));
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(width: 12),
+
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: AppColors.cardBg,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: AppColors.textLight.withOpacity(0.2)),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: state.selectedWing,
+                                  isExpanded: true,
+                                  icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.primaryColor),
+                                  style: const TextStyle(
+                                    color: AppColors.textDark,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  hint: const Text('Select Wing'),
+                                  items: state.wings.map((String wing) {
+                                    return DropdownMenuItem<String>(
+                                      value: wing,
+                                      child: Text(wing),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    if (newValue != null) {
+                                      context.read<ManageFloorsBloc>().add(SelectWingEvent(newValue));
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      Row(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${filtered.length} Floor${filtered.length != 1 ? 's' : ''}',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: AppColors.textLight,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              _buildStatusCounts(filtered),
+
                             ],
                           ),
-                          child: TextField(
-                            controller: _searchController,
-                            onChanged: (val) {
-                              context.read<ManageFloorsBloc>().add(UpdateSearchQueryEvent(val));
-                            },
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.textDark,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: 'Search by tower, wing, floor...',
-                              hintStyle: const TextStyle(
-                                color: AppColors.textLight,
-                                fontSize: 14,
-                              ),
-                              prefixIcon: const Icon(
-                                Icons.search_rounded,
-                                color: AppColors.primaryColor,
-                                size: 22,
-                              ),
-                              suffixIcon: state.searchQuery.isNotEmpty
-                                  ? GestureDetector(
-                                onTap: () {
-                                  _searchController.clear();
-                                  context.read<ManageFloorsBloc>().add(const UpdateSearchQueryEvent(''));
-                                },
-                                child: const Icon(
-                                  Icons.close_rounded,
-                                  color: AppColors.textLight,
-                                  size: 18,
-                                ),
-                              )
-                                  : null,
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        Row(
-                          children: [
-                            Expanded(
+                          const Spacer(),
+                          if (state.selectedTower != 'All' || state.selectedWing != 'All' || state.searchQuery.isNotEmpty)
+                            GestureDetector(
+                              onTap: () {
+                                _searchController.clear();
+                                context.read<ManageFloorsBloc>().add(const ClearFiltersEvent());
+                              },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.cardBg,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: AppColors.textLight.withOpacity(0.2)),
+                                  color: AppColors.primaryColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: state.selectedTower,
-                                    isExpanded: true,
-                                    icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.primaryColor),
-                                    style: const TextStyle(
-                                      color: AppColors.textDark,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    hint: const Text('Select Tower'),
-                                    items: state.towers.map((String tower) {
-                                      return DropdownMenuItem<String>(
-                                        value: tower,
-                                        child: Text(tower),
-                                      );
-                                    }).toList(),
-                                    onChanged: (String? newValue) {
-                                      if (newValue != null) {
-                                        context.read<ManageFloorsBloc>().add(SelectTowerEvent(newValue));
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(width: 12),
-
-                            Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
-                                decoration: BoxDecoration(
-                                  color: AppColors.cardBg,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: AppColors.textLight.withOpacity(0.2)),
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: state.selectedWing,
-                                    isExpanded: true,
-                                    icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.primaryColor),
-                                    style: const TextStyle(
-                                      color: AppColors.textDark,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    hint: const Text('Select Wing'),
-                                    items: state.wings.map((String wing) {
-                                      return DropdownMenuItem<String>(
-                                        value: wing,
-                                        child: Text(wing),
-                                      );
-                                    }).toList(),
-                                    onChanged: (String? newValue) {
-                                      if (newValue != null) {
-                                        context.read<ManageFloorsBloc>().add(SelectWingEvent(newValue));
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        Row(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${filtered.length} Floor${filtered.length != 1 ? 's' : ''}',
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    color: AppColors.textLight,
+                                child: const Text(
+                                  'Clear filters',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: AppColors.primaryColor,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                const SizedBox(width: 4),
-                                _buildStatusCounts(filtered),
-
-                              ],
-                            ),
-                            const Spacer(),
-                            if (state.selectedTower != 'All' || state.selectedWing != 'All' || state.searchQuery.isNotEmpty)
-                              GestureDetector(
-                                onTap: () {
-                                  _searchController.clear();
-                                  context.read<ManageFloorsBloc>().add(const ClearFiltersEvent());
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primaryColor.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: const Text(
-                                    'Clear filters',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: AppColors.primaryColor,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
                               ),
-                          ],
-                        ),
+                            ),
+                        ],
+                      ),
 
-                        const SizedBox(height: 16),
-                      ],
-                    ),
+                      const SizedBox(height: 16),
+                    ],
                   ),
                 ),
 

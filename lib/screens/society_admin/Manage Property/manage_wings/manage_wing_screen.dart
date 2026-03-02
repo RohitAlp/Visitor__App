@@ -164,214 +164,210 @@ class _ManageWingScreenState extends State<ManageWingScreen>
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: AppColors.bgColor,
         body: Column(
           children: [
             // Fixed Header
-            Container(
-              color: AppColors.bgColor,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Header Row
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {},
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header Row
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: AppColors.cardBg,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.06),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.arrow_back_ios_rounded,
+                            size: 16,
+                            color: AppColors.textDark,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Text(
+                        'Manage Wings',
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textDark,
+                          letterSpacing: -0.8,
+                        ),
+                      ),
+                      const Spacer(),
+                      ScaleTransition(
+                        scale: _fabAnimation,
+                        child: GestureDetector(
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('Add new flat owner'),
+                                backgroundColor: AppColors.primaryColor,
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            );
+                          },
                           child: Container(
-                            width: 36,
-                            height: 36,
+                            width: 42,
+                            height: 42,
                             decoration: BoxDecoration(
-                              color: AppColors.cardBg,
-                              borderRadius: BorderRadius.circular(12),
+                              gradient: const LinearGradient(
+                                colors: [
+                                  AppColors.primaryLight,
+                                  AppColors.primaryColor,
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(14),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.06),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 2),
+                                  color: AppColors.primaryColor.withOpacity(
+                                    0.45,
+                                  ),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 6),
                                 ),
                               ],
                             ),
                             child: const Icon(
-                              Icons.arrow_back_ios_rounded,
-                              size: 16,
-                              color: AppColors.textDark,
+                              Icons.add_rounded,
+                              color: Colors.white,
+                              size: 24,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        const Text(
-                          'Manage Wings',
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textDark,
-                            letterSpacing: -0.8,
-                          ),
-                        ),
-                        const Spacer(),
-                        ScaleTransition(
-                          scale: _fabAnimation,
-                          child: GestureDetector(
-                            onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: const Text('Add new flat owner'),
-                                  backgroundColor: AppColors.primaryColor,
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              width: 42,
-                              height: 42,
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    AppColors.primaryLight,
-                                    AppColors.primaryColor,
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                borderRadius: BorderRadius.circular(14),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.primaryColor.withOpacity(
-                                      0.45,
-                                    ),
-                                    blurRadius: 16,
-                                    offset: const Offset(0, 6),
-                                  ),
-                                ],
-                              ),
-                              child: const Icon(
-                                Icons.add_rounded,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                            ),
-                          ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Search Bar
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.cardBg,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.06),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
-
-                    const SizedBox(height: 20),
-
-                    // Search Bar
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.cardBg,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.06),
-                            blurRadius: 16,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
+                    child: TextField(
+                      controller: _searchController,
+                      onChanged: (val) => setState(() => _searchQuery = val),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textDark,
+                        fontWeight: FontWeight.w500,
                       ),
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: (val) => setState(() => _searchQuery = val),
-                        style: const TextStyle(
+                      decoration: InputDecoration(
+                        hintText: 'Search by wing ot tower name...',
+                        hintStyle: const TextStyle(
+                          color: AppColors.textLight,
                           fontSize: 14,
-                          color: AppColors.textDark,
-                          fontWeight: FontWeight.w500,
                         ),
-                        decoration: InputDecoration(
-                          hintText: 'Search by wing ot tower name...',
-                          hintStyle: const TextStyle(
+                        prefixIcon: const Icon(
+                          Icons.search_rounded,
+                          color: AppColors.primaryColor,
+                          size: 22,
+                        ),
+                        suffixIcon: _searchQuery.isNotEmpty
+                            ? GestureDetector(
+                          onTap: () {
+                            _searchController.clear();
+                            setState(() => _searchQuery = '');
+                          },
+                          child: const Icon(
+                            Icons.close_rounded,
                             color: AppColors.textLight,
-                            fontSize: 14,
+                            size: 18,
                           ),
-                          prefixIcon: const Icon(
-                            Icons.search_rounded,
-                            color: AppColors.primaryColor,
-                            size: 22,
-                          ),
-                          suffixIcon: _searchQuery.isNotEmpty
-                              ? GestureDetector(
-                            onTap: () {
-                              _searchController.clear();
-                              setState(() => _searchQuery = '');
-                            },
-                            child: const Icon(
-                              Icons.close_rounded,
-                              color: AppColors.textLight,
-                              size: 18,
-                            ),
-                          )
-                              : null,
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 16,
-                          ),
+                        )
+                            : null,
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
                         ),
                       ),
                     ),
+                  ),
 
-                    const SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-                    const SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-                    Row(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '${filtered.length} Wing${filtered.length != 1 ? 's' : ''}',
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: AppColors.textLight,
+                  Row(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            '${filtered.length} Wing${filtered.length != 1 ? 's' : ''}',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: AppColors.textLight,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          _buildStatusCounts(filtered),
+                        ],
+                      ),
+                      const Spacer(),
+                      if (_selectedWing != 'All' || _searchQuery.isNotEmpty)
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedWing = 'All';
+                              _searchQuery = '';
+                              _searchController.clear();
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              'Clear filters',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: AppColors.primaryColor,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const SizedBox(width: 4),
-                            _buildStatusCounts(filtered),
-                          ],
-                        ),
-                        const Spacer(),
-                        if (_selectedWing != 'All' || _searchQuery.isNotEmpty)
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedWing = 'All';
-                                _searchQuery = '';
-                                _searchController.clear();
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.primaryColor.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Text(
-                                'Clear filters',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.primaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
+                  ),
 
-                    const SizedBox(height: 16),
-                  ],
-                ),
+                  const SizedBox(height: 16),
+                ],
               ),
             ),
 

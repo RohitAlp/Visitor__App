@@ -17,7 +17,6 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
       appBar: const CustomAppBar(title: "Manage Users", showBackButton: false),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
