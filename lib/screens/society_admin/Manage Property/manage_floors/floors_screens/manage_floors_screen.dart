@@ -4,9 +4,9 @@ import 'package:visitorapp/config/Routes/RouteName.dart';
 import 'package:visitorapp/screens/society_admin/Manage%20Property/manage_floors/edit_floors_form/bloc/edit_floors_bloc.dart' hide SelectTowerEvent;
 import 'package:visitorapp/screens/society_admin/Manage%20Property/manage_floors/edit_floors_form/edit_floor_form.dart';
 
-import '../../../../constants/app_colors.dart';
-import '../../../../utils/enum.dart';
-import 'bloc/manage_floors_bloc.dart';
+import '../../../../../constants/app_colors.dart';
+import '../../../../../utils/enum.dart';
+import 'bloc/manage_floors_bloc.dart' show ManageFloorsBloc, DeleteFloorEvent, Floor, ManageFloorsState, UpdateSearchQueryEvent, ClearFiltersEvent, LoadFloorsEvent, SelectTowerEvent, SelectWingEvent;
 
 class ManageFloorsScreen extends StatelessWidget {
   const ManageFloorsScreen({super.key});
@@ -182,10 +182,11 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
         return SafeArea(
           child: Scaffold(
             backgroundColor: AppColors.bgColor,
-            body: CustomScrollView(
-              slivers: [
-                // App Bar
-                SliverToBoxAdapter(
+            body: Column(
+              children: [
+                // Fixed Header
+                Container(
+                  color: AppColors.bgColor,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                     child: Column(
@@ -469,93 +470,75 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                   ),
                 ),
 
-                // Loading State
-                if (state.status == Status.loading)
-                  const SliverToBoxAdapter(
-                    child: Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(50),
-                        child: CircularProgressIndicator(
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
+                // Scrollable List
+                Expanded(
+                  child: state.status == Status.loading
+                      ? const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryColor,
                     ),
+                  )
+                      : filtered.isEmpty
+                      ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryColor.withOpacity(0.08),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.layers_outlined,
+                            size: 40,
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'No Floors found',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textDark,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        const Text(
+                          'Try adjusting your search or filters',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: AppColors.textLight,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                      : ListView.builder(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                    itemCount: filtered.length,
+                    itemBuilder: (context, index) {
+                      final floor = filtered[index];
+                      return _FloorCard(
+                        floor: floor,
+                        onEdit: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (_) => EditFloorsBloc(),
+                                child: const EditFloorForm(),
+                              ),
+                            ),
+                          );
+                        },
+                        onDelete: () => _deleteFloor(floor, context),
+                        index: index,
+                      );
+                    },
                   ),
-
-                // Floors List
-                if (state.status != Status.loading)
-                  if (filtered.isEmpty)
-                    SliverFillRemaining(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: AppColors.primaryColor.withOpacity(0.08),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.layers_outlined,
-                                size: 40,
-                                color: AppColors.primaryColor,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            const Text(
-                              'No Floors found',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.textDark,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            const Text(
-                              'Try adjusting your search or filters',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: AppColors.textLight,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  else
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-                      sliver: SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                            final floor = filtered[index];
-                            return _FloorCard(
-                              floor: floor,
-                              onEdit: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => BlocProvider(
-                                      create: (_) => EditFloorsBloc(),
-                                      child: const EditFloorForm(),
-                                    ),
-                                  ),
-                                );
-                              },
-                              onDelete: () => _deleteFloor(floor, context),
-                              index: index,
-                            );
-                          },
-                          childCount: filtered.length,
-                        ),
-                      ),
-                    ),
-
-                // Bottom padding
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 100),
                 ),
               ],
             ),

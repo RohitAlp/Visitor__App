@@ -4,6 +4,7 @@ import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/screens/society_admin/Manage Property/manage_wings/edit_wing_form/bloc/editwing_bloc.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
+import 'package:visitorapp/widgets/custom_dropdown.dart';
 
 import '../../../../../utils/enum.dart';
 
@@ -78,34 +79,15 @@ class _EditWingFormState extends State<EditWingForm> {
                         const SizedBox(height: 8),
                         BlocBuilder<EditwingBloc, EditwingState>(
                           builder: (context, state) {
-                            return Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey.shade300),
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: state.selectedTower.isEmpty ? null : state.selectedTower,
-                                  hint: const Text(
-                                    'Select Tower',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  items: towers.map((String tower) {
-                                    return DropdownMenuItem<String>(
-                                      value: tower,
-                                      child: Text(tower),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? value) {
-                                    if (value != null) {
-                                      context.read<EditwingBloc>().add(SelectTowerEvent(value));
-                                    }
-                                  },
-                                ),
-                              ),
+                            return CustomDropdown(
+                              value: state.selectedTower.isEmpty ? null : state.selectedTower,
+                              hintText: 'Select Tower',
+                              items: towers,
+                              onChanged: (String? value) {
+                                if (value != null) {
+                                  context.read<EditwingBloc>().add(SelectTowerEvent(value));
+                                }
+                              },
                             );
                           },
                         ),
@@ -127,34 +109,15 @@ class _EditWingFormState extends State<EditWingForm> {
                         const SizedBox(height: 8),
                         BlocBuilder<EditwingBloc, EditwingState>(
                           builder: (context, state) {
-                            return Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey.shade300),
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: state.wingStatus.isEmpty ? null : state.wingStatus,
-                                  hint: const Text(
-                                    'Select Status',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  items: wingStatuses.map((String status) {
-                                    return DropdownMenuItem<String>(
-                                      value: status,
-                                      child: Text(status),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? value) {
-                                    if (value != null) {
-                                      context.read<EditwingBloc>().add(SelectWingStatusEvent(value));
-                                    }
-                                  },
-                                ),
-                              ),
+                            return CustomDropdown(
+                              value: state.wingStatus.isEmpty ? null : state.wingStatus,
+                              hintText: 'Select Status',
+                              items: wingStatuses,
+                              onChanged: (String? value) {
+                                if (value != null) {
+                                  context.read<EditwingBloc>().add(SelectWingStatusEvent(value));
+                                }
+                              },
                             );
                           },
                         ),

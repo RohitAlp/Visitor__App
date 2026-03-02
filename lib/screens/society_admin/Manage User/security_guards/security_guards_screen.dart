@@ -160,10 +160,11 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.bgColor,
-        body: CustomScrollView(
-          slivers: [
-            // App Bar
-            SliverToBoxAdapter(
+        body: Column(
+          children: [
+            // Fixed Header
+            Container(
+              color: AppColors.bgColor,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                 child: Column(
@@ -363,10 +364,10 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
               ),
             ),
 
-            // Owner List
-            filtered.isEmpty
-                ? SliverFillRemaining(
-              child: Center(
+            // Scrollable List
+            Expanded(
+              child: filtered.isEmpty
+                  ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -402,20 +403,15 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                     ),
                   ],
                 ),
-              ),
-            )
-                : SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
+              )
+                  : ListView.builder(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                itemCount: filtered.length,
+                itemBuilder: (context, index) {
                   final owner = filtered[index];
                   return _OwnerCard(
                     owner: owner,
                     onEdit: () {
-                      // Navigator.pushNamed(
-                      //   context,
-                      //   RouteName.EditSecurityGuardsForm,
-                      // );
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -429,7 +425,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                     onDelete: () => _deleteOwner(owner),
                     index: index,
                   );
-                }, childCount: filtered.length),
+                },
               ),
             ),
           ],

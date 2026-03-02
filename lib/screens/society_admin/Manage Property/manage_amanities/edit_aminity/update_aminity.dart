@@ -5,6 +5,7 @@ import 'package:visitorapp/screens/society_admin/Manage Property/manage_amanitie
 import 'package:visitorapp/utils/enum.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
+import 'package:visitorapp/widgets/custom_dropdown.dart';
 
 class EditAminityForm extends StatefulWidget {
   const EditAminityForm({super.key});
@@ -98,34 +99,15 @@ class _EditAminityFormState extends State<EditAminityForm> {
                         const SizedBox(height: 8),
                         BlocBuilder<AminityBloc, AminityState>(
                           builder: (context, state) {
-                            return Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey.shade300),
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: state.amenityType.isEmpty ? null : state.amenityType,
-                                  hint: const Text(
-                                    'Select amenity type',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  items: _amenityTypes.map((String type) {
-                                    return DropdownMenuItem<String>(
-                                      value: type,
-                                      child: Text(type),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? value) {
-                                    if (value != null) {
-                                      context.read<AminityBloc>().add(AmenityTypeChangedEvent(value));
-                                    }
-                                  },
-                                ),
-                              ),
+                            return CustomDropdown(
+                              value: state.amenityType.isEmpty ? null : state.amenityType,
+                              hintText: 'Select amenity type',
+                              items: _amenityTypes,
+                              onChanged: (String? value) {
+                                if (value != null) {
+                                  context.read<AminityBloc>().add(AmenityTypeChangedEvent(value));
+                                }
+                              },
                             );
                           },
                         ),
@@ -157,34 +139,15 @@ class _EditAminityFormState extends State<EditAminityForm> {
                         const SizedBox(height: 8),
                         BlocBuilder<AminityBloc, AminityState>(
                           builder: (context, state) {
-                            return Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey.shade300),
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: state.status.isEmpty ? null : state.status,
-                                  hint: const Text(
-                                    'Select status',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  items: _statuses.map((String status) {
-                                    return DropdownMenuItem<String>(
-                                      value: status,
-                                      child: Text(status),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? value) {
-                                    if (value != null) {
-                                      context.read<AminityBloc>().add(StatusChangedEvent(value));
-                                    }
-                                  },
-                                ),
-                              ),
+                            return CustomDropdown(
+                              value: state.status.isEmpty ? null : state.status,
+                              hintText: 'Select status',
+                              items: _statuses,
+                              onChanged: (String? value) {
+                                if (value != null) {
+                                  context.read<AminityBloc>().add(StatusChangedEvent(value));
+                                }
+                              },
                             );
                           },
                         ),

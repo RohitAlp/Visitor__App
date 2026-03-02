@@ -165,10 +165,11 @@ class _ManageWingScreenState extends State<ManageWingScreen>
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.bgColor,
-        body: CustomScrollView(
-          slivers: [
-            // App Bar
-            SliverToBoxAdapter(
+        body: Column(
+          children: [
+            // Fixed Header
+            Container(
+              color: AppColors.bgColor,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                 child: Column(
@@ -368,16 +369,16 @@ class _ManageWingScreenState extends State<ManageWingScreen>
                       ],
                     ),
 
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
             ),
 
-            // Owner List
-            filtered.isEmpty
-                ? SliverFillRemaining(
-              child: Center(
+            // Scrollable List
+            Expanded(
+              child: filtered.isEmpty
+                  ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -413,12 +414,11 @@ class _ManageWingScreenState extends State<ManageWingScreen>
                     ),
                   ],
                 ),
-              ),
-            )
-                : SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
+              )
+                  : ListView.builder(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                itemCount: filtered.length,
+                itemBuilder: (context, index) {
                   final wing = filtered[index];
                   return _OwnerCard(
                     owner: wing,
@@ -436,7 +436,7 @@ class _ManageWingScreenState extends State<ManageWingScreen>
                     onDelete: () => _deleteOwner(wing),
                     index: index,
                   );
-                }, childCount: filtered.length),
+                },
               ),
             ),
           ],

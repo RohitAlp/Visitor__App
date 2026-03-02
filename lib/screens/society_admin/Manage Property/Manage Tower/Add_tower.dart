@@ -130,12 +130,11 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
     return SafeArea(
       child: Scaffold(
         backgroundColor: bgColor,
-        body: CustomScrollView(
-          slivers: [
-            // App Bar
-           
-      
-            SliverToBoxAdapter(
+        body: Column(
+          children: [
+            // Fixed Header
+            Container(
+              color: bgColor,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                 child: Column(
@@ -178,14 +177,14 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                                 letterSpacing: -0.8,
                               ),
                             ),
-                            Text(
-                              '${_allTowers.length} towers',
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: textLight,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                            // Text(
+                            //   '${_allTowers.length} towers',
+                            //   style: const TextStyle(
+                            //     fontSize: 13,
+                            //     color: textLight,
+                            //     fontWeight: FontWeight.w500,
+                            //   ),
+                            // ),
                           ],
                         ),
                         const Spacer(),
@@ -220,9 +219,9 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                         ),
                       ],
                     ),
-      
+
                     const SizedBox(height: 20),
-      
+
                     // Search Bar
                     Container(
                       decoration: BoxDecoration(
@@ -266,9 +265,9 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                         ),
                       ),
                     ),
-      
+
                     const SizedBox(height: 16),
-      
+
                     // Count
                     Row(
                       children: [
@@ -314,17 +313,17 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                           ),
                       ],
                     ),
-      
-                    const SizedBox(height: 8),
+
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
             ),
-      
-            // Tower List
-            filtered.isEmpty
-                ? SliverFillRemaining(
-              child: Center(
+
+            // Scrollable List
+            Expanded(
+              child: filtered.isEmpty
+                  ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -355,23 +354,19 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                     ),
                   ],
                 ),
-              ),
-            )
-                : SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                    final tower = filtered[index];
-                    return _TowerCard(
-                      tower: tower,
-                      onEdit: () => _editTower(tower),
-                      onDelete: () => _deleteTower(tower),
-                      index: index,
-                    );
-                  },
-                  childCount: filtered.length,
-                ),
+              )
+                  : ListView.builder(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                itemCount: filtered.length,
+                itemBuilder: (context, index) {
+                  final tower = filtered[index];
+                  return _TowerCard(
+                    tower: tower,
+                    onEdit: () => _editTower(tower),
+                    onDelete: () => _deleteTower(tower),
+                    index: index,
+                  );
+                },
               ),
             ),
           ],

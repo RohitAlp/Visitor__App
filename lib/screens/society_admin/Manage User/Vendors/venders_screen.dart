@@ -176,10 +176,11 @@ class _VendorsScreensState extends State<VendorsScreens>
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.bgColor,
-        body: CustomScrollView(
-          slivers: [
-            // App Bar
-            SliverToBoxAdapter(
+        body: Column(
+          children: [
+            // Fixed Header
+            Container(
+              color: AppColors.bgColor,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                 child: Column(
@@ -344,14 +345,6 @@ class _VendorsScreensState extends State<VendorsScreens>
                             width: 54,
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              // gradient: const LinearGradient(
-                              //   colors: [
-                              //     // AppColors.primaryLight,
-                              //     AppColors.primaryColor,
-                              //   ],
-                              //   begin: Alignment.topLeft,
-                              //   end: Alignment.bottomRight,
-                              // ),
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
@@ -424,10 +417,10 @@ class _VendorsScreensState extends State<VendorsScreens>
               ),
             ),
 
-            // Owner List
-            filtered.isEmpty
-                ? SliverFillRemaining(
-              child: Center(
+            // Scrollable List
+            Expanded(
+              child: filtered.isEmpty
+                  ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -463,17 +456,15 @@ class _VendorsScreensState extends State<VendorsScreens>
                     ),
                   ],
                 ),
-              ),
-            )
-                : SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
+              )
+                  : ListView.builder(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                itemCount: filtered.length,
+                itemBuilder: (context, index) {
                   final owner = filtered[index];
                   return _OwnerCard(
                     owner: owner,
                     onEdit: () {
-
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -487,7 +478,7 @@ class _VendorsScreensState extends State<VendorsScreens>
                     onDelete: () => _deleteOwner(owner),
                     index: index,
                   );
-                }, childCount: filtered.length),
+                },
               ),
             ),
           ],

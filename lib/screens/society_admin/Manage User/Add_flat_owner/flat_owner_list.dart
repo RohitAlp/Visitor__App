@@ -141,15 +141,13 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
     final filtered = _filteredOwners;
 
     return SafeArea(
-
       child: Scaffold(
         backgroundColor: AppColors.bgColor,
-        body: CustomScrollView(
-          slivers: [
-            // App Bar
-
-
-            SliverToBoxAdapter(
+        body: Column(
+          children: [
+            // Fixed Header
+            Container(
+              color: AppColors.bgColor,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                 child: Column(
@@ -364,10 +362,10 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
               ),
             ),
 
-            // Owner List
-            filtered.isEmpty
-                ? SliverFillRemaining(
-              child: Center(
+            // Scrollable List
+            Expanded(
+              child: filtered.isEmpty
+                  ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -396,23 +394,19 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                     ),
                   ],
                 ),
-              ),
-            )
-                : SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                    final owner = filtered[index];
-                    return _OwnerCard(
-                      owner: owner,
-                      onEdit: () => _editOwner(owner),
-                      onDelete: () => _deleteOwner(owner),
-                      index: index,
-                    );
-                  },
-                  childCount: filtered.length,
-                ),
+              )
+                  : ListView.builder(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                itemCount: filtered.length,
+                itemBuilder: (context, index) {
+                  final owner = filtered[index];
+                  return _OwnerCard(
+                    owner: owner,
+                    onEdit: () => _editOwner(owner),
+                    onDelete: () => _deleteOwner(owner),
+                    index: index,
+                  );
+                },
               ),
             ),
           ],

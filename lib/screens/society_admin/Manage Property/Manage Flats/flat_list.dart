@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:visitorapp/screens/society_admin/Manage%20Property/Manage%20Flats/edit_flatts_form/edit_flatts_form.dart';
+import 'package:visitorapp/screens/society_admin/Manage%20Property/Manage%20Flats/edit_flatts_form/flat_bloc/flat_bloc.dart';
 import '../../../../constants/app_colors.dart';
 
 class Flat {
@@ -125,289 +128,296 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
 
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      body: CustomScrollView(
-        slivers: [
-          // App Bar
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: 0,
-            backgroundColor: AppColors.bgColor,
-            elevation: 0,
-            leading: null,
-            automaticallyImplyLeading: false,
-            title: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Row(
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Fixed Header
+            Container(
+              color: AppColors.bgColor,
+              child: Column(
                 children: [
-                  const Text(
-                    'Society Admin',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textDark,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  const Spacer(),
-                  Stack(
-                    children: [
-                      Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
-                          color: AppColors.cardBg,
-                          borderRadius: BorderRadius.circular(14),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.primaryColor.withOpacity(0.15),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
+                  // App Bar
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Society Admin',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textDark,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        const Spacer(),
+                        Stack(
+                          children: [
+                            Container(
+                              width: 42,
+                              height: 42,
+                              decoration: BoxDecoration(
+                                color: AppColors.cardBg,
+                                borderRadius: BorderRadius.circular(14),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors.primaryColor.withOpacity(0.15),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(Icons.notifications_outlined, color: AppColors.primaryColor, size: 22),
+                            ),
+                            Positioned(
+                              top: 8,
+                              right: 8,
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFFF4444),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                        child: const Icon(Icons.notifications_outlined, color: AppColors.primaryColor, size: 22),
-                      ),
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFFF4444),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
 
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Header Row
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.maybePop(context),
-                        child: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: AppColors.cardBg,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.06),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
+                  // Header Section
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Header Row
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () => Navigator.maybePop(context),
+                              child: Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: AppColors.cardBg,
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.06),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: const Icon(Icons.arrow_back_ios_rounded, size: 16, color: AppColors.textDark),
                               ),
-                            ],
-                          ),
-                          child: const Icon(Icons.arrow_back_ios_rounded, size: 16, color: AppColors.textDark),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Manage Flats',
-                            style: TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.textDark,
-                              letterSpacing: -0.8,
                             ),
-                          ),
-                          Text(
-                            '${_allFlats.length} flats',
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: AppColors.textLight,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      ScaleTransition(
-                        scale: _fabAnimation,
-                        child: GestureDetector(
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text('Add new flat'),
-                                backgroundColor: AppColors.primaryColor,
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            width: 42,
-                            height: 42,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [AppColors.primaryLight, AppColors.primaryColor],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              borderRadius: BorderRadius.circular(14),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.primaryColor.withOpacity(0.45),
-                                  blurRadius: 16,
-                                  offset: const Offset(0, 6),
+                            const SizedBox(width: 12),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Manage Flats',
+                                  style: TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.textDark,
+                                    letterSpacing: -0.8,
+                                  ),
+                                ),
+                                Text(
+                                  '${_allFlats.length} flats',
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    color: AppColors.textLight,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ],
                             ),
-                            child: const Icon(Icons.add_rounded, color: Colors.white, size: 24),
+                            const Spacer(),
+                            ScaleTransition(
+                              scale: _fabAnimation,
+                              child: GestureDetector(
+                                onTap: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: const Text('Add new flat'),
+                                      backgroundColor: AppColors.primaryColor,
+                                      behavior: SnackBarBehavior.floating,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  width: 42,
+                                  height: 42,
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      colors: [AppColors.primaryLight, AppColors.primaryColor],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(14),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColors.primaryColor.withOpacity(0.45),
+                                        blurRadius: 16,
+                                        offset: const Offset(0, 6),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Icon(Icons.add_rounded, color: Colors.white, size: 24),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Search Bar
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.cardBg,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.06),
+                                blurRadius: 16,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: TextField(
+                            controller: _searchController,
+                            onChanged: (val) => setState(() => _searchQuery = val),
+                            style: const TextStyle(fontSize: 14, color: AppColors.textDark, fontWeight: FontWeight.w500),
+                            decoration: InputDecoration(
+                              hintText: 'Search by owner name/flat number',
+                              hintStyle: const TextStyle(color: AppColors.textLight, fontSize: 14),
+                              prefixIcon: const Icon(Icons.search_rounded, color: AppColors.primaryColor, size: 22),
+                              suffixIcon: _searchQuery.isNotEmpty
+                                  ? GestureDetector(
+                                onTap: () {
+                                  _searchController.clear();
+                                  setState(() => _searchQuery = '');
+                                },
+                                child: const Icon(Icons.close_rounded, color: AppColors.textLight, size: 18),
+                              )
+                                  : null,
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
 
-                  const SizedBox(height: 20),
+                        const SizedBox(height: 16),
 
-                  // Search Bar
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.cardBg,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
+                        // Count + stats row
+                        Row(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  '${filtered.length} Flat${filtered.length != 1 ? 's' : ''}',
+                                  style: const TextStyle(fontSize: 13, color: AppColors.textLight, fontWeight: FontWeight.w600),
+                                ),
+                                const SizedBox(width: 4),
+                                _buildStatusCounts(filtered),
+                              ],
+                            ),
+                            const Spacer(),
+                            if (_searchQuery.isNotEmpty)
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _searchQuery = '';
+                                    _searchController.clear();
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primaryColor.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Text(
+                                    'Clear',
+                                    style: TextStyle(fontSize: 12, color: AppColors.primaryColor, fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
+
+                        const SizedBox(height: 16),
                       ],
                     ),
-                    child: TextField(
-                      controller: _searchController,
-                      onChanged: (val) => setState(() => _searchQuery = val),
-                      style: const TextStyle(fontSize: 14, color: AppColors.textDark, fontWeight: FontWeight.w500),
-                      decoration: InputDecoration(
-                        hintText: 'Search by owner name/flat number',
-                        hintStyle: const TextStyle(color: AppColors.textLight, fontSize: 14),
-                        prefixIcon: const Icon(Icons.search_rounded, color: AppColors.primaryColor, size: 22),
-                        suffixIcon: _searchQuery.isNotEmpty
-                            ? GestureDetector(
-                          onTap: () {
-                            _searchController.clear();
-                            setState(() => _searchQuery = '');
-                          },
-                          child: const Icon(Icons.close_rounded, color: AppColors.textLight, size: 18),
-                        )
-                            : null,
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Count + stats row
-                  Row(
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            '${filtered.length} Flat${filtered.length != 1 ? 's' : ''}',
-                            style: const TextStyle(fontSize: 13, color: AppColors.textLight, fontWeight: FontWeight.w600),
-                          ),
-                          const SizedBox(width: 4),
-                          _buildStatusCounts(filtered),
-                        ],
-                      ),
-                      const Spacer(),
-                      if (_searchQuery.isNotEmpty)
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _searchQuery = '';
-                              _searchController.clear();
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Text(
-                              'Clear',
-                              style: TextStyle(fontSize: 12, color: AppColors.primaryColor, fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 8),
-                ],
-              ),
-            ),
-          ),
-
-          // Flat List
-          filtered.isEmpty
-              ? SliverFillRemaining(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withOpacity(0.08),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.meeting_room_rounded, size: 40, color: AppColors.primaryColor),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'No flats found',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.textDark),
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    'Try adjusting your search',
-                    style: TextStyle(fontSize: 13, color: AppColors.textLight),
                   ),
                 ],
               ),
             ),
-          )
-              : SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) {
+
+            // Scrollable List
+            Expanded(
+              child: filtered.isEmpty
+                  ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor.withOpacity(0.08),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.meeting_room_rounded, size: 40, color: AppColors.primaryColor),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'No flats found',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.textDark),
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Try adjusting your search',
+                      style: TextStyle(fontSize: 13, color: AppColors.textLight),
+                    ),
+                  ],
+                ),
+              )
+                  : ListView.builder(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                itemCount: filtered.length,
+                itemBuilder: (context, index) {
                   final flat = filtered[index];
                   return _FlatCard(
                     flat: flat,
-                    onEdit: () => _editFlat(flat),
+                    onEdit: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider(
+                            create: (_) => FlatBloc(),
+                            child: const EditFlatForm(),
+                          ),
+                        ),
+                      );
+                    },
                     onDelete: () => _deleteFlat(flat),
                     index: index,
                   );
                 },
-                childCount: filtered.length,
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
