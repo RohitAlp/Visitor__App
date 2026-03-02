@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visitorapp/constants/app_colors.dart';
-import 'package:visitorapp/screens/society_admin/Manage Property/manage_wings/edit_wing_form/bloc/editwing_bloc.dart';
+import 'package:visitorapp/screens/society_admin/Manage Property/manage_wings/edit_wing_form/bloc/editwing_bloc.dart' hide SelectTowerEvent, EditWingNameEvent, UpdateWingEvent;
+import 'package:visitorapp/screens/society_admin/Manage%20Property/manage_floors/edit_floors_form/bloc/edit_floors_bloc.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
 
 import '../../../../../utils/enum.dart';
 
-class EditWingForm extends StatefulWidget {
-  const EditWingForm({super.key});
+class EditFloorForm extends StatefulWidget {
+  const EditFloorForm({super.key});
 
   @override
-  State<EditWingForm> createState() => _EditWingFormState();
+  State<EditFloorForm> createState() => _EditFloorFormState();
 }
 
-class _EditWingFormState extends State<EditWingForm> {
+class _EditFloorFormState extends State<EditFloorForm> {
   final _formKey = GlobalKey<FormState>();
-  
+
   final List<String> towers = ['Tower A', 'Tower B', 'Tower C', 'Tower D'];
   final List<String> wingStatuses = ['Active', 'Inactive', 'Under Maintenance'];
+  final List<String> wings = ['Wing A', 'Wing B', 'Wing C', 'Wing D'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Edit Wing'),
-      
-      body: BlocListener<EditwingBloc, EditwingState>(
+      appBar: const CustomAppBar(title: 'Edit Floor'),
+
+      body: BlocListener<EditFloorsBloc, EditFloorsState>(
         listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           if (state.status == Status.success) {
@@ -37,7 +39,7 @@ class _EditWingFormState extends State<EditWingForm> {
             );
             Navigator.pop(context);
           }
-          
+
           if (state.status == Status.error) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -47,7 +49,7 @@ class _EditWingFormState extends State<EditWingForm> {
             );
           }
         },
-        
+
         child: SafeArea(
           child: Container(
             color: const Color(0xFFF5F5F5),
@@ -73,10 +75,10 @@ class _EditWingFormState extends State<EditWingForm> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        
+
                         _buildLabel('Select Tower'),
                         const SizedBox(height: 8),
-                        BlocBuilder<EditwingBloc, EditwingState>(
+                        BlocBuilder<EditFloorsBloc, EditFloorsState>(
                           builder: (context, state) {
                             return Container(
                               width: double.infinity,
@@ -101,7 +103,7 @@ class _EditWingFormState extends State<EditWingForm> {
                                   }).toList(),
                                   onChanged: (String? value) {
                                     if (value != null) {
-                                      context.read<EditwingBloc>().add(SelectTowerEvent(value));
+                                      context.read<EditFloorsBloc>().add(SelectFloorsTowerEvent(value));
                                     }
                                   },
                                 ),
@@ -109,23 +111,12 @@ class _EditWingFormState extends State<EditWingForm> {
                             );
                           },
                         ),
-                        
+
                         const SizedBox(height: 20),
-                        
-                        _buildLabel('Enter Wing Name'),
+
+                        _buildLabel('Select Wing'),
                         const SizedBox(height: 8),
-                        CustomTextField(
-                          hintText: 'Enter Wing Name',
-                          onChanged: (value) {
-                            context.read<EditwingBloc>().add(EditWingNameEvent(value));
-                          },
-                        ),
-                        
-                        const SizedBox(height: 20),
-                        
-                        _buildLabel('Wing Status'),
-                        const SizedBox(height: 8),
-                        BlocBuilder<EditwingBloc, EditwingState>(
+                        BlocBuilder<EditFloorsBloc, EditFloorsState>(
                           builder: (context, state) {
                             return Container(
                               width: double.infinity,
@@ -137,20 +128,20 @@ class _EditWingFormState extends State<EditWingForm> {
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
-                                  value: state.wingStatus.isEmpty ? null : state.wingStatus,
+                                  value: state.wingName.isEmpty ? null : state.wingName,
                                   hint: const Text(
-                                    'Select Status',
+                                    'Select Wing',
                                     style: TextStyle(color: Colors.grey),
                                   ),
-                                  items: wingStatuses.map((String status) {
+                                  items: wings.map((String wing) {
                                     return DropdownMenuItem<String>(
-                                      value: status,
-                                      child: Text(status),
+                                      value: wing,
+                                      child: Text(wing),
                                     );
                                   }).toList(),
                                   onChanged: (String? value) {
                                     if (value != null) {
-                                      context.read<EditwingBloc>().add(SelectWingStatusEvent(value));
+                                      context.read<EditFloorsBloc>().add(EditWingNameEvent(value));
                                     }
                                   },
                                 ),
@@ -158,6 +149,44 @@ class _EditWingFormState extends State<EditWingForm> {
                             );
                           },
                         ),
+
+                        const SizedBox(height: 20),
+
+                        _buildLabel('Floor Name (Optional)'),
+                        const SizedBox(height: 8),
+                        CustomTextField(
+                          hintText: 'Ground Floor',
+                          onChanged: (value) {
+                            context.read<EditFloorsBloc>().add(EditFloorNameEvent(value));
+                          },
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        _buildLabel('Floor Number *'),
+                        const SizedBox(height: 8),
+                        CustomTextField(
+                          hintText: '0',
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            context.read<EditFloorsBloc>().add(EditFloorNumberEvent(int.tryParse(value) ?? 0));
+                          },
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        _buildLabel('Total Flats on Floor (Optional)'),
+                        const SizedBox(height: 8),
+                        CustomTextField(
+                          hintText: '4',
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            context.read<EditFloorsBloc>().add(EditTotalFlatsEvent(int.tryParse(value) ?? 0));
+                          },
+                        ),
+
+                        const SizedBox(height: 20),
+
                       ],
                     ),
                   ),
@@ -167,8 +196,8 @@ class _EditWingFormState extends State<EditWingForm> {
           ),
         ),
       ),
-      
-      bottomNavigationBar: BlocBuilder<EditwingBloc, EditwingState>(
+
+      bottomNavigationBar: BlocBuilder<EditFloorsBloc, EditFloorsState>(
         builder: (context, state) {
           return SafeArea(
             child: Container(
@@ -210,9 +239,8 @@ class _EditWingFormState extends State<EditWingForm> {
                           : () {
                         if (_formKey.currentState!.validate() &&
                             state.selectedTower.isNotEmpty &&
-                            state.wingName.isNotEmpty &&
-                            state.wingStatus.isNotEmpty) {
-                          context.read<EditwingBloc>().add(const UpdateWingEvent());
+                            state.wingName.isNotEmpty ) {
+                          context.read<EditFloorsBloc>().add( UpdateWingEvent());
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -232,7 +260,7 @@ class _EditWingFormState extends State<EditWingForm> {
                         ),
                       )
                           : const Text(
-                        'Update Wing',
+                        'Update Floor',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,

@@ -143,6 +143,21 @@ class _ManageWingScreenState extends State<ManageWingScreen>
     );
   }
 
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'active':
+        return const Color(0xFF10B981); // Emerald green
+      case 'inactive':
+        return const Color(0xFFF59E0B); // Amber
+      case 'maintenance':
+        return const Color(0xFF3B82F6); // Blue
+      case 'under construction':
+        return const Color(0xFF8B5CF6); // Violet
+      default:
+        return const Color(0xFF6B7280); // Gray
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final filtered = _filteredGuards;
@@ -307,13 +322,19 @@ class _ManageWingScreenState extends State<ManageWingScreen>
 
                     Row(
                       children: [
-                        Text(
-                          '${filtered.length} Wing${filtered.length != 1 ? 's' : ''}',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: AppColors.textLight,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              '${filtered.length} Wing${filtered.length != 1 ? 's' : ''}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: AppColors.textLight,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            _buildStatusCounts(filtered),
+                          ],
                         ),
                         const Spacer(),
                         if (_selectedWing != 'All' || _searchQuery.isNotEmpty)
@@ -424,7 +445,57 @@ class _ManageWingScreenState extends State<ManageWingScreen>
     );
   }
 }
+Widget _buildStatusCounts(List<Wing> floors) {
+  final statusCounts = <String, int>{};
 
+  for (final floor in floors) {
+    final status = floor.status.toLowerCase();
+    statusCounts[status] = (statusCounts[status] ?? 0) + 1;
+  }
+
+  final statusEntries = statusCounts.entries.toList()
+    ..sort((a, b) => b.value.compareTo(a.value));
+
+  return Wrap(
+    spacing: 8,
+    runSpacing: 4,
+    children: statusEntries.map((entry) {
+      final status = entry.key;
+      final count = entry.value;
+      final color = _getStatusColor(status);
+
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Text(
+              '${status[0].toUpperCase()}${status.substring(1)}: $count',
+              style: TextStyle(
+                fontSize: 10,
+                color: color,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+    }).toList(),
+  );
+}
 class _OwnerCard extends StatefulWidget {
   final Wing owner;
   final VoidCallback onEdit;
@@ -575,9 +646,7 @@ class _OwnerCardState extends State<_OwnerCard>
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: widget.owner.status == 'Active'
-                                ? Colors.green.withOpacity(0.1)
-                                : Colors.red.withOpacity(0.1),
+                            color: _getStatusColor(widget.owner.status).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -585,9 +654,7 @@ class _OwnerCardState extends State<_OwnerCard>
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
-                              color: widget.owner.status == 'Active'
-                                  ? Colors.green
-                                  : Colors.red,
+                              color: _getStatusColor(widget.owner.status),
                             ),
                           ),
                         ),
@@ -671,5 +738,20 @@ class _ActionButtonState extends State<_ActionButton> {
         ),
       ),
     );
+  }
+
+}
+Color _getStatusColor(String status) {
+  switch (status.toLowerCase()) {
+    case 'active':
+      return const Color(0xFF10B981); // Emerald green
+    case 'inactive':
+      return const Color(0xFFF59E0B); // Amber
+    case 'maintenance':
+      return const Color(0xFF3B82F6); // Blue
+    case 'under construction':
+      return const Color(0xFF8B5CF6); // Violet
+    default:
+      return const Color(0xFF6B7280); // Gray
   }
 }
