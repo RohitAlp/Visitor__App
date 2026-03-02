@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
 import 'package:visitorapp/widgets/dropdown_form_field.dart';
@@ -102,9 +103,7 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                           },
                           onChanged: (_) {},
                         ),
-      
                         const SizedBox(height: 16),
-      
                         _buildLabel('Mobile Number'),
                         const SizedBox(height: 6),
                         CustomTextField(
@@ -119,9 +118,7 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                           },
                           onChanged: (_) {},
                         ),
-      
                         const SizedBox(height: 16),
-      
                         _buildLabel('Email ID'),
                         const SizedBox(height: 6),
                         CustomTextField(
@@ -136,9 +133,7 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                           },
                           onChanged: (_) {},
                         ),
-      
                         const SizedBox(height: 24),
-      
                         const Text(
                           'Flat Details',
                           style: TextStyle(
@@ -147,7 +142,6 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                           ),
                         ),
                         const SizedBox(height: 20),
-      
                         _buildLabel('Tower Name'),
                         const SizedBox(height: 6),
                       CustomDropdownFormField(
@@ -156,9 +150,7 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                         onChanged: (v) => setState(() => _selectedTower = v),
                         validator: (v) => v == null ? 'Required' : null,
                       ),
-      
                         const SizedBox(height: 16),
-      
                         _buildLabel('Wing'),
                         const SizedBox(height: 6),
                       CustomDropdownFormField(
@@ -167,9 +159,7 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                         onChanged: (v) => setState(() => _selectedWing = v),
                         validator: (v) => v == null ? 'Required' : null,
                       ),
-      
                         const SizedBox(height: 16),
-      
                         _buildLabel('Floor'),
                         const SizedBox(height: 6),
                       CustomDropdownFormField(
@@ -178,9 +168,7 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                         onChanged: (v) => setState(() => _selectedFloor = v),
                         validator: (v) => v == null ? 'Required' : null,
                       ),
-      
                         const SizedBox(height: 16),
-      
                         _buildLabel('Flat Number'),
                         const SizedBox(height: 6),
                         CustomTextField(
