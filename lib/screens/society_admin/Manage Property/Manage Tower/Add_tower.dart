@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../config/Routes/RouteName.dart';
+import '../../../../constants/app_colors.dart' show AppColors;
 import '../../../../widgets/owner_card.dart';
 
 class ManageTowersScreen extends StatefulWidget {
@@ -209,13 +210,14 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                   // Search Bar
                   Container(
                     decoration: BoxDecoration(
-                      color: cardBg,
+                      color: AppColors.cardBg,
                       borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
+                          color: Color(0x66000000),
+                          blurRadius: 2,
+                          spreadRadius: 0,
+                          offset: Offset(0, 0),
                         ),
                       ],
                     ),
@@ -255,17 +257,41 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                   // Count
                   Row(
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            '${filtered.length} Tower${filtered.length != 1 ? 's' : ''}',
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: textLight,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        '${filtered.length} Tower${filtered.length != 1 ? 's' : ''}',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: textLight,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF10B981),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${filtered.where((tower) => tower.isActive).length} Active',
+                        style: const TextStyle(fontSize: 11, color: textLight, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(width: 12),
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF59E0B),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${filtered.where((tower) => !tower.isActive).length} Inactive',
+                        style: const TextStyle(fontSize: 11, color: textLight, fontWeight: FontWeight.w500),
                       ),
                       const Spacer(),
                       if (_searchQuery.isNotEmpty)

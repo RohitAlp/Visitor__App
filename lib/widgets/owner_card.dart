@@ -713,6 +713,56 @@ class _OwnerCardState extends State<OwnerCard>
                                   ),
                                   const SizedBox(height: 5),
 
+                                  // Show owner name for occupied flats
+                                  if (widget.owner.isFlat && widget.owner.isOccupied && widget.owner.ownerName != null && widget.owner.ownerName!.isNotEmpty)
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.person_rounded,
+                                          size: 14,
+                                          color: textMid,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          widget.owner.ownerName!,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey.shade800,
+                                            fontWeight: FontWeight.w600,
+                                            letterSpacing: 0.2,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                  // Show "No owner assigned" for vacant flats
+                                  if (widget.owner.isFlat && widget.owner.isVacant)
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.person_off_rounded,
+                                          size: 14,
+                                          color: textMid,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          'No owner assigned',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey.shade600,
+                                            fontWeight: FontWeight.w500,
+                                            fontStyle: FontStyle.italic,
+                                            letterSpacing: 0.2,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                  if (widget.owner.isFlat && (widget.owner.isOccupied && widget.owner.ownerName != null && widget.owner.ownerName!.isNotEmpty) || widget.owner.isVacant)
+                                    const SizedBox(height: 5),
+
                                   if (widget.owner.isAmenity && widget.owner.location != null && widget.owner.location!.isNotEmpty)
                                     Row(
                                       mainAxisSize: MainAxisSize.min,

@@ -279,11 +279,12 @@ class _ManageWingScreenState extends State<ManageWingScreen>
                     decoration: BoxDecoration(
                       color: AppColors.cardBg,
                       borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          blurRadius: 16,
-                          offset: const Offset(0, 4),
+                          color: Color(0x66000000),
+                          blurRadius: 2,
+                          spreadRadius: 0,
+                          offset: Offset(0, 0),
                         ),
                       ],
                     ),
@@ -334,19 +335,41 @@ class _ManageWingScreenState extends State<ManageWingScreen>
 
                   Row(
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            '${filtered.length} Wing${filtered.length != 1 ? 's' : ''}',
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: AppColors.textLight,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          _buildStatusCounts(filtered),
-                        ],
+                      Text(
+                        '${filtered.length} Wing${filtered.length != 1 ? 's' : ''}',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: AppColors.textLight,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF10B981),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${filtered.where((wing) => wing.isActive).length} Active',
+                        style: const TextStyle(fontSize: 11, color: AppColors.textLight, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(width: 12),
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF59E0B),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${filtered.where((wing) => !wing.isActive).length} Inactive',
+                        style: const TextStyle(fontSize: 11, color: AppColors.textLight, fontWeight: FontWeight.w500),
                       ),
                       const Spacer(),
                       if (_selectedWing != 'All' || _searchQuery.isNotEmpty)

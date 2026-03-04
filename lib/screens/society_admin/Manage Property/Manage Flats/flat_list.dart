@@ -268,7 +268,7 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                           boxShadow: const [
                             BoxShadow(
                               color: Color(0x66000000),
-                              blurRadius: 4,
+                              blurRadius: 2,
                               spreadRadius: 0,
                               offset: Offset(0, 0),
                             ),
@@ -299,16 +299,39 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
 
                       const SizedBox(height: 16),
 
-                      // Count + stats row
                       Row(
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                '${filtered.length} Flat${filtered.length != 1 ? 's' : ''}',
-                                style: const TextStyle(fontSize: 13, color: AppColors.textLight, fontWeight: FontWeight.w600),
-                              ),
-                            ],
+                          Text(
+                            '${filtered.length} Flat${filtered.length != 1 ? 's' : ''}',
+                            style: const TextStyle(fontSize: 13, color: AppColors.textLight, fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF10B981),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${filtered.where((flat) => flat.isOccupied).length} Occupied',
+                            style: const TextStyle(fontSize: 11, color: AppColors.textLight, fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFF59E0B),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${filtered.where((flat) => flat.isVacant).length} Vacant',
+                            style: const TextStyle(fontSize: 11, color: AppColors.textLight, fontWeight: FontWeight.w500),
                           ),
                           const Spacer(),
                           if (_searchQuery.isNotEmpty)
