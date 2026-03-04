@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:visitorapp/constants/app_colors.dart';
 import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice.dart';
 import '../payment/payment.dart';
@@ -60,7 +61,7 @@ class _DashboardHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFB85C10), // brown fills entire background
+      backgroundColor: AppColors.appPrimaryColor,
       body: Stack(
         children: [
           SafeArea(
@@ -375,7 +376,7 @@ class _DashboardHomePage extends StatelessWidget {
                   const Text(
                     "₹ 25,500",
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF6B2D0E),
                       letterSpacing: 0.4,
@@ -396,7 +397,7 @@ class _DashboardHomePage extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFBF5B1E),
+                        backgroundColor: AppColors.appPrimaryColor,
                         foregroundColor: Colors.white,
                         elevation: 2,
                         shadowColor: const Color(0xFFBF5B1E).withOpacity(0.4),
