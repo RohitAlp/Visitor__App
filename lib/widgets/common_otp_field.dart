@@ -57,12 +57,11 @@ class _CommonOtpFieldState extends State<CommonOtpField> {
     final defaultBorder = widget.borderColor ?? Colors.grey.shade300;
     final filledBorder = AppColors.primaryColor;
     final fillColor = widget.fillColor ?? Colors.grey.shade100;
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(widget.length, (index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4), // ⭐ spacing
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: SizedBox(
             width: 45,
             height: 45,
@@ -71,7 +70,6 @@ class _CommonOtpFieldState extends State<CommonOtpField> {
               builder: (context, _, __) {
                 final isFilled = controllers[index].text.isNotEmpty;
                 final isFocused = focusNodes[index].hasFocus;
-
                 return TextFormField(
                   controller: controllers[index],
                   focusNode: focusNodes[index],
@@ -98,7 +96,6 @@ class _CommonOtpFieldState extends State<CommonOtpField> {
                         width: isFocused ? 1.8 : 1,
                       ),
                     ),
-
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
@@ -117,7 +114,6 @@ class _CommonOtpFieldState extends State<CommonOtpField> {
                     if (value.isEmpty && index > 0) {
                       focusNodes[index - 1].requestFocus();
                     }
-
                     _checkCompletion();
                   },
                 );

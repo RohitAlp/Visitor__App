@@ -54,8 +54,10 @@ class _OtpScreenState extends State<OtpScreen> {
 
     Navigator.pushNamed(
       context,
-      RouteName.manageUsersSocietyAdmin,
-      arguments: 2,
+      // RouteName.manageUsersSocietyAdmin,
+      // arguments: 2,
+      RouteName.dashboardScreen,
+
     );
   }
 

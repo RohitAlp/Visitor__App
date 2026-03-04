@@ -39,7 +39,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return SafeArea(
       top: false,
       child: Scaffold(
-         body: IndexedStack(
+        backgroundColor: Colors.white,
+        body: IndexedStack(
           index: _selectedIndex,
           children: _pages,
         ),
@@ -47,8 +48,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           items: _navItems,
           selectedIndex: _selectedIndex,
           onTap: (index) => setState(() => _selectedIndex = index),
-          barColor: const Color(0xFFC5610F),
-          bubbleColor: const Color(0xFFC5610F),
         ),
       ),
     );
@@ -61,91 +60,46 @@ class _DashboardHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF8F5),
+      backgroundColor: const Color(0xFFB85C10), // brown fills entire background
       body: Stack(
         children: [
+          SafeArea(
+            child: Column(
+              children: [
 
-          Positioned(
-            top: -100,
-            left: 0,
-            right: 0,
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(150)),
-              child: Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      const Color(0xFFF7EEE7),
-                      const Color(0xFFF4EAE0),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: _buildHeader(),
+                ),
+
+                const SizedBox(height: 20),
+                    Expanded(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFFDF8F5),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(36),
+                        topRight: Radius.circular(36),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 20),
+                          _buildMaintenanceCard(),
+                          const SizedBox(height: 5),
+                          _buildQuickActionsGrid(),
+                          const SizedBox(height: 5),
+                          _buildRecentActivity(),
+                          const SizedBox(height: 100),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Positioned(
-                      top: -120,
-                      right: -80,
-                      child: Container(
-                        width: 380,
-                        height: 380,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              const Color(0xFFE9D5C7).withOpacity(0.65),
-                              const Color(0xFFD8B9A1).withOpacity(0.55),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: -60,
-                      left: -100,
-                      child: Container(
-                        width: 260,
-                        height: 260,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [
-                              const Color(0xFFF3E3D7).withOpacity(0.8),
-                              const Color(0xFFEAD4C5).withOpacity(0.6),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  _buildHeader(),
-                  const SizedBox(height: 30),
-                  _buildQuickActionsGrid(),
-                  const SizedBox(height: 25),
-                  _buildMaintenanceCard(),
-                  const SizedBox(height: 25),
-                  _buildRecentActivity(),
-                  const SizedBox(height: 100),
-                ],
-              ),
+              ],
             ),
           ),
         ],
@@ -157,70 +111,103 @@ class _DashboardHomePage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "PUNEET",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFFC5610F), letterSpacing: 1.2),
-            ),
-            const Text("URBAN SPACES", style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500)),
-          ],
-        ),
+        // Profile photo + greeting
         Row(
           children: [
+            CircleAvatar(
+              radius: 24,
+              backgroundColor: Colors.white24,
+             // child: const Icon(Icons.person, color: Colors.white, size: 28),
+
+              backgroundImage: AssetImage('assets/image/user-profile-pic.jpg'),
+            ),
+            const SizedBox(width: 12),
             Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const Text("Hi, Runal", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                const Text("Wing A - Flat 912", style: TextStyle(fontSize: 12, color: Colors.grey)),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  "Hi, Runal",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  "Wing A - Flat 912",
+                  style: TextStyle(fontSize: 13, color: Colors.white70),
+                ),
               ],
             ),
-            const SizedBox(width: 10),
-            Stack(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.notifications_none, color: Colors.blueGrey[800]),
-                ),
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  child: Container(height: 8, width: 8, decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle)),
-                )
-              ],
-            )
           ],
-        )
+        ),
+
+        // Notification bell
+        Stack(
+          children: [
+            const Icon(
+              Icons.notifications,
+              color: Colors.white,
+              size: 35,
+            ),
+            Positioned(
+              right: 6,
+              top: 6,
+              child: Container(
+                height: 16,
+                width: 16,
+                decoration: BoxDecoration(
+                  color: Colors.redAccent,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 1.5),
+                ),
+                child: const Center(
+                  child: Text(
+                    '3',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 9,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
 
   Widget _buildQuickActionsGrid() {
     final List<Map<String, dynamic>> items = [
-      {'icon': 'assets/images/visitors.svg', 'label': 'Visitors'},
-      {'icon': 'assets/images/notices.svg', 'label': 'Notices'},
-      {'icon': 'assets/images/complaints.svg', 'label': 'Complaints'},
-      {'icon': 'assets/images/amenities.svg', 'label': 'Amenities'},
-      {'icon': 'assets/images/deliveries.svg', 'label': 'Deliveries'},
-      {'icon': 'assets/images/documents.svg', 'label': 'Documents'},
+      {'icon': 'assets/image/visitor.svg',    'label': 'Visitors'},
+      {'icon': 'assets/image/Notice.svg',     'label': 'Notices'},
+      {'icon': 'assets/image/complaints.svg', 'label': 'Complaints', 'color': Colors.lightBlueAccent},
+      {'icon': 'assets/image/Group.svg',      'label': 'Amenities',  'color': Colors.yellow[700]},
+      {'icon': 'assets/image/deliveries.svg', 'label': 'Deliveries'},
+      {'icon': 'assets/image/Documents.svg',  'label': 'Documents',  'color': Colors.orange},
     ];
 
     return GridView.builder(
       shrinkWrap: true,
-      padding: const EdgeInsets.all(20), // Essential for shadow visibility
+     // padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 20,
+        ),
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 15,
-        mainAxisSpacing: 20,
-        childAspectRatio: 100 / 107, // Matches your frame dimensions
+        mainAxisSpacing: 15,
+        childAspectRatio: 100 / 107,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
 
-        return Container(
+        return SizedBox(
           width: 100,
           height: 107,
           child: Stack(
@@ -229,12 +216,12 @@ class _DashboardHomePage extends StatelessWidget {
               Positioned(
                 top: 0,
                 left: 0,
-                right: 0, // Fill width
-                bottom: 0, // Fill height
+                right: 0,
+                bottom: 0,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    boxShadow: const [
+                    boxShadow:   [
                       BoxShadow(
                         color: Color.fromRGBO(110, 136, 157, 0.25),
                         offset: Offset(0, 0),
@@ -246,30 +233,30 @@ class _DashboardHomePage extends StatelessWidget {
                 ),
               ),
 
-              // Circular Shadow/Background behind Icon
-              Positioned(
-                top: 10,
-                left: 22,
-                child: Container(
-                  width: 55.8,
-                  height: 55.0,
-                  decoration: BoxDecoration(
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromRGBO(138, 149, 158, 0.25),
-                        offset: Offset(0, 10),
-                        blurRadius: 40,
-                      )
-                    ],
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
+              // // Circular Shadow/Background behind Icon
+              // Positioned(
+              //   top: 10,
+              //   left: 22,
+              //   child: Container(
+              //     width: 55.8,
+              //     height: 55.0,
+              //     decoration: const BoxDecoration(
+              //       boxShadow: [
+              //         BoxShadow(
+              //           color: Color.fromRGBO(138, 149, 158, 0.25),
+              //           offset: Offset(0, 10),
+              //           blurRadius: 40,
+              //         )
+              //       ],
+              //       color: Colors.white,
+              //       shape: BoxShape.circle,
+              //     ),
+              //   ),
+              // ),
 
               // Label Text
               Positioned(
-                top: 75, // Slightly adjusted for better centering
+                top: 75,
                 left: 0,
                 right: 0,
                 child: Text(
@@ -278,7 +265,7 @@ class _DashboardHomePage extends StatelessWidget {
                   style: const TextStyle(
                     color: Colors.black,
                     fontFamily: 'Mulish',
-                    fontSize: 13, // Scaled down slightly to fit 3-column grid
+                    fontSize: 13,
                     fontWeight: FontWeight.normal,
                   ),
                 ),
@@ -287,15 +274,21 @@ class _DashboardHomePage extends StatelessWidget {
               // Icon Container
               Positioned(
                 top: 15,
-                left: 30,
+                left: 35,
                 child: Container(
                   width: 40,
                   height: 40,
                   alignment: Alignment.center,
                   child: SvgPicture.asset(
                     item['icon'],
-                    width: 24, // Control SVG size here
-                    height: 24,
+                    width: 26,
+                    height: 26,
+                    colorFilter: item['color'] != null
+                        ? ColorFilter.mode(
+                      item['color'],
+                      BlendMode.srcIn,
+                    )
+                        : null,
                   ),
                 ),
               ),
@@ -308,83 +301,226 @@ class _DashboardHomePage extends StatelessWidget {
 
   Widget _buildMaintenanceCard() {
     return Container(
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF5F5),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.red.withOpacity(0.1)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("Maintenance", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1A237E))),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(border: Border.all(color: Colors.red), borderRadius: BorderRadius.circular(8)),
-                child: const Text("Due", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
-              )
-            ],
+        color: const Color(0xFFFEF0E6),
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.brown.withOpacity(0.18),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
+            spreadRadius: 3,
           ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("₹ 25,500", style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFFC5610F))),
-              const Text("Due By 5th March 2026", style: TextStyle(color: Colors.grey, fontSize: 13)),
-            ],
+          BoxShadow(
+            color: Colors.brown.withOpacity(0.08),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+            spreadRadius: 1,
           ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFD32F2F),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-              ),
-              child: const Text("Pay Now", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            ),
-          )
         ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(18),
+        child: Stack(
+          clipBehavior: Clip.hardEdge,
+          children: [
+            // Darker OVAL — TOP-RIGHT corner
+            Positioned(
+              top: -25,
+              right: -25,
+              child: Container(
+                width: 150,
+                height: 90,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE8A070).withOpacity(0.8),
+                  // Using a huge circular radius on a non-square container
+                  // is the easiest way to ensure a perfect oval.
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
+            ),
+
+            // Faint OVAL — BOTTOM-LEFT corner
+            Positioned(
+              bottom: -50,
+              left: -60,
+              child: Container(
+                width: 300,
+                height: 220,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF5D5B8),
+                  // Radius matches the container shape to force the oval
+                  borderRadius: BorderRadius.all(Radius.elliptical(300, 220)),
+                ),
+              ),
+            ),
+
+            // Main content
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Maintenance",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF6B2D0E),
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    "₹ 25,500",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF6B2D0E),
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    "Due By 5th March 2026",
+                    style: TextStyle(
+                      color: Color(0xFF9E8880),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFBF5B1E),
+                        foregroundColor: Colors.white,
+                        elevation: 2,
+                        shadowColor: const Color(0xFFBF5B1E).withOpacity(0.4),
+                        shape: const StadiumBorder(),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 28,
+                          vertical: 12,
+                        ),
+                      ),
+                      child: const Text(
+                        "Pay Now",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildRecentActivity() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFFFDF4EC),
         borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.brown.withOpacity(0.10),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+            spreadRadius: 2,
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Recent Activity", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFFC5610F))),
-          const SizedBox(height: 15),
-          _activityItem(Icons.check_circle_outline, "Complaint #245 Resolved", "2 hours ago", Colors.orange),
-          const Divider(),
-          _activityItem(Icons.card_giftcard, "Parcel Received at Gate", "Today, 11:30 AM", Colors.orange),
-          const Divider(),
-          _activityItem(Icons.calendar_today, "Event: Society Meeting", "Sunday 22 Feb, 10:30 AM", Colors.orange),
+          const Text(
+            "Recent Activity",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF2D2D2D),
+            ),
+          ),
+          const SizedBox(height: 6),
+          _activityItem(iconWidget: const Icon(Icons.check_circle_outline_rounded, color: Color(0xFFBF5B1E), size: 16), title: "Complaint #245 Resolved",  time: "2 hours ago"),
+          _buildDivider(),
+          _activityItem(
+            iconWidget: SvgPicture.asset(
+              "assets/image/parcel-tracker.svg",
+              width: 22,
+              height: 22,
+              fit: BoxFit.contain,
+              color: const Color(0xFFBF5B1E),
+            ),
+            title: "Parcel Received at Gate",
+            time: "Today, 11:30 AM",
+          ),_buildDivider(),
+          _activityItem(iconWidget: const Icon(Icons.calendar_month_outlined, color: Color(0xFFBF5B1E), size: 16),      title: "Event: Society Meeting",   time: "Sunday 22 Feb, 10:30 AM"),
         ],
       ),
     );
   }
 
-  Widget _activityItem(IconData icon, String title, String time, Color color) {
+  Widget _buildDivider() {
+    return Divider(
+      color: Colors.grey.withOpacity(0.18),
+      thickness: 1,
+      height: 1,
+    );
+  }
+
+  Widget _activityItem({
+    required Widget iconWidget,
+    required String title,
+    required String time,
+  }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 7),
       child: Row(
         children: [
-          Icon(icon, color: color, size: 20),
-          const SizedBox(width: 15),
-          Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w500))),
-          Text(time, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: const Color(0xFFE8C9A8),
+                width: 1,
+              ),
+            ),
+            child: Center(child: iconWidget),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Color(0xEC2D2D2D),
+              ),
+            ),
+          ),
+          Text(
+            time,
+            style: const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFFBF5B1E),
+            ),
+          ),
         ],
       ),
     );
