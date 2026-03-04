@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:visitorapp/constants/app_colors.dart';
 
 class NavItemData {
   final IconData? icon;
@@ -47,7 +48,7 @@ class CustomAnimatedNavBar extends StatefulWidget {
     required this.selectedIndex,
     required this.onTap,
     this.barColor = Colors.white,
-    this.pillColor = const Color(0xFFB85C00),
+    this.pillColor = AppColors.appPrimaryColor,
     this.activeContentColor = Colors.white,
     this.inactiveColor = const Color(0xFF9E9E9E),
   });
