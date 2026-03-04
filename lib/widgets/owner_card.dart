@@ -394,6 +394,48 @@ class _OwnerCardState extends State<OwnerCard>
     }
   }
 
+  String _getProfileImage() {
+    if (widget.owner.isGuard) {
+      return 'assets/image/profile.png';
+    } else if (widget.owner.isVendor) {
+      return 'assets/image/Group.svg';
+    } else if (widget.owner.isFlat) {
+      if (widget.owner.name.contains('Wing')) {
+        return 'assets/image/wings.png';
+      } else if (widget.owner.name.contains('Flats') || widget.owner.name.contains('Floor')) {
+        return 'assets/image/flor.png';
+      }
+      return 'assets/image/house.png';
+    } else if (widget.owner.isTower) {
+      return 'assets/image/tower.png';
+    } else if (widget.owner.isAmenity) {
+      return 'assets/image/wifi.png';
+    } else {
+      return 'assets/image/profile.png'; 
+    }
+  }
+
+  IconData _getProfileIcon() {
+    if (widget.owner.isGuard) {
+      return Icons.person_rounded; 
+    } else if (widget.owner.isVendor) {
+      return Icons.home_repair_service_sharp; // Service icon for vendors
+    } else if (widget.owner.isFlat) {
+      if (widget.owner.name.contains('Wing')) {
+        return Icons.meeting_room_rounded;
+      } else if (widget.owner.name.contains('Flats') || widget.owner.name.contains('Floor')) {
+        return Icons.layers_outlined;
+      }
+      return Icons.apartment_rounded;
+    } else if (widget.owner.isTower) {
+      return Icons.domain_rounded;
+    } else if (widget.owner.isAmenity) {
+      return Icons.pool_rounded;
+    } else {
+      return Icons.person_rounded;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -535,13 +577,14 @@ class _OwnerCardState extends State<OwnerCard>
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(14),
                                   child: Image.asset(
-                                    'assets/image/profile.png',
+                                    _getProfileImage(),
                                     width: 24,
                                     height: 24,
                                     fit: BoxFit.cover,
+                                    color: Color(0xFF64B5F6), // Lighter blue color for images
                                     errorBuilder: (context, error, stackTrace) {
-                                      return const Icon(
-                                        Icons.person_rounded,
+                                      return Icon(
+                                        _getProfileIcon(),
                                         color: Color(0xFF512DA8),
                                         size: 24,
                                       );
@@ -717,7 +760,9 @@ class _OwnerCardState extends State<OwnerCard>
                                             ? 'assets/image/clock.png'
                                             : widget.owner.isVendor
                                                 ? _getServiceImage(widget.owner.services ?? '')
-                                                : 'assets/image/house.png',
+                                                : widget.owner.isTower
+                                                    ? 'assets/image/tower.png'
+                                                    : 'assets/image/house.png',
                                         width: 14,
                                         height: 14,
                                         color: textMid,
@@ -727,7 +772,9 @@ class _OwnerCardState extends State<OwnerCard>
                                                 ? Icons.schedule_rounded 
                                                 : widget.owner.isVendor
                                                     ? _getServiceIcon(widget.owner.services ?? '')
-                                                    : Icons.apartment_rounded,
+                                                    : widget.owner.isTower
+                                                        ? Icons.domain_rounded
+                                                        : Icons.apartment_rounded,
                                             size: 14,
                                             color: textMid,
                                           );
