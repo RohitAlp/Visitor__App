@@ -581,7 +581,7 @@ class _OwnerCardState extends State<OwnerCard>
                                     width: 24,
                                     height: 24,
                                     fit: BoxFit.cover,
-                                    color: Color(0xFF64B5F6), // Lighter blue color for images
+                                    color: Color(0xFF357CB4), // Lighter blue color for images
                                     errorBuilder: (context, error, stackTrace) {
                                       return Icon(
                                         _getProfileIcon(),
@@ -666,15 +666,15 @@ class _OwnerCardState extends State<OwnerCard>
                                         )
                                       else if (widget.owner.isGuard)
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                                           decoration: BoxDecoration(
                                             color: primaryColor.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(6),
+                                            borderRadius: BorderRadius.circular(8),
                                           ),
                                           child: Text(
                                             _getShiftType(widget.owner.shift ?? ''),
                                             style: TextStyle(
-                                              fontSize: 10,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.w800,
                                               color: primaryColor,
                                             ),
@@ -682,15 +682,15 @@ class _OwnerCardState extends State<OwnerCard>
                                         )
                                       else if (widget.owner.isVendor)
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                                           decoration: BoxDecoration(
                                             color: Colors.green.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(6),
+                                            borderRadius: BorderRadius.circular(8),
                                           ),
                                           child: Text(
                                             'Vendor',
                                             style: TextStyle(
-                                              fontSize: 10,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.w800,
                                               color: Colors.green,
                                             ),
@@ -701,15 +701,15 @@ class _OwnerCardState extends State<OwnerCard>
                                         Container()
                                       else if (widget.owner.isFlat)
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                                           decoration: BoxDecoration(
                                             color: widget.owner.isVacant ? const Color(0xFFEF4444).withOpacity(0.1) : const Color(0xFF10B981).withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(6),
+                                            borderRadius: BorderRadius.circular(8),
                                           ),
                                           child: Text(
                                             widget.owner.isVacant ? 'Vacant' : 'Occupied',
                                             style: TextStyle(
-                                              fontSize: 10,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.w800,
                                               color: widget.owner.isVacant ? const Color(0xFFEF4444) : const Color(0xFF10B981),
                                             ),
@@ -717,15 +717,15 @@ class _OwnerCardState extends State<OwnerCard>
                                         )
                                       else if (widget.owner.isTower)
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                                           decoration: BoxDecoration(
                                             color: widget.owner.isActive ? const Color(0xFF10B981).withOpacity(0.1) : const Color(0xFFF59E0B).withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(6),
+                                            borderRadius: BorderRadius.circular(8),
                                           ),
                                           child: Text(
                                             widget.owner.isActive ? 'Active' : 'Inactive',
                                             style: TextStyle(
-                                              fontSize: 10,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.w800,
                                               color: widget.owner.isActive ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
                                             ),
@@ -733,15 +733,15 @@ class _OwnerCardState extends State<OwnerCard>
                                         )
                                       else if (widget.owner.isAmenity)
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                                           decoration: BoxDecoration(
                                             color: _getAmenityStatusColor(widget.owner.status).withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(6),
+                                            borderRadius: BorderRadius.circular(8),
                                           ),
                                           child: Text(
                                             _getAmenityStatusText(widget.owner.status),
                                             style: TextStyle(
-                                              fontSize: 10,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.w800,
                                               color: _getAmenityStatusColor(widget.owner.status),
                                             ),
