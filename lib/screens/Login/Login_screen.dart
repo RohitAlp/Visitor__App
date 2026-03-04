@@ -54,60 +54,62 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: SizedBox.expand(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 800),
-                child: Image.asset(
-                  _images[_currentImageIndex],
-                  key: ValueKey(_images[_currentImageIndex]),
-                  fit: BoxFit.cover, // 👈 fills & crops properly
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
-              ),
-            ),
-          ),
-
-          if (_showStartButton)
-            Positioned(
-              bottom: 60,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.appPrimaryColor,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 14,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _showStartButton = false;
-                    });
-
-                    _openLoginBottomSheet();
-                  },
-                  child: const Text(
-                    "Let's Start →",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: SizedBox.expand(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 800),
+                  child: Image.asset(
+                    _images[_currentImageIndex],
+                    key: ValueKey(_images[_currentImageIndex]),
+                    fit: BoxFit.cover, // 👈 fills & crops properly
+                    width: double.infinity,
+                    height: double.infinity,
                   ),
                 ),
               ),
             ),
-        ],
+      
+            if (_showStartButton)
+              Positioned(
+                bottom: 60,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.appPrimaryColor,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 14,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _showStartButton = false;
+                      });
+      
+                      _openLoginBottomSheet();
+                    },
+                    child: const Text(
+                      "Let's Start →",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
