@@ -284,11 +284,12 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                         decoration: BoxDecoration(
                           color: AppColors.cardBg,
                           borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.06),
-                              blurRadius: 16,
-                              offset: const Offset(0, 4),
+                              color: Color(0x66000000),
+                              blurRadius: 2,
+                              spreadRadius: 0,
+                              offset: Offset(0, 0),
                             ),
                           ],
                         ),
@@ -346,7 +347,16 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                                 color: AppColors.cardBg,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(color: AppColors.textLight.withOpacity(0.2)),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color(0x66000000),
+                                    blurRadius: 1,
+                                    spreadRadius: 0,
+                                    offset: Offset(0, 0),
+                                  ),
+                                ],
                               ),
+
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: state.selectedTower,
@@ -383,6 +393,14 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                                 color: AppColors.cardBg,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(color: AppColors.textLight.withOpacity(0.2)),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color(0x66000000),
+                                    blurRadius: 1,
+                                    spreadRadius: 0,
+                                    offset: Offset(0, 0),
+                                  ),
+                                ],
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
@@ -417,21 +435,41 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
 
                       Row(
                         children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${filtered.length} Floor${filtered.length != 1 ? 's' : ''}',
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  color: AppColors.textLight,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              _buildStatusCounts(filtered),
-
-                            ],
+                          Text(
+                            '${filtered.length} Floor${filtered.length != 1 ? 's' : ''}',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: AppColors.textLight,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF10B981),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${filtered.fold<int>(0, (sum, floor) => sum + floor.occupiedFlats)} Occupied',
+                            style: const TextStyle(fontSize: 11, color: AppColors.textLight, fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFF59E0B),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${filtered.fold<int>(0, (sum, floor) => sum + (floor.totalFlats - floor.occupiedFlats))} Vacant',
+                            style: const TextStyle(fontSize: 11, color: AppColors.textLight, fontWeight: FontWeight.w500),
                           ),
                           const Spacer(),
                           if (state.selectedTower != 'All' || state.selectedWing != 'All' || state.searchQuery.isNotEmpty)
@@ -564,17 +602,3 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
 }
 
 
-Color _getStatusColor(String status) {
-  switch (status.toLowerCase()) {
-    case 'active':
-      return const Color(0xFF10B981); // Emerald green
-    case 'inactive':
-      return const Color(0xFFF59E0B); // Amber
-    case 'maintenance':
-      return const Color(0xFF3B82F6); // Blue
-    case 'under construction':
-      return const Color(0xFF8B5CF6); // Violet
-    default:
-      return const Color(0xFF6B7280); // Gray
-  }
-}

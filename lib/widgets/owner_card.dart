@@ -360,6 +360,82 @@ class _OwnerCardState extends State<OwnerCard>
     return 'Unknown'; // Fallback text
   }
 
+  String _getServiceImage(String service) {
+    switch (service.toLowerCase()) {
+      case 'plumbing services':
+        return 'assets/image/fauce.png'; // Using floor.png as plumbing tool
+      case 'electrical services':
+        return 'assets/image/Vector.svg'; // Using Vector.svg as electrical symbol
+      case 'housekeeping services':
+        return 'assets/image/home-01.svg'; // Using home-01.svg for housekeeping
+      case 'carpentry services':
+        return 'assets/image/toolbo.png';
+      case 'appliance repair services':
+        return 'assets/image/installat.png';
+      default:
+        return 'assets/image/tools.png';
+    }
+  }
+
+  IconData _getServiceIcon(String service) {
+    switch (service.toLowerCase()) {
+      case 'plumbing services':
+        return Icons.plumbing;
+      case 'electrical services':
+        return Icons.electrical_services;
+      case 'housekeeping services':
+        return Icons.cleaning_services;
+      case 'carpentry services':
+        return Icons.carpenter;
+      case 'appliance repair services':
+        return Icons.ac_unit_outlined;
+      default:
+        return Icons.room_service;
+    }
+  }
+
+  String _getProfileImage() {
+    if (widget.owner.isGuard) {
+      return 'assets/image/profile.png';
+    } else if (widget.owner.isVendor) {
+      return 'assets/image/Group.svg';
+    } else if (widget.owner.isFlat) {
+      if (widget.owner.name.contains('Wing')) {
+        return 'assets/image/wings.png';
+      } else if (widget.owner.name.contains('Flats') || widget.owner.name.contains('Floor')) {
+        return 'assets/image/flor.png';
+      }
+      return 'assets/image/house.png';
+    } else if (widget.owner.isTower) {
+      return 'assets/image/tower.png';
+    } else if (widget.owner.isAmenity) {
+      return 'assets/image/wifi.png';
+    } else {
+      return 'assets/image/profile.png'; 
+    }
+  }
+
+  IconData _getProfileIcon() {
+    if (widget.owner.isGuard) {
+      return Icons.person_rounded; 
+    } else if (widget.owner.isVendor) {
+      return Icons.home_repair_service_sharp; // Service icon for vendors
+    } else if (widget.owner.isFlat) {
+      if (widget.owner.name.contains('Wing')) {
+        return Icons.meeting_room_rounded;
+      } else if (widget.owner.name.contains('Flats') || widget.owner.name.contains('Floor')) {
+        return Icons.layers_outlined;
+      }
+      return Icons.apartment_rounded;
+    } else if (widget.owner.isTower) {
+      return Icons.domain_rounded;
+    } else if (widget.owner.isAmenity) {
+      return Icons.pool_rounded;
+    } else {
+      return Icons.person_rounded;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -480,8 +556,8 @@ class _OwnerCardState extends State<OwnerCard>
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 8,
+                          vertical: 20,
+                          horizontal: 10,
                         ),
                         child: Row(
                           children: [
@@ -496,20 +572,24 @@ class _OwnerCardState extends State<OwnerCard>
                                   width: 1,
                                 ),
                               ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(14),
-                                child: Image.asset(
-                                  'assets/image/profile.png',
-                                  width: 24,
-                                  height: 24,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Icon(
-                                      Icons.person_rounded,
-                                      color: Color(0xFF512DA8),
-                                      size: 24,
-                                    );
-                                  },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(14),
+                                  child: Image.asset(
+                                    _getProfileImage(),
+                                    width: 24,
+                                    height: 24,
+                                    fit: BoxFit.cover,
+                                    color: Color(0xFF64B5F6), // Lighter blue color for images
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Icon(
+                                        _getProfileIcon(),
+                                        color: Color(0xFF512DA8),
+                                        size: 24,
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
@@ -674,53 +754,261 @@ class _OwnerCardState extends State<OwnerCard>
                                   Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Icon(
+                                      if (!widget.owner.isFlat)
+                                      Image.asset(
                                         widget.owner.isGuard 
-                                            ? Icons.schedule_rounded 
+                                            ? 'assets/image/clock.png'
                                             : widget.owner.isVendor
-                                                ? Icons.room_service_sharp
-                                                : widget.owner.isFlat
-                                                    ? Icons.meeting_room_rounded
+                                                ? _getServiceImage(widget.owner.services ?? '')
+                                                : widget.owner.isTower
+                                                    ? 'assets/image/tower.png'
+                                                    : 'assets/image/house.png',
+                                        width: 14,
+                                        height: 14,
+                                        color: textMid,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return Icon(
+                                            widget.owner.isGuard 
+                                                ? Icons.schedule_rounded 
+                                                : widget.owner.isVendor
+                                                    ? _getServiceIcon(widget.owner.services ?? '')
                                                     : widget.owner.isTower
                                                         ? Icons.domain_rounded
-                                                        : widget.owner.isAmenity
-                                                            ? Icons.pool_rounded
-                                                            : Icons.apartment_rounded,
-                                        size: 14,
-                                        color: textMid,
+                                                        : Icons.apartment_rounded,
+                                            size: 14,
+                                            color: textMid,
+                                          );
+                                        },
                                       ),
                                       const SizedBox(width: 6),
-                                      Text(
-                                        widget.owner.isGuard 
-                                            ? (widget.owner.shift ?? '')
-                                            : widget.owner.isVendor
-                                                ? (widget.owner.services ?? '')
-                                                : widget.owner.isFlat
-                                                    ? '${widget.owner.tower ?? ''} • ${widget.owner.wing} • ${widget.owner.floor ?? ''}'
-                                                    : widget.owner.isTower
-                                                        ? '${widget.owner.towerCode ?? ''} • ${widget.owner.wings ?? 0} Wings'
-                                                        : widget.owner.isAmenity
-                                                            ? (widget.owner.category ?? '')
-                                                            : widget.owner.flat,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey.shade800,
-                                          fontWeight: FontWeight.w600,
-                                          letterSpacing: 0.2,
-                                        ),
-                                      ),
+                                      if (widget.owner.isFlat)
+                                        Row(
+                                          children: [
+                                            if (widget.owner.tower != null && widget.owner.tower!.isNotEmpty)
+                                            Row(
+                                              children: [
+                                                Image.asset(
+                                                  'assets/image/tower.png',
+                                                  width: 12,
+                                                  height: 12,
+                                                  color: textMid,
+                                                  errorBuilder: (context, error, stackTrace) {
+                                                    return const Icon(
+                                                      Icons.domain_rounded,
+                                                      size: 12,
+                                                      color: textMid,
+                                                    );
+                                                  },
+                                                ),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  '${widget.owner.tower} • ',
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.grey.shade800,
+                                                    fontWeight: FontWeight.w600,
+                                                    letterSpacing: 0.2,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Image.asset(
+                                              'assets/image/wings.png',
+                                              width: 12,
+                                              height: 12,
+                                              color: textMid,
+                                              errorBuilder: (context, error, stackTrace) {
+                                                return const Icon(
+                                                  Icons.meeting_room_rounded,
+                                                  size: 12,
+                                                  color: textMid,
+                                                );
+                                              },
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              ' ${widget.owner.wing}',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey.shade800,
+                                                fontWeight: FontWeight.w600,
+                                                letterSpacing: 0.2,
+                                              ),
+                                            ),
+                                            if (widget.owner.floor != null && widget.owner.floor!.isNotEmpty)
+                                            Row(
+                                              children: [
+                                                const Text(' • '),
+                                                Image.asset(
+                                                  'assets/image/floor.png',
+                                                  width: 12,
+                                                  height: 12,
+                                                  color: textMid,
+                                                  errorBuilder: (context, error, stackTrace) {
+                                                    return const Icon(
+                                                      Icons.layers_rounded,
+                                                      size: 12,
+                                                      color: textMid,
+                                                    );
+                                                  },
+                                                ),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  widget.owner.floor!,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.grey.shade800,
+                                                    fontWeight: FontWeight.w600,
+                                                    letterSpacing: 0.2,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        )
+                                      else
+                                        if (widget.owner.isTower)
+                                          Row(
+                                            children: [
+                                              Text(
+                                                '${widget.owner.towerCode ?? ''} • ',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.grey.shade800,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 0.2,
+                                                ),
+                                              ),
+                                              Image.asset(
+                                                'assets/image/wings.png',
+                                                width: 12,
+                                                height: 12,
+                                                color: textMid,
+                                                errorBuilder: (context, error, stackTrace) {
+                                                  return const Icon(
+                                                    Icons.domain_rounded,
+                                                    size: 12,
+                                                    color: textMid,
+                                                  );
+                                                },
+                                              ),
+                                              const SizedBox(width: 4),
+                                              Text(
+                                                ' ${widget.owner.wings ?? 0} Wings',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.grey.shade800,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 0.2,
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        else
+                                          Text(
+                                            widget.owner.isGuard 
+                                                ? (widget.owner.shift ?? '')
+                                                : widget.owner.isVendor
+                                                    ? (widget.owner.services ?? '')
+                                                    : widget.owner.isAmenity
+                                                        ? (widget.owner.category ?? '')
+                                                        : widget.owner.flat,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey.shade800,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 0.2,
+                                            ),
+                                          ),
                                     ],
                                   ),
                                   const SizedBox(height: 5),
+
+                                  if (widget.owner.isFlat && widget.owner.isOccupied && widget.owner.ownerName != null && widget.owner.ownerName!.isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 6.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            'assets/image/profile.png',
+                                            width: 14,
+                                            height: 14,
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return const Icon(
+                                                Icons.person_rounded,
+                                                size: 14,
+                                                color: textMid,
+                                              );
+                                            },
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            widget.owner.ownerName!,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey.shade800,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 0.2,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                  if (widget.owner.isFlat && widget.owner.isVacant)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 6.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            'assets/image/Group.svg',
+                                            width: 14,
+                                            height: 14,
+                                            color: textMid,
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return const Icon(
+                                                Icons.person_off_rounded,
+                                                size: 14,
+                                                color: textMid,
+                                              );
+                                            },
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            'No owner assigned',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey.shade600,
+                                              fontWeight: FontWeight.w500,
+                                              fontStyle: FontStyle.italic,
+                                              letterSpacing: 0.2,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                  if (widget.owner.isFlat && (widget.owner.isOccupied && widget.owner.ownerName != null && widget.owner.ownerName!.isNotEmpty) || widget.owner.isVacant)
+                                    const SizedBox(height: 5),
 
                                   if (widget.owner.isAmenity && widget.owner.location != null && widget.owner.location!.isNotEmpty)
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(
-                                          Icons.location_on_rounded,
-                                          size: 14,
+                                        Image.asset(
+                                          'assets/image/Vector.svg',
+                                          width: 14,
+                                          height: 14,
                                           color: textMid,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return const Icon(
+                                              Icons.location_on_rounded,
+                                              size: 14,
+                                              color: textMid,
+                                            );
+                                          },
                                         ),
                                         const SizedBox(width: 6),
                                         Text(
@@ -742,10 +1030,18 @@ class _OwnerCardState extends State<OwnerCard>
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(
-                                          Icons.access_time_rounded,
-                                          size: 14,
+                                        Image.asset(
+                                          'assets/image/Notice.svg',
+                                          width: 14,
+                                          height: 14,
                                           color: textMid,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return const Icon(
+                                              Icons.access_time_rounded,
+                                              size: 14,
+                                              color: textMid,
+                                            );
+                                          },
                                         ),
                                         const SizedBox(width: 6),
                                         Text(
@@ -767,10 +1063,18 @@ class _OwnerCardState extends State<OwnerCard>
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(
-                                          Icons.phone_rounded,
-                                          size: 14,
+                                        Image.asset(
+                                          'assets/image/complaints.svg',
+                                          width: 14,
+                                          height: 14,
                                           color: textMid,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return const Icon(
+                                              Icons.phone_rounded,
+                                              size: 14,
+                                              color: textMid,
+                                            );
+                                          },
                                         ),
                                         const SizedBox(width: 6),
                                         Text(
@@ -792,10 +1096,18 @@ class _OwnerCardState extends State<OwnerCard>
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(
-                                          Icons.home_work_rounded,
-                                          size: 14,
+                                        Image.asset(
+                                          'assets/image/Documents.svg',
+                                          width: 14,
+                                          height: 14,
                                           color: textMid,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return const Icon(
+                                              Icons.home_work_rounded,
+                                              size: 14,
+                                              color: textMid,
+                                            );
+                                          },
                                         ),
                                         const SizedBox(width: 6),
                                         Container(

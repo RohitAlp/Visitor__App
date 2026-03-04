@@ -160,7 +160,7 @@ class _EditVendorsFormState extends State<EditVendorsForm> {
                                   "Upload Photo",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 12
+                                      fontSize: 14
                                   ),
                                 ),
                                 const SizedBox(height: 8),
