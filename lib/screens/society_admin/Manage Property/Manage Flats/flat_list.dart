@@ -147,7 +147,15 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                                 ),
                               ],
                             ),
-                            child: const Icon(Icons.notifications_outlined, color: AppColors.primaryColor, size: 22),
+                            child: Image.asset(
+                              'assets/image/Notice.svg',
+                              width: 22,
+                              height: 22,
+                              color: AppColors.primaryColor,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(Icons.notifications_outlined, color: AppColors.primaryColor, size: 22);
+                              },
+                            ),
                           ),
                           Positioned(
                             top: 8,
@@ -193,7 +201,15 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                                   ),
                                 ],
                               ),
-                              child: const Icon(Icons.arrow_back_ios_rounded, size: 16, color: AppColors.textDark),
+                              child: Image.asset(
+                                'assets/image/svgviewer-output.svg',
+                                width: 16,
+                                height: 16,
+                                color: AppColors.textDark,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(Icons.arrow_back_ios_rounded, size: 16, color: AppColors.textDark);
+                                },
+                              ),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -251,7 +267,15 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                                     ),
                                   ],
                                 ),
-                                child: const Icon(Icons.add_rounded, color: Colors.white, size: 24),
+                                child: Image.asset(
+                                  'assets/image/edit-05.png',
+                                  width: 24,
+                                  height: 24,
+                                  color: Colors.white,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(Icons.add_rounded, color: Colors.white, size: 24);
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -281,14 +305,30 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                           decoration: InputDecoration(
                             hintText: 'Search by owner name/flat number',
                             hintStyle: const TextStyle(color: AppColors.textLight, fontSize: 14),
-                            prefixIcon: const Icon(Icons.search_rounded, color: AppColors.primaryColor, size: 22),
+                            prefixIcon: Image.asset(
+                              'assets/image/complaints.svg',
+                              width: 22,
+                              height: 22,
+                              color: AppColors.primaryColor,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(Icons.search_rounded, color: AppColors.primaryColor, size: 22);
+                              },
+                            ),
                             suffixIcon: _searchQuery.isNotEmpty
                                 ? GestureDetector(
                               onTap: () {
                                 _searchController.clear();
                                 setState(() => _searchQuery = '');
                               },
-                              child: const Icon(Icons.close_rounded, color: AppColors.textLight, size: 18),
+                              child: Image.asset(
+                                'assets/image/delete_5577690.png',
+                                width: 18,
+                                height: 18,
+                                color: AppColors.textLight,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(Icons.close_rounded, color: AppColors.textLight, size: 18);
+                                },
+                              ),
                             )
                                 : null,
                             border: InputBorder.none,
@@ -378,7 +418,15 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                         color: AppColors.primaryColor.withOpacity(0.08),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.meeting_room_rounded, size: 40, color: AppColors.primaryColor),
+                      child: Image.asset(
+                        'assets/image/home-01.svg',
+                        width: 40,
+                        height: 40,
+                        color: AppColors.primaryColor,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.meeting_room_rounded, size: 40, color: AppColors.primaryColor);
+                        },
+                      ),
                     ),
                     const SizedBox(height: 16),
                     const Text(
