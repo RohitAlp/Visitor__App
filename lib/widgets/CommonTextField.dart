@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../constants/app_colors.dart';
 
 class CommonTextField extends StatelessWidget {
   final String hintText;
@@ -12,6 +15,7 @@ class CommonTextField extends StatelessWidget {
   final int? maxLength;
   final bool isRequired;
   final bool readOnly;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CommonTextField({
     super.key,
@@ -26,6 +30,7 @@ class CommonTextField extends StatelessWidget {
     this.maxLength,
     this.isRequired = false,
     this.readOnly = false,
+    this.inputFormatters,
   });
 
   @override
@@ -40,6 +45,8 @@ class CommonTextField extends StatelessWidget {
       obscureText: obscureText,
       maxLength: maxLength,
       readOnly: readOnly,
+      inputFormatters: inputFormatters,
+      cursorColor: Colors.white,
       style: const TextStyle(
         color: Colors.white,
         fontSize: 14,

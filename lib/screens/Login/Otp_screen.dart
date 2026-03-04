@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../config/Routes/RouteName.dart';
 import '../../constants/app_colors.dart';
@@ -42,7 +43,7 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void _verifyOtp() {
-    if (_enteredOtp.length < 4) {
+    if (_enteredOtp.length < 6) {
       Utils.showToast(
         context,
         message: "Please enter valid OTP",
@@ -76,11 +77,22 @@ class _OtpScreenState extends State<OtpScreen> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: Text("OTP Verifictaion",
+          leading: IconButton(
+            icon: const Icon(
+              CupertinoIcons.back,
+              color: Colors.black, // change if needed
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: const Text(
+            "OTP Verification",
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-            ),),
+            ),
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(20),
@@ -108,7 +120,7 @@ class _OtpScreenState extends State<OtpScreen> {
       
               /// OTP Field
               CommonOtpField(
-                length: 4,
+                length: 6,
                 onCompleted: (otp) {
                   _enteredOtp = otp;
                 },
@@ -128,7 +140,6 @@ class _OtpScreenState extends State<OtpScreen> {
                         fontSize: 12,
                       ),
                     ),
-      
                     GestureDetector(
                       onTap: _canResend ? _resendOtp : null,
                       child: Row(
@@ -162,7 +173,6 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
               ),
               const Spacer(),
-      
               Center(
                 child: GestureDetector(
                   onTap: () {
