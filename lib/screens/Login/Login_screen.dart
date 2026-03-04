@@ -17,8 +17,10 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   final mobileController = TextEditingController();
+  late AnimationController _rotationController;
   int _secondsRemaining = 30;
   Timer? _timer;
   bool _canResend = false;
@@ -27,9 +29,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _startTimer();
-  }
 
+    _imageTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      setState(() {
+        _currentImageIndex =
+            (_currentImageIndex + 1) % _images.length;
+      });
+    });
+  }
   void _sendOtp() {
     if (mobileController.text.length < 10) {
       Utils.showToast(
@@ -83,35 +90,97 @@ class _LoginScreenState extends State<LoginScreen> {
   void _onResend() {
     _startTimer();
   }
+  int _currentImageIndex = 0;
+  Timer? _imageTimer;
 
+  final List<String> _images = [
+    'assets/image/tower1.png',
+    'assets/image/tower2.png',
+    'assets/image/tower3.png',
+  ];
   @override
   void dispose() {
+    _imageTimer?.cancel();
+    _rotationController.dispose();
     _timer?.cancel();
     mobileController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: SizedBox.expand(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 800),
+                child: Image.asset(
+                  _images[_currentImageIndex],
+                  key: ValueKey(_images[_currentImageIndex]),
+                  fit: BoxFit.cover, // 👈 fills & crops properly
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
+              ),
+            ),
+          ),
+
+          /// 🔘 Let's Start Button
+          Positioned(
+            bottom: 60,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 14,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: _openLoginBottomSheet,
+                child: const Text(
+                  "Let's Start →",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  void _openLoginBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+            top: 20,
+          ),
+          child:SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 24),
-                Center(
-                  child: Image.asset(
-                    'assets/image/Applogo.png',
-                    height: 120,
-                    width: 200,
-                  ),
-                ),
-                SizedBox(height: 20),
                 Text(
-                  "Welcome Onboard!",
+                  "Welcome Rutuja!",
                   style: TextStyle(
                     color: AppColors.appPrimaryColor,
                     fontSize: 20,
@@ -119,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 Text(
-                  "Login via otp",
+                  "Login",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 12,
@@ -127,7 +196,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 20),
-
                 CommonTextField(
                   hintText: "Enter mobile number",
                   prefixIcon: Icons.phone,
@@ -147,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 if (_otpSent) ...[
-                  SizedBox(height: 20),
+                  SizedBox(height: 15),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: CommonOtpField(
@@ -159,11 +227,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Column(
                     children: [
-                      /// ⏱️ TIMER
                       Text(
                         "00:${_secondsRemaining.toString().padLeft(2, '0')}",
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: AppColors.appPrimaryColor,
                         ),
@@ -197,7 +264,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ],
-                SizedBox(height: 30),
+                SizedBox(height: 15),
                 Center(
                   child: InkWell(
                     onTap: () {
@@ -208,15 +275,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                     },
                     child: Container(
-                      height: 50,
-                      width: 200,
+                      height: 40,
+                      width: 170,
                       decoration: BoxDecoration(
                         color: AppColors.appPrimaryColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        _otpSent ? 'Verify OTP' : 'Send OTP',
+                        _otpSent ? 'Verify OTP' : 'Login',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -229,8 +296,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
