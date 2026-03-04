@@ -25,6 +25,9 @@ class Owner {
   final String? timing;
   final bool isAmenity;
   final String status;
+  final String? occupancyInfo;
+  final bool isOccupied;
+  final bool isVacant;
 
   const Owner({
     required this.name,
@@ -49,6 +52,9 @@ class Owner {
     this.timing,
     this.isAmenity = false,
     this.status = 'active',
+    this.occupancyInfo,
+    this.isOccupied = false,
+    this.isVacant = false,
   });
 
   Owner.guard({
@@ -73,7 +79,10 @@ class Owner {
        location = null,
        timing = null,
        isAmenity = false,
-       status = 'active';
+       status = 'active',
+       occupancyInfo = null,
+       isOccupied = false,
+       isVacant = false;
 
   // Constructor for vendors
   Owner.vendor({
@@ -98,7 +107,10 @@ class Owner {
        location = null,
        timing = null,
        isAmenity = false,
-       status = 'active';
+       status = 'active',
+       occupancyInfo = null,
+       isOccupied = false,
+       isVacant = false;
 
   // Constructor for flats
   Owner.flat({
@@ -111,6 +123,9 @@ class Owner {
     this.avatarInitials = 'F',
     this.isActive = true,
     this.ownerName,
+    this.occupancyInfo,
+    this.isOccupied = false,
+    this.isVacant = false,
   }) : isGuard = false,
        isVendor = false,
        isFlat = true,
@@ -125,7 +140,6 @@ class Owner {
        isAmenity = false,
        status = 'active';
 
-  // Constructor for towers
   Owner.tower({
     required this.name,
     required this.towerCode,
@@ -148,7 +162,10 @@ class Owner {
        location = null,
        timing = null,
        isAmenity = false,
-       status = 'active';
+       status = 'active',
+       occupancyInfo = null,
+       isOccupied = false,
+       isVacant = false;
 
   // Constructor for amenities
   Owner.amenity({
@@ -173,7 +190,10 @@ class Owner {
        ownerName = null,
        towerCode = null,
        wings = null,
-       isAmenity = true;
+       isAmenity = true,
+       occupancyInfo = null,
+       isOccupied = false,
+       isVacant = false;
 }
 
 class OwnerCard extends StatefulWidget {
@@ -276,6 +296,68 @@ class _OwnerCardState extends State<OwnerCard>
       default:
         return 'Unknown';
     }
+  }
+
+  Color _getOccupancyColor(String occupancyInfo) {
+    // Extract numbers from format like "0/4 Occupied"
+    final match = RegExp(r'(\d+)/(\d+)').firstMatch(occupancyInfo);
+    if (match != null) {
+      final occupied = int.tryParse(match.group(1) ?? '0') ?? 0;
+      final total = int.tryParse(match.group(2) ?? '0') ?? 1;
+      
+      final percentage = ((occupied / total) * 100).round();
+      return percentage == 0 ? const Color(0xFFEF4444) : const Color(0xFF10B981); // Red for vacant (0%), Green for occupied
+    }
+    return const Color(0xFF6B7280); // Gray default
+  }
+
+  String _getOccupancyText(String occupancyInfo) {
+    // Extract numbers from format like "0/4 Occupied"
+    final match = RegExp(r'(\d+)/(\d+)').firstMatch(occupancyInfo);
+    if (match != null) {
+      final occupied = int.tryParse(match.group(1) ?? '0') ?? 0;
+      final total = int.tryParse(match.group(2) ?? '0') ?? 1;
+      
+      final percentage = ((occupied / total) * 100).round();
+      
+      if (percentage == 0) {
+        return 'Vacant';
+      } else {
+        return 'Occupied $percentage%';
+      }
+    }
+    return occupancyInfo; // Fallback to original text
+  }
+
+  Color _getOccupancyStatusColor(String occupancyInfo) {
+    // Extract numbers from format like "0/4 Occupied"
+    final match = RegExp(r'(\d+)/(\d+)').firstMatch(occupancyInfo);
+    if (match != null) {
+      final occupied = int.tryParse(match.group(1) ?? '0') ?? 0;
+      final total = int.tryParse(match.group(2) ?? '0') ?? 1;
+      
+      final percentage = ((occupied / total) * 100).round();
+      return percentage == 0 ? const Color(0xFFEF4444) : const Color(0xFF10B981); // Red for vacant (0%), Green for occupied
+    }
+    return const Color(0xFF6B7280); // Gray default
+  }
+
+  String _getOccupancyStatusText(String occupancyInfo) {
+    // Extract numbers from format like "0/4 Occupied"
+    final match = RegExp(r'(\d+)/(\d+)').firstMatch(occupancyInfo);
+    if (match != null) {
+      final occupied = int.tryParse(match.group(1) ?? '0') ?? 0;
+      final total = int.tryParse(match.group(2) ?? '0') ?? 1;
+      
+      final percentage = ((occupied / total) * 100).round();
+      
+      if (percentage == 0) {
+        return 'Vacant';
+      } else {
+        return 'Occupied';
+      }
+    }
+    return 'Unknown'; // Fallback text
   }
 
   @override
@@ -534,19 +616,22 @@ class _OwnerCardState extends State<OwnerCard>
                                             ),
                                           ),
                                         )
+                                      else if (widget.owner.isFlat && widget.owner.occupancyInfo != null && widget.owner.occupancyInfo!.isNotEmpty)
+                                        // Don't show status badge for flats when occupancy info is present
+                                        Container()
                                       else if (widget.owner.isFlat)
                                         Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                                           decoration: BoxDecoration(
-                                            color: widget.owner.isActive ? const Color(0xFF10B981).withOpacity(0.1) : const Color(0xFFF59E0B).withOpacity(0.1),
+                                            color: widget.owner.isVacant ? const Color(0xFFEF4444).withOpacity(0.1) : const Color(0xFF10B981).withOpacity(0.1),
                                             borderRadius: BorderRadius.circular(6),
                                           ),
                                           child: Text(
-                                            widget.owner.isActive ? 'Occupied' : 'Vacant',
+                                            widget.owner.isVacant ? 'Vacant' : 'Occupied',
                                             style: TextStyle(
                                               fontSize: 10,
                                               fontWeight: FontWeight.w800,
-                                              color: widget.owner.isActive ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
+                                              color: widget.owner.isVacant ? const Color(0xFFEF4444) : const Color(0xFF10B981),
                                             ),
                                           ),
                                         )
@@ -699,29 +784,38 @@ class _OwnerCardState extends State<OwnerCard>
                                         ),
                                       ],
                                     ),
-                                  
-                                  if (widget.owner.isFlat && widget.owner.ownerName != null)
+
+                                  if (widget.owner.isFlat && widget.owner.occupancyInfo != null && widget.owner.occupancyInfo!.isNotEmpty)
                                     const SizedBox(height: 5),
-                                  
-                                  if (widget.owner.isFlat)
+
+                                  if (widget.owner.isFlat && widget.owner.occupancyInfo != null && widget.owner.occupancyInfo!.isNotEmpty)
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Icon(
-                                          Icons.person_rounded,
+                                          Icons.home_work_rounded,
                                           size: 14,
                                           color: textMid,
                                         ),
                                         const SizedBox(width: 6),
-                                        Text(
-                                          widget.owner.ownerName?.isNotEmpty == true 
-                                              ? 'Owner: ${widget.owner.ownerName}'
-                                              : 'No owner assigned',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey.shade800,
-                                            fontWeight: FontWeight.w500,
-                                            letterSpacing: 0.2,
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                          decoration: BoxDecoration(
+                                            color: _getOccupancyColor(widget.owner.occupancyInfo!).withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(6),
+                                            border: Border.all(
+                                              color: _getOccupancyColor(widget.owner.occupancyInfo!).withOpacity(0.3),
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            _getOccupancyText(widget.owner.occupancyInfo!),
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w700,
+                                              color: _getOccupancyColor(widget.owner.occupancyInfo!),
+                                              letterSpacing: 0.3,
+                                            ),
                                           ),
                                         ),
                                       ],

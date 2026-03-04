@@ -16,14 +16,14 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
     with TickerProviderStateMixin {
 
   final List<Owner> _allFlats = [
-    Owner.flat(name: 'Flat 101', flat: 'Flat 101', wing: 'A Wing', tower: 'Tower A', floor: 'Floor 1', isActive: true, ownerName: 'Rajesh Kumar'),
-    Owner.flat(name: 'Flat 102', flat: 'Flat 102', wing: 'A Wing', tower: 'Tower A', floor: 'Floor 1', isActive: true, ownerName: 'Priya Sharma'),
-    Owner.flat(name: 'Flat 201', flat: 'Flat 201', wing: 'A Wing', tower: 'Tower A', floor: 'Floor 2', isActive: true, ownerName: 'Amit Patel'),
-    Owner.flat(name: 'Flat 202', flat: 'Flat 202', wing: 'A Wing', tower: 'Tower A', floor: 'Floor 2', isActive: false, ownerName: null),
-    Owner.flat(name: 'Flat 301', flat: 'Flat 301', wing: 'C Wing', tower: 'Tower B', floor: 'Floor 3', isActive: true, ownerName: 'Sunita Verma'),
-    Owner.flat(name: 'Flat 302', flat: 'Flat 302', wing: 'B Wing', tower: 'Tower B', floor: 'Floor 3', isActive: true, ownerName: 'Karan Mehta'),
-    Owner.flat(name: 'Flat 401', flat: 'Flat 401', wing: 'D Wing', tower: 'Tower C', floor: 'Floor 4', isActive: false, ownerName: null),
-    Owner.flat(name: 'Flat 501', flat: 'Flat 501', wing: 'C Wing', tower: 'Tower C', floor: 'Floor 5', isActive: true, ownerName: 'Meera Joshi'),
+    Owner.flat(name: 'Flat 101', flat: 'Flat 101', wing: 'A Wing', tower: 'Tower A', floor: 'Floor 1', ownerName: 'Rajesh Kumar', isOccupied: true, isVacant: false),
+    Owner.flat(name: 'Flat 102', flat: 'Flat 102', wing: 'A Wing', tower: 'Tower A', floor: 'Floor 1', ownerName: 'Priya Sharma', isOccupied: true, isVacant: false),
+    Owner.flat(name: 'Flat 201', flat: 'Flat 201', wing: 'A Wing', tower: 'Tower A', floor: 'Floor 2', ownerName: 'Amit Patel', isOccupied: true, isVacant: false),
+    Owner.flat(name: 'Flat 202', flat: 'Flat 202', wing: 'A Wing', tower: 'Tower A', floor: 'Floor 2', ownerName: null, isOccupied: false, isVacant: true),
+    Owner.flat(name: 'Flat 301', flat: 'Flat 301', wing: 'C Wing', tower: 'Tower B', floor: 'Floor 3', ownerName: 'Sunita Verma', isOccupied: true, isVacant: false),
+    Owner.flat(name: 'Flat 302', flat: 'Flat 302', wing: 'B Wing', tower: 'Tower B', floor: 'Floor 3', ownerName: 'Karan Mehta', isOccupied: true, isVacant: false),
+    Owner.flat(name: 'Flat 401', flat: 'Flat 401', wing: 'D Wing', tower: 'Tower C', floor: 'Floor 4', ownerName: null, isOccupied: false, isVacant: true),
+    Owner.flat(name: 'Flat 501', flat: 'Flat 501', wing: 'C Wing', tower: 'Tower C', floor: 'Floor 5', ownerName: 'Meera Joshi', isOccupied: true, isVacant: false),
   ];
 
   String _searchQuery = '';

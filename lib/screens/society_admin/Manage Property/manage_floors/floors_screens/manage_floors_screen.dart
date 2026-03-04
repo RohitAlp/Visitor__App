@@ -6,6 +6,7 @@ import 'package:visitorapp/screens/society_admin/Manage%20Property/manage_floors
 
 import '../../../../../constants/app_colors.dart';
 import '../../../../../utils/enum.dart';
+import '../../../../../widgets/owner_card.dart';
 import 'bloc/manage_floors_bloc.dart' show ManageFloorsBloc, DeleteFloorEvent, Floor, ManageFloorsState, UpdateSearchQueryEvent, ClearFiltersEvent, LoadFloorsEvent, SelectTowerEvent, SelectWingEvent;
 
 class ManageFloorsScreen extends StatelessWidget {
@@ -517,8 +518,8 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                     itemCount: filtered.length,
                     itemBuilder: (context, index) {
                       final floor = filtered[index];
-                      return _FloorCard(
-                        floor: floor,
+                      return OwnerCard(
+                        owner: _mapFloorToOwner(floor),
                         onEdit: () {
                           Navigator.push(
                             context,
@@ -532,6 +533,7 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                         },
                         onDelete: () => _deleteFloor(floor, context),
                         index: index,
+                        showStatus: true,
                       );
                     },
                   ),
@@ -543,218 +545,24 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
       },
     );
   }
-}
-
-class _FloorCard extends StatefulWidget {
-  final Floor floor;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-  final int index;
-
-  const _FloorCard({
-    required this.floor,
-    required this.onEdit,
-    required this.onDelete,
-    required this.index,
-  });
-
-  @override
-  State<_FloorCard> createState() => _FloorCardState();
-}
-
-class _FloorCardState extends State<_FloorCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _slideAnimation;
-  late Animation<double> _fadeAnimation;
-
-  static const Color primaryColor = Color(0xFFC5610F);
-  static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color textDark = Color(0xFF1A1208);
-  static const Color textMid = Color(0xFF6B5A47);
-  static const Color textLight = Color(0xFF9C8872);
-
-  bool _pressed = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _slideAnimation = Tween<double>(
-      begin: 40,
-      end: 0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
-    );
-
-    Future.delayed(Duration(milliseconds: 60 * widget.index), () {
-      if (mounted) _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) => Transform.translate(
-        offset: Offset(0, _slideAnimation.value),
-        child: Opacity(opacity: _fadeAnimation.value, child: child),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: GestureDetector(
-          onTapDown: (_) => setState(() => _pressed = true),
-          onTapUp: (_) => setState(() => _pressed = false),
-          onTapCancel: () => setState(() => _pressed = false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 120),
-            transform: Matrix4.identity()..scale(_pressed ? 0.97 : 1.0),
-            decoration: BoxDecoration(
-              color: cardBg,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(_pressed ? 0.03 : 0.07),
-                  blurRadius: _pressed ? 8 : 20,
-                  offset: Offset(0, _pressed ? 2 : 8),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  // Floor Icon
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(
-                      Icons.layers_rounded,
-                      color: AppColors.primaryColor,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-
-                  // Info
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              widget.floor.floorNumber,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: textDark,
-                                letterSpacing: -0.3,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on_rounded,
-                              size: 13,
-                              color: primaryColor.withOpacity(0.7),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Tower: ${widget.floor.tower}',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: textMid,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.apartment_rounded,
-                              size: 13,
-                              color: primaryColor.withOpacity(0.7),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Wing: ${widget.floor.wing}',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: textMid,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: _getStatusColor(widget.floor.status).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            widget.floor.status,
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: _getStatusColor(widget.floor.status),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Action buttons
-                  Column(
-                    children: [
-                      _ActionButton(
-                        icon: Icons.edit_rounded,
-                        color: primaryColor,
-                        onTap: widget.onEdit,
-                      ),
-                      const SizedBox(height: 8),
-                      _ActionButton(
-                        icon: Icons.delete_outline_rounded,
-                        color: const Color(0xFFDC2626),
-                        onTap: widget.onDelete,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+  
+  // Helper method to map Floor to Owner
+  Owner _mapFloorToOwner(Floor floor) {
+    return Owner.flat(
+      name: floor.floorNumber,
+      flat: '${floor.totalFlats} Flats',
+      wing: floor.wing,
+      tower: floor.tower,
+      floor: floor.floorNumber,
+      phone: '',
+      avatarInitials: 'F',
+      isActive: floor.status.toLowerCase() == 'active',
+      ownerName: null, 
+      occupancyInfo: '${floor.occupiedFlats}/${floor.totalFlats} Occupied',
     );
   }
 }
+
 
 Color _getStatusColor(String status) {
   switch (status.toLowerCase()) {
@@ -768,58 +576,5 @@ Color _getStatusColor(String status) {
       return const Color(0xFF8B5CF6); // Violet
     default:
       return const Color(0xFF6B7280); // Gray
-  }
-}
-class _ActionButton extends StatefulWidget {
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _ActionButton({
-    required this.icon,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  State<_ActionButton> createState() => _ActionButtonState();
-}
-
-class _ActionButtonState extends State<_ActionButton> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _hovered = true),
-      onTapUp: (_) {
-        setState(() => _hovered = false);
-        widget.onTap();
-      },
-      onTapCancel: () => setState(() => _hovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: _hovered ? widget.color : widget.color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: _hovered
-              ? [
-            BoxShadow(
-              color: widget.color.withOpacity(0.4),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ]
-              : null,
-        ),
-        child: Icon(
-          widget.icon,
-          size: 17,
-          color: _hovered ? Colors.white : widget.color,
-        ),
-      ),
-    );
   }
 }
