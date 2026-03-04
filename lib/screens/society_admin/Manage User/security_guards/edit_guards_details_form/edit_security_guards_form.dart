@@ -154,7 +154,7 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
                                   "Upload Photo",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 12
+                                    fontSize: 14
                                   ),
                                 ),
                                 const SizedBox(height: 8),

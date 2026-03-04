@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 import 'package:visitorapp/widgets/custom_dropdown.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
+import '../../../../widgets/owner_card.dart';
 import 'Add_tower.dart';
 
 class AddTowerForm extends StatefulWidget {
@@ -41,10 +42,10 @@ class _AddTowerFormState extends State<AddTowerForm> {
       _isEdit = isEditArg == true;
 
       final towerArg = args['tower'];
-      if (towerArg is Tower) {
+      if (towerArg is Owner) {
         _towerNameController.text = towerArg.name;
-        _towerCodeController.text = towerArg.code;
-        _wingsController.text = towerArg.wings.toString();
+        _towerCodeController.text = towerArg.towerCode ?? '';
+        _wingsController.text = towerArg.wings?.toString() ?? '0';
         _selectedStatus = towerArg.isActive ? 'Active' : 'Inactive';
       }
     }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:visitorapp/screens/Login/Otp_screen.dart';
 
@@ -54,60 +55,63 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: SizedBox.expand(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 800),
-                child: Image.asset(
-                  _images[_currentImageIndex],
-                  key: ValueKey(_images[_currentImageIndex]),
-                  fit: BoxFit.cover, // 👈 fills & crops properly
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
-              ),
-            ),
-          ),
-
-          if (_showStartButton)
-            Positioned(
-              bottom: 60,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.appPrimaryColor,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 14,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _showStartButton = false;
-                    });
-
-                    _openLoginBottomSheet();
-                  },
-                  child: const Text(
-                    "Let's Start →",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: SizedBox.expand(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 800),
+                  child: Image.asset(
+                    _images[_currentImageIndex],
+                    key: ValueKey(_images[_currentImageIndex]),
+                    fit: BoxFit.cover, // 👈 fills & crops properly
+                    width: double.infinity,
+                    height: double.infinity,
                   ),
                 ),
               ),
             ),
-        ],
+      
+            if (_showStartButton)
+              Positioned(
+                bottom: 60,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.appPrimaryColor,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 14,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        mobileController.clear();
+                        _showStartButton = false;
+                      });
+      
+                      _openLoginBottomSheet();
+                    },
+                    child: const Text(
+                      "Let's Start →",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -143,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Welcome Rutuja!",
+                      "Smart Living Starts Here",
                       style: TextStyle(
                         color: AppColors.appPrimaryColor,
                         fontSize: 20,
@@ -160,14 +164,16 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                     ),
                     const SizedBox(height: 20),
-
                     /// Mobile Field
                     CommonTextField(
                       hintText: "Enter mobile number",
                       prefixIcon: Icons.phone,
                       iconColor: AppColors.appPrimaryColor,
                       controller: mobileController,
-                      keyboardType: TextInputType.phone,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
                       maxLength: 10,
                     ),
 

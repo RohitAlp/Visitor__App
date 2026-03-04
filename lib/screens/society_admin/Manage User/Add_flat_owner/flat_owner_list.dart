@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../constants/app_colors.dart';
 import '../../../../config/Routes/RouteName.dart';
+import '../../../../widgets/owner_card.dart';
 
 class FlatOwner {
   final String name;
@@ -9,6 +10,7 @@ class FlatOwner {
   final String phone;
   final String wing;
   final String avatarInitials;
+  final bool isActive;
 
   const FlatOwner({
     required this.name,
@@ -16,6 +18,7 @@ class FlatOwner {
     required this.phone,
     required this.wing,
     required this.avatarInitials,
+    required this.isActive,
   });
 }
 
@@ -37,14 +40,14 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
   static const Color textLight = Color(0xFF9C8872);
 
   final List<FlatOwner> _allOwners = const [
-    FlatOwner(name: 'Rajesh Kumar', flat: 'Flat A-302', phone: '+91 98765 43210', wing: 'A', avatarInitials: 'RK'),
-    FlatOwner(name: 'Priya Sharma', flat: 'Flat B-501', phone: '+91 98765 43211', wing: 'B', avatarInitials: 'PS'),
-    FlatOwner(name: 'Amit Patel', flat: 'Flat C-204', phone: '+91 98765 43212', wing: 'C', avatarInitials: 'AP'),
-    FlatOwner(name: 'Sneha Reddy', flat: 'Flat A-101', phone: '+91 98765 43213', wing: 'A', avatarInitials: 'SR'),
-    FlatOwner(name: 'Vikram Singh', flat: 'Flat D-403', phone: '+91 98765 43214', wing: 'D', avatarInitials: 'VS'),
-    FlatOwner(name: 'Meera Joshi', flat: 'Flat B-201', phone: '+91 98765 43215', wing: 'B', avatarInitials: 'MJ'),
-    FlatOwner(name: 'Karan Mehta', flat: 'Flat C-305', phone: '+91 98765 43216', wing: 'C', avatarInitials: 'KM'),
-    FlatOwner(name: 'Anita Gupta', flat: 'Flat A-404', phone: '+91 98765 43217', wing: 'A', avatarInitials: 'AG'),
+    FlatOwner(name: 'Nikhil Dattatray Bhandigare', flat: 'Flat A-302', phone: '+91 98765 43210', wing: 'A', avatarInitials: 'RK', isActive: true),
+    FlatOwner(name: 'Priya Sharma', flat: 'Flat B-501', phone: '+91 98765 43211', wing: 'B', avatarInitials: 'PS', isActive: true),
+    FlatOwner(name: 'Amit Patel', flat: 'Flat C-204', phone: '+91 98765 43212', wing: 'C', avatarInitials: 'AP', isActive: false),
+    FlatOwner(name: 'Sneha Reddy', flat: 'Flat A-101', phone: '+91 98765 43213', wing: 'A', avatarInitials: 'SR', isActive: true),
+    FlatOwner(name: 'Vikram Singh', flat: 'Flat D-403', phone: '+91 98765 43214', wing: 'D', avatarInitials: 'VS', isActive: false),
+    FlatOwner(name: 'Meera Joshi', flat: 'Flat B-201', phone: '+91 98765 43215', wing: 'B', avatarInitials: 'MJ', isActive: true),
+    FlatOwner(name: 'Karan Mehta', flat: 'Flat C-305', phone: '+91 98765 43216', wing: 'C', avatarInitials: 'KM', isActive: true),
+    FlatOwner(name: 'Anita Gupta', flat: 'Flat A-404', phone: '+91 98765 43217', wing: 'A', avatarInitials: 'AG', isActive: false),
   ];
 
   String _selectedWing = 'All';
@@ -173,7 +176,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                       const Text(
                         'Flat Owners',
                         style: TextStyle(
-                          fontSize: 26,
+                          fontSize: 20,
                           fontWeight: FontWeight.w800,
                           color: textDark,
                           letterSpacing: -0.8,
@@ -187,15 +190,15 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                             Navigator.pushNamed(context, RouteName.AddFlatOwnerForm);
                           },
                           child: Container(
-                            width: 42,
-                            height: 42,
+                            width: 30,
+                            height: 30,
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
                                 colors: [primaryLight, primaryColor],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
                                   color: primaryColor.withOpacity(0.45),
@@ -204,7 +207,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                                 ),
                               ],
                             ),
-                            child: const Icon(Icons.add_rounded, color: Colors.white, size: 24),
+                            child: const Icon(Icons.add_rounded, color: Colors.white, size: 20),
                           ),
                         ),
                       ),
@@ -394,8 +397,15 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                 itemCount: filtered.length,
                 itemBuilder: (context, index) {
                   final owner = filtered[index];
-                  return _OwnerCard(
-                    owner: owner,
+                  return OwnerCard(
+                    owner: Owner(
+                      name: owner.name,
+                      flat: owner.flat,
+                      phone: owner.phone,
+                      wing: owner.wing,
+                      avatarInitials: owner.avatarInitials,
+                      isActive: owner.isActive,
+                    ),
                     onEdit: () => _editOwner(owner),
                     onDelete: () => _deleteOwner(owner),
                     index: index,
@@ -410,275 +420,3 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
   }
 }
 
-class _OwnerCard extends StatefulWidget {
-  final FlatOwner owner;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-  final int index;
-
-  const _OwnerCard({
-    required this.owner,
-    required this.onEdit,
-    required this.onDelete,
-    required this.index,
-  });
-
-  @override
-  State<_OwnerCard> createState() => _OwnerCardState();
-}
-
-class _OwnerCardState extends State<_OwnerCard> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _slideAnimation;
-  late Animation<double> _fadeAnimation;
-
-  static const Color primaryColor = Color(0xFFC5610F);
-  static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color textDark = Color(0xFF1A1208);
-  static const Color textMid = Color(0xFF6B5A47);
-  static const Color textLight = Color(0xFF9C8872);
-
-  bool _pressed = false;
-
-  Color get _wingColor {
-    switch (widget.owner.wing) {
-      case 'A': return const Color(0xFF2563EB);
-      case 'B': return const Color(0xFF059669);
-      case 'C': return const Color(0xFF7C3AED);
-      case 'D': return const Color(0xFFDC2626);
-      default: return primaryColor;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _slideAnimation = Tween<double>(begin: 40, end: 0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
-    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
-
-    Future.delayed(Duration(milliseconds: 60 * widget.index), () {
-      if (mounted) _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) => Transform.translate(
-        offset: Offset(0, _slideAnimation.value),
-        child: Opacity(opacity: _fadeAnimation.value, child: child),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8, top: 2),
-        child: GestureDetector(
-          onTapDown: (_) => setState(() => _pressed = true),
-          onTapUp: (_) => setState(() => _pressed = false),
-          onTapCancel: () => setState(() => _pressed = false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 120),
-            transform: Matrix4.identity()..scale(_pressed ? 0.97 : 1.0),
-            decoration: BoxDecoration(
-              color: cardBg,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Color(0x66000000).withOpacity(0.2)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
-                  blurRadius: 6,
-                  spreadRadius: 0,
-                  offset: const Offset(0, 0),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-              child: Row(
-                children: [
-                  // Avatar
-                  Container(
-                    width: 45,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          _wingColor.withOpacity(0.15),
-                          _wingColor.withOpacity(0.08),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: _wingColor.withOpacity(0.2),
-                        width: 1.5,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        widget.owner.avatarInitials,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: _wingColor,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              widget.owner.name,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: textDark,
-                                letterSpacing: -0.3,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: _wingColor.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                widget.owner.wing,
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w800,
-                                  color: _wingColor,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Icon(Icons.apartment_rounded, size: 13, color: primaryColor.withOpacity(0.7)),
-                            const SizedBox(width: 4),
-                            Text(
-                              widget.owner.flat,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: textMid,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 3),
-                        Row(
-                          children: [
-                            Icon(Icons.phone_rounded, size: 13, color: primaryColor.withOpacity(0.7)),
-                            const SizedBox(width: 4),
-                            Text(
-                              widget.owner.phone,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: textLight,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Action buttons
-                  Column(
-                    children: [
-                      _ActionButton(
-                        icon: Icons.edit_rounded,
-                        color: primaryColor,
-                        onTap: widget.onEdit,
-                      ),
-                      const SizedBox(height: 8),
-                      _ActionButton(
-                        icon: Icons.delete_outline_rounded,
-                        color: const Color(0xFFDC2626),
-                        onTap: widget.onDelete,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ActionButton extends StatefulWidget {
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _ActionButton({required this.icon, required this.color, required this.onTap});
-
-  @override
-  State<_ActionButton> createState() => _ActionButtonState();
-}
-
-class _ActionButtonState extends State<_ActionButton> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _hovered = true),
-      onTapUp: (_) {
-        setState(() => _hovered = false);
-        widget.onTap();
-      },
-      onTapCancel: () => setState(() => _hovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: _hovered ? widget.color : widget.color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: _hovered
-              ? [
-            BoxShadow(
-              color: widget.color.withOpacity(0.4),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            )
-          ]
-              : null,
-        ),
-        child: Icon(
-          widget.icon,
-          size: 17,
-          color: _hovered ? Colors.white : widget.color,
-        ),
-      ),
-    );
-  }
-}

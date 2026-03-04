@@ -54,7 +54,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
       decoration: InputDecoration(
         hintText: widget.hintText ?? '',
         hintStyle: const TextStyle(
-          fontSize: 14,
           color: Colors.grey,
         ),
         filled: true,

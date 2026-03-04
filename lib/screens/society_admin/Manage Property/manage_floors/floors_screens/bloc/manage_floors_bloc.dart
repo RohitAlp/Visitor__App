@@ -12,6 +12,8 @@ class Floor {
   final String wing;
   final String floorNumber;
   final String status;
+  final int totalFlats;
+  final int occupiedFlats;
 
   const Floor({
     required this.id,
@@ -19,7 +21,12 @@ class Floor {
     required this.wing,
     required this.floorNumber,
     required this.status,
+    required this.totalFlats,
+    required this.occupiedFlats,
   });
+
+  double get occupancyPercentage => totalFlats > 0 ? (occupiedFlats / totalFlats) * 100 : 0;
+  String get occupancyText => '${occupancyPercentage.round()}% Occupied';
 }
 
 class ManageFloorsBloc extends Bloc<ManageFloorsEvent, ManageFloorsState> {
@@ -44,18 +51,18 @@ class ManageFloorsBloc extends Bloc<ManageFloorsEvent, ManageFloorsState> {
       await Future.delayed(const Duration(milliseconds: 500));
       
       final List<Floor> floors = [
-        const Floor(id: '1', tower: 'Tower A', wing: 'Wing A1', floorNumber: 'Floor 1', status: 'Active'),
-        const Floor(id: '2', tower: 'Tower A', wing: 'Wing A1', floorNumber: 'Floor 2', status: 'Active'),
-        const Floor(id: '3', tower: 'Tower A', wing: 'Wing A2', floorNumber: 'Floor 1', status: 'Inactive'),
-        const Floor(id: '4', tower: 'Tower A', wing: 'Wing A2', floorNumber: 'Floor 2', status: 'Active'),
-        const Floor(id: '5', tower: 'Tower B', wing: 'Wing B1', floorNumber: 'Floor 1', status: 'Active'),
-        const Floor(id: '6', tower: 'Tower B', wing: 'Wing B1', floorNumber: 'Floor 2', status: 'Active'),
-        const Floor(id: '7', tower: 'Tower B', wing: 'Wing B2', floorNumber: 'Floor 1', status: 'Active'),
-        const Floor(id: '8', tower: 'Tower B', wing: 'Wing B2', floorNumber: 'Floor 2', status: 'Inactive'),
-        const Floor(id: '9', tower: 'Tower C', wing: 'Wing C1', floorNumber: 'Floor 1', status: 'Active'),
-        const Floor(id: '10', tower: 'Tower C', wing: 'Wing C1', floorNumber: 'Floor 2', status: 'Active'),
-        const Floor(id: '11', tower: 'Tower C', wing: 'Wing C2', floorNumber: 'Floor 1', status: 'Active'),
-        const Floor(id: '12', tower: 'Tower C', wing: 'Wing C2', floorNumber: 'Floor 2', status: 'Active'),
+        const Floor(id: '1', tower: 'Tower A', wing: 'A Wing', floorNumber: 'Ground Floor', status: 'Active', totalFlats: 4, occupiedFlats: 4),
+        const Floor(id: '2', tower: 'Tower A', wing: 'A Wing', floorNumber: 'Floor 1', status: 'Active', totalFlats: 4, occupiedFlats: 0),
+        const Floor(id: '3', tower: 'Tower A', wing: 'B Wing', floorNumber: 'Ground Floor', status: 'Active', totalFlats: 4, occupiedFlats: 2),
+        const Floor(id: '4', tower: 'Tower A', wing: 'B Wing', floorNumber: 'Floor 1', status: 'Inactive', totalFlats: 4, occupiedFlats: 1),
+        const Floor(id: '5', tower: 'Tower B', wing: 'A Wing', floorNumber: 'Ground Floor', status: 'Active', totalFlats: 4, occupiedFlats: 4),
+        const Floor(id: '6', tower: 'Tower B', wing: 'A Wing', floorNumber: 'Floor 1', status: 'Active', totalFlats: 4, occupiedFlats: 3),
+        const Floor(id: '7', tower: 'Tower B', wing: 'B Wing', floorNumber: 'Ground Floor', status: 'Active', totalFlats: 4, occupiedFlats: 4),
+        const Floor(id: '8', tower: 'Tower B', wing: 'B Wing', floorNumber: 'Floor 1', status: 'Active', totalFlats: 4, occupiedFlats: 2),
+        const Floor(id: '9', tower: 'Tower C', wing: 'A Wing', floorNumber: 'Ground Floor', status: 'Active', totalFlats: 4, occupiedFlats: 4),
+        const Floor(id: '10', tower: 'Tower C', wing: 'A Wing', floorNumber: 'Floor 1', status: 'Active', totalFlats: 4, occupiedFlats: 3),
+        const Floor(id: '11', tower: 'Tower C', wing: 'B Wing', floorNumber: 'Ground Floor', status: 'Active', totalFlats: 4, occupiedFlats: 4),
+        const Floor(id: '12', tower: 'Tower C', wing: 'B Wing', floorNumber: 'Floor 1', status: 'Active', totalFlats: 4, occupiedFlats: 1),
       ];
 
       emit(state.copyWith(

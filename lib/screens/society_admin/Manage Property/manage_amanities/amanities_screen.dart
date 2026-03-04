@@ -3,22 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visitorapp/screens/society_admin/Manage%20Property/manage_amanities/edit_aminity/update_aminity.dart';
 import '../../../../constants/app_colors.dart';
 import 'edit_aminity/amenity_bloc/aminity_bloc.dart';
-
-class Amenity {
-  final String name;
-  final String category;
-  final String location;
-  final String timing;
-  final String status;
-
-  const Amenity({
-    required this.name,
-    required this.category,
-    required this.location,
-    required this.timing,
-    required this.status,
-  });
-}
+import '../../../../widgets/owner_card.dart';
 
 class ManageAmanitiesScreen extends StatefulWidget {
   const ManageAmanitiesScreen({super.key});
@@ -30,34 +15,38 @@ class ManageAmanitiesScreen extends StatefulWidget {
 class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
     with TickerProviderStateMixin {
 
-  final List<Amenity> _allAmenities = const [
-    Amenity(
+  final List<Owner> _allAmenities = [
+    Owner.amenity(
       name: 'Swimming Pool',
       category: 'Recreation',
       location: 'Block A - Ground Floor',
       timing: '6 AM - 10 PM',
-      status: 'Active',
+      isActive: true,
+      status: 'active',
     ),
-    Amenity(
+    Owner.amenity(
       name: 'Gymnasium',
       category: 'Fitness',
       location: 'Block B - 1st Floor',
       timing: '5 AM - 11 PM',
-      status: 'Active',
+      isActive: true,
+      status: 'active',
     ),
-    Amenity(
+    Owner.amenity(
       name: 'Community Hall',
       category: 'Events',
       location: 'Main Building - 2nd Floor',
       timing: '9 AM - 9 PM',
-      status: 'Active',
+      isActive: false,
+      status: 'maintenance',
     ),
-    Amenity(
+    Owner.amenity(
       name: 'Children\'s Play Area',
       category: 'Recreation',
       location: 'Garden Area',
       timing: '6 AM - 8 PM',
-      status: 'Active',
+      isActive: false,
+      status: 'closed',
     ),
   ];
 
@@ -67,12 +56,12 @@ class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
   late AnimationController _fabController;
   late Animation<double> _fabAnimation;
 
-  List<Amenity> get _filteredAmenities {
+  List<Owner> get _filteredAmenities {
     return _allAmenities.where((amenity) {
       final matchesSearch = _searchQuery.isEmpty ||
           amenity.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          amenity.category.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          amenity.location.toLowerCase().contains(_searchQuery.toLowerCase());
+          (amenity.category?.toLowerCase().contains(_searchQuery.toLowerCase()) ?? false) ||
+          (amenity.location?.toLowerCase().contains(_searchQuery.toLowerCase()) ?? false);
       
       final matchesStatus = _selectedStatus == 'All' || 
           amenity.status.toLowerCase() == _selectedStatus.toLowerCase();
@@ -99,7 +88,7 @@ class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
     super.dispose();
   }
 
-  void _deleteAmenity(Amenity amenity) {
+  void _deleteAmenity(Owner amenity) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -134,7 +123,7 @@ class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
     );
   }
 
-  void _editAmenity(Amenity amenity) {
+  void _editAmenity(Owner amenity) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Editing ${amenity.name}'),
@@ -305,11 +294,12 @@ class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
                         decoration: BoxDecoration(
                           color: AppColors.cardBg,
                           borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.06),
-                              blurRadius: 16,
-                              offset: const Offset(0, 4),
+                              color: Color(0x66000000),
+                              blurRadius: 2,
+                              spreadRadius: 0,
+                              offset: Offset(0, 0),
                             ),
                           ],
                         ),
@@ -344,11 +334,12 @@ class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
                         decoration: BoxDecoration(
                           color: AppColors.cardBg,
                           borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.06),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
+                              color: Color(0x66000000),
+                              blurRadius: 1,
+                              spreadRadius: 0,
+                              offset: Offset(0, 0),
                             ),
                           ],
                         ),
@@ -389,15 +380,51 @@ class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
 
                       Row(
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                '${filtered.length} Amenity${filtered.length != 1 ? 'ies' : ''}',
-                                style: const TextStyle(fontSize: 13, color: AppColors.textLight, fontWeight: FontWeight.w600),
-                              ),
-                              const SizedBox(width: 4),
-                              _buildStatusCounts(filtered),
-                            ],
+                          Text(
+                            '${filtered.length} Amenity${filtered.length != 1 ? 'ies' : ''}',
+                            style: const TextStyle(fontSize: 13, color: AppColors.textLight, fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF10B981),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${filtered.where((amenity) => amenity.status.toLowerCase() == 'active').length} Active',
+                            style: const TextStyle(fontSize: 11, color: AppColors.textLight, fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF3B82F6),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${filtered.where((amenity) => amenity.status.toLowerCase() == 'maintenance').length} Maintenance',
+                            style: const TextStyle(fontSize: 11, color: AppColors.textLight, fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFF59E0B),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${filtered.where((amenity) => amenity.status.toLowerCase() == 'closed').length} Closed',
+                            style: const TextStyle(fontSize: 11, color: AppColors.textLight, fontWeight: FontWeight.w500),
                           ),
                           const Spacer(),
                           if (_searchQuery.isNotEmpty)
@@ -464,9 +491,9 @@ class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
                 itemCount: filtered.length,
                 itemBuilder: (context, index) {
                   final amenity = filtered[index];
-                  return _AmenityCard(
-                    amenity: amenity,
-                    onEdit: (){
+                  return OwnerCard(
+                    owner: amenity,
+                    onEdit: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -479,6 +506,7 @@ class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
                     },
                     onDelete: () => _deleteAmenity(amenity),
                     index: index,
+                    showStatus: true,
                   );
                 },
               ),
@@ -487,43 +515,6 @@ class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
         ),
       ),
     );
-  }
-}
-
-IconData _getAmenityIcon(String amenityName) {
-  switch (amenityName.toLowerCase()) {
-    case 'swimming pool':
-      return Icons.pool_rounded;
-    case 'gymnasium':
-    case 'gym':
-      return Icons.fitness_center_rounded;
-    case 'community hall':
-      return Icons.meeting_room_rounded;
-    case 'children\'s play area':
-    case 'play area':
-      return Icons.child_care_rounded;
-    case 'garden':
-      return Icons.park_rounded;
-    case 'parking':
-      return Icons.local_parking_rounded;
-    case 'clubhouse':
-      return Icons.sports_bar_rounded;
-    case 'tennis court':
-      return Icons.sports_tennis_rounded;
-    case 'basketball court':
-      return Icons.sports_basketball_rounded;
-    case 'jogging track':
-      return Icons.directions_run_rounded;
-    case 'security':
-      return Icons.security_rounded;
-    case 'elevator':
-      return Icons.elevator_rounded;
-    case 'power backup':
-      return Icons.power_rounded;
-    case 'water supply':
-      return Icons.water_drop_rounded;
-    default:
-      return Icons.apartment_rounded;
   }
 }
 
@@ -542,359 +533,3 @@ Color _getStatusColor(String status) {
   }
 }
 
-Widget _buildStatusCounts(List<Amenity> amenities) {
-  final statusCounts = <String, int>{};
-
-  for (final amenity in amenities) {
-    final status = amenity.status.toLowerCase();
-    statusCounts[status] = (statusCounts[status] ?? 0) + 1;
-  }
-
-  final statusEntries = statusCounts.entries.toList()
-    ..sort((a, b) => b.value.compareTo(a.value));
-
-  return Wrap(
-    spacing: 8,
-    runSpacing: 4,
-    children: statusEntries.map((entry) {
-      final status = entry.key;
-      final count = entry.value;
-      final color = _getStatusColor(status);
-
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 6,
-              height: 6,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
-            ),
-            const SizedBox(width: 4),
-            Text(
-              '${status[0].toUpperCase()}${status.substring(1)}: $count',
-              style: TextStyle(
-                fontSize: 10,
-                color: color,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      );
-    }).toList(),
-  );
-}
-
-class _AmenityCard extends StatefulWidget {
-  final Amenity amenity;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-  final int index;
-
-  const _AmenityCard({
-    required this.amenity,
-    required this.onEdit,
-    required this.onDelete,
-    required this.index,
-  });
-
-  @override
-  State<_AmenityCard> createState() => _AmenityCardState();
-}
-
-class _AmenityCardState extends State<_AmenityCard> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _slideAnimation;
-  late Animation<double> _fadeAnimation;
-  bool _pressed = false;
-
-  // Unique accent per amenity based on index
-  Color get _accentColor {
-    final colors = [
-      const Color(0xFF2563EB),
-      const Color(0xFF059669),
-      const Color(0xFF7C3AED),
-      const Color(0xFFDC2626),
-      AppColors.primaryColor,
-      const Color(0xFF0891B2),
-    ];
-    return colors[widget.index % colors.length];
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _slideAnimation = Tween<double>(begin: 40, end: 0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
-    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
-
-    Future.delayed(Duration(milliseconds: 60 * widget.index), () {
-      if (mounted) _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) => Transform.translate(
-        offset: Offset(0, _slideAnimation.value),
-        child: Opacity(opacity: _fadeAnimation.value, child: child),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: GestureDetector(
-          onTapDown: (_) => setState(() => _pressed = true),
-          onTapUp: (_) => setState(() => _pressed = false),
-          onTapCancel: () => setState(() => _pressed = false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 120),
-            transform: Matrix4.identity()..scale(_pressed ? 0.97 : 1.0),
-            decoration: BoxDecoration(
-              color: AppColors.cardBg,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(_pressed ? 0.03 : 0.07),
-                  blurRadius: _pressed ? 8 : 20,
-                  offset: Offset(0, _pressed ? 2 : 8),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Amenity icon avatar
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          _accentColor.withOpacity(0.15),
-                          _accentColor.withOpacity(0.06),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: _accentColor.withOpacity(0.2),
-                        width: 1.5,
-                      ),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        _getAmenityIcon(widget.amenity.name),
-                        color: _accentColor,
-                        size: 24,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-
-                  // Info
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.amenity.name,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textDark,
-                            letterSpacing: -0.3,
-                          ),
-                        ),
-                        const SizedBox(height: 3),
-                        Row(
-                          children: [
-                            Icon(Icons.category_rounded, size: 13, color: AppColors.primaryColor.withOpacity(0.7)),
-                            const SizedBox(width: 4),
-                            Column(
-                              children: [
-                                Text(
-                                  '${widget.amenity.category}',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: AppColors.textMid,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 3),
-                        Row(
-                          children: [
-                            // Icon(Icons.category_rounded, size: 13, color: AppColors.primaryColor.withOpacity(0.7)),
-                            const SizedBox(width: 4),
-                            Column(
-                              children: [
-                                Text(
-                                  '• ${widget.amenity.location}',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: AppColors.textMid,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 3),
-                        Row(
-                          children: [
-                            Icon(Icons.access_time_rounded, size: 13, color: AppColors.primaryColor.withOpacity(0.7)),
-                            const SizedBox(width: 4),
-                            Text(
-                              widget.amenity.timing,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: AppColors.textLight,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        // Status badge
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: _getStatusColor(widget.amenity.status.toLowerCase()).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: _getStatusColor(widget.amenity.status.toLowerCase()).withOpacity(0.25),
-                              width: 1,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 6,
-                                height: 6,
-                                decoration: BoxDecoration(
-                                  color: _getStatusColor(widget.amenity.status.toLowerCase()),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                widget.amenity.status,
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: _getStatusColor(widget.amenity.status.toLowerCase()),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Action buttons
-                  Column(
-                    children: [
-                      _ActionButton(
-                        icon: Icons.edit_rounded,
-                        color: AppColors.primaryColor,
-                        onTap: widget.onEdit,
-                      ),
-                      const SizedBox(height: 8),
-                      _ActionButton(
-                        icon: Icons.delete_outline_rounded,
-                        color: const Color(0xFFDC2626),
-                        onTap: widget.onDelete,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ActionButton extends StatefulWidget {
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _ActionButton({required this.icon, required this.color, required this.onTap});
-
-  @override
-  State<_ActionButton> createState() => _ActionButtonState();
-}
-
-class _ActionButtonState extends State<_ActionButton> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _hovered = true),
-      onTapUp: (_) {
-        setState(() => _hovered = false);
-        widget.onTap();
-      },
-      onTapCancel: () => setState(() => _hovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: _hovered ? widget.color : widget.color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: _hovered
-              ? [
-            BoxShadow(
-              color: widget.color.withOpacity(0.4),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            )
-          ]
-              : null,
-        ),
-        child: Icon(
-          widget.icon,
-          size: 17,
-          color: _hovered ? Colors.white : widget.color,
-        ),
-      ),
-    );
-  }
-}
