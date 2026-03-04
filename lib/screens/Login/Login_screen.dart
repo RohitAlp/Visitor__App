@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:visitorapp/screens/Login/Otp_screen.dart';
 
@@ -92,6 +93,7 @@ class _LoginScreenState extends State<LoginScreen>
                     ),
                     onPressed: () {
                       setState(() {
+                        mobileController.clear();
                         _showStartButton = false;
                       });
       
@@ -145,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Welcome Rutuja!",
+                      "Smart Living Starts Here",
                       style: TextStyle(
                         color: AppColors.appPrimaryColor,
                         fontSize: 20,
@@ -162,14 +164,16 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                     ),
                     const SizedBox(height: 20),
-
                     /// Mobile Field
                     CommonTextField(
                       hintText: "Enter mobile number",
                       prefixIcon: Icons.phone,
                       iconColor: AppColors.appPrimaryColor,
                       controller: mobileController,
-                      keyboardType: TextInputType.phone,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
                       maxLength: 10,
                     ),
 

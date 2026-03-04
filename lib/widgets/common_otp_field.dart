@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../constants/app_colors.dart';
 
 class CommonOtpField extends StatefulWidget {
   final int length;
@@ -8,7 +11,7 @@ class CommonOtpField extends StatefulWidget {
 
   const CommonOtpField({
     super.key,
-    this.length = 4,
+    this.length = 6,
     this.onCompleted,
     this.borderColor,
     this.fillColor,
@@ -52,7 +55,7 @@ class _CommonOtpFieldState extends State<CommonOtpField> {
   @override
   Widget build(BuildContext context) {
     final defaultBorder = widget.borderColor ?? Colors.grey.shade300;
-    final filledBorder = Colors.grey.shade500;
+    final filledBorder = AppColors.primaryColor;
     final fillColor = widget.fillColor ?? Colors.grey.shade100;
 
     return Row(
@@ -61,8 +64,8 @@ class _CommonOtpFieldState extends State<CommonOtpField> {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4), // ⭐ spacing
           child: SizedBox(
-            width: 50,
-            height: 50,
+            width: 45,
+            height: 45,
             child: ValueListenableBuilder(
               valueListenable: controllers[index],
               builder: (context, _, __) {
@@ -74,6 +77,10 @@ class _CommonOtpFieldState extends State<CommonOtpField> {
                   focusNode: focusNodes[index],
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
+                  cursorColor: AppColors.primaryColor,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
                   maxLength: 1,
                   style: const TextStyle(
                     fontSize: 17,
@@ -85,7 +92,7 @@ class _CommonOtpFieldState extends State<CommonOtpField> {
                     fillColor: fillColor,
                     contentPadding: EdgeInsets.zero,
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
                         color:  defaultBorder,
                         width: isFocused ? 1.8 : 1,
