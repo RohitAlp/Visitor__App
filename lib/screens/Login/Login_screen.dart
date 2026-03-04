@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushNamed(
       context,
       RouteName.manageUsersSocietyAdmin,
-      arguments: 1,
+      arguments: 2,
     );
   }
 

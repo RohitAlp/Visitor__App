@@ -3,30 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visitorapp/config/Routes/RouteName.dart';
 
 import '../../../../constants/app_colors.dart';
+import '../../../../widgets/owner_card.dart';
 import 'edit_guards_details_form/bloc/editguards_bloc.dart';
 import 'edit_guards_details_form/edit_security_guards_form.dart';
-
-class SecurityGuard {
-  final String name;
-  final String shift;
-  final String phone;
-  final String avatarInitials;
-
-  const SecurityGuard({
-    required this.name,
-    required this.shift,
-    required this.phone,
-    required this.avatarInitials,
-  });
-
-  static const Color primaryColor = Color(0xFFC5610F);
-  static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color textDark = Color(0xFF1A1208);
-  static const Color textMid = Color(0xFF6B5A47);
-  static const Color textLight = Color(0xFF9C8872);
-
-
-}
 
 class SecurityGuardsScreen extends StatefulWidget {
   const SecurityGuardsScreen({super.key});
@@ -44,40 +23,40 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
   static const Color textDark = Color(0xFF1A1208);
   static const Color textMid = Color(0xFF6B5A47);
   static const Color textLight = Color(0xFF9C8872);
-  final List<SecurityGuard> _allGuards = const [
-    SecurityGuard(
+  final List<Owner> _allGuards =  [
+    Owner.guard(
       name: 'Rajesh Kumar',
       phone: '+91 98765 43210',
       shift: '06:00 AM - 02:00 PM',
       avatarInitials: 'RK',
     ),
-    SecurityGuard(
+    Owner.guard(
       name: 'Priya Sharma',
       phone: '+91 98765 43211',
       shift: '06:00 AM - 02:00 PM',
       avatarInitials: 'PS',
     ),
 
-    SecurityGuard(
+    Owner.guard(
       name: 'Amit Patel',
       phone: '+91 98765 43212',
       shift: '02:00 PM - 10:00 PM',
       avatarInitials: 'AP',
     ),
-    SecurityGuard(
+    Owner.guard(
       name: 'Sneha Reddy',
       phone: '+91 98765 43213',
       shift: '02:00 PM - 10:00 PM',
       avatarInitials: 'SR',
     ),
 
-    SecurityGuard(
+    Owner.guard(
       name: 'Vikram Singh',
       phone: '+91 98765 43214',
       shift: '10:00 PM - 06:00 AM',
       avatarInitials: 'VS',
     ),
-    SecurityGuard(
+    Owner.guard(
       name: 'Meera Joshi',
       phone: '+91 98765 43215',
       shift: '10:00 PM - 06:00 AM',
@@ -94,16 +73,16 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
 
   final List<String> _shifts = ['All', 'Morning', 'Afternoon', 'Night'];
 
-  List<SecurityGuard> get _filteredGuards {
+  List<Owner> get _filteredGuards {
     return _allGuards.where((guard) {
       final matchesShift = _selectedShift == 'All' ||
-          (_selectedShift == 'Morning' && guard.shift.contains('06:00 AM - 02:00 PM')) ||
-          (_selectedShift == 'Afternoon' && guard.shift.contains('02:00 PM - 10:00 PM')) ||
-          (_selectedShift == 'Night' && guard.shift.contains('10:00 PM - 06:00 AM'));
+          (_selectedShift == 'Morning' && guard.shift!.contains('06:00 AM - 02:00 PM')) ||
+          (_selectedShift == 'Afternoon' && guard.shift!.contains('02:00 PM - 10:00 PM')) ||
+          (_selectedShift == 'Night' && guard.shift!.contains('10:00 PM - 06:00 AM'));
       final matchesSearch =
           _searchQuery.isEmpty ||
               guard.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              guard.shift.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              guard.shift!.toLowerCase().contains(_searchQuery.toLowerCase()) ||
               guard.phone.contains(_searchQuery);
       return matchesShift && matchesSearch;
     }).toList();
@@ -130,7 +109,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
     super.dispose();
   }
 
-  void _deleteGuard(SecurityGuard guard) {
+  void _deleteGuard(Owner guard) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -466,8 +445,8 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                 itemCount: filtered.length,
                 itemBuilder: (context, index) {
                   final guard = filtered[index];
-                  return _GuardCard(
-                    guard: guard,
+                  return OwnerCard(
+                    owner: guard,
                     onEdit: () {
                       Navigator.push(
                         context,
@@ -481,307 +460,12 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                     },
                     onDelete: () => _deleteGuard(guard),
                     index: index,
+                    showStatus: false,
                   );
                 },
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _GuardCard extends StatefulWidget {
-  final SecurityGuard guard;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-  final int index;
-
-  const _GuardCard({
-    required this.guard,
-    required this.onEdit,
-    required this.onDelete,
-    required this.index,
-  });
-
-  @override
-  State<_GuardCard> createState() => _GuardCardState();
-}
-
-class _GuardCardState extends State<_GuardCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _slideAnimation;
-  late Animation<double> _fadeAnimation;
-
-  static const Color primaryColor = Color(0xFFC5610F);
-  static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color textDark = Color(0xFF1A1208);
-  static const Color textMid = Color(0xFF6B5A47);
-  static const Color textLight = Color(0xFF9C8872);
-
-  bool _pressed = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _slideAnimation = Tween<double>(
-      begin: 40,
-      end: 0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
-    );
-
-    Future.delayed(Duration(milliseconds: 60 * widget.index), () {
-      if (mounted) _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) => Transform.translate(
-        offset: Offset(0, _slideAnimation.value),
-        child: Opacity(opacity: _fadeAnimation.value, child: child),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8, top: 2),
-        child: GestureDetector(
-          onTapDown: (_) => setState(() => _pressed = true),
-          onTapUp: (_) => setState(() => _pressed = false),
-          onTapCancel: () => setState(() => _pressed = false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 120),
-            transform: Matrix4.identity()..scale(_pressed ? 0.97 : 1.0),
-            decoration: BoxDecoration(
-              color: cardBg,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Color(0x66000000).withOpacity(0.2)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
-                  blurRadius: 6,
-                  spreadRadius: 0,
-                  offset: const Offset(0, 0),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-              child: Row(
-                children: [
-                  Container(
-                    width: 45,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          primaryColor.withOpacity(0.15),
-                          primaryColor.withOpacity(0.08),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: primaryColor.withOpacity(0.2),
-                        width: 1.5,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        widget.guard.avatarInitials,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-
-                          color: primaryColor,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-
-                  // Info
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              widget.guard.name,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: textDark,
-                                letterSpacing: -0.3,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: primaryColor.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                _getShiftType(widget.guard.shift),
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w800,
-                                  color: primaryColor,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.apartment_rounded,
-                              size: 13,
-                              color: primaryColor.withOpacity(0.7),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              widget.guard.shift,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: textMid,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 3),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.phone_rounded,
-                              size: 13,
-                              color: primaryColor.withOpacity(0.7),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              widget.guard.phone,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: textLight,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Action buttons
-                  Column(
-                    children: [
-                      _ActionButton(
-                        icon: Icons.edit_rounded,
-                        color: primaryColor,
-                        onTap: widget.onEdit,
-                      ),
-                      const SizedBox(height: 8),
-                      _ActionButton(
-                        icon: Icons.delete_outline_rounded,
-                        color: const Color(0xFFDC2626),
-                        onTap: widget.onDelete,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-String _getInitials(String name) {
-  final words = name.trim().split(' ');
-
-  if (words.length == 1) {
-    return words.first.substring(0, 1).toUpperCase();
-  }
-
-  return (words.first[0] + words.last[0]).toUpperCase();
-}
-String _getShiftType(String shift) {
-  if (shift.contains('06:00 AM - 02:00 PM')) return 'Morning';
-  if (shift.contains('02:00 PM - 10:00 PM')) return 'Afternoon';
-  if (shift.contains('10:00 PM - 06:00 AM')) return 'Night';
-  return 'Unknown';
-}
-
-class _ActionButton extends StatefulWidget {
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _ActionButton({
-    required this.icon,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  State<_ActionButton> createState() => _ActionButtonState();
-}
-
-class _ActionButtonState extends State<_ActionButton> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _hovered = true),
-      onTapUp: (_) {
-        setState(() => _hovered = false);
-        widget.onTap();
-      },
-      onTapCancel: () => setState(() => _hovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: _hovered ? widget.color : widget.color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: _hovered
-              ? [
-            BoxShadow(
-              color: widget.color.withOpacity(0.4),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ]
-              : null,
-        ),
-        child: Icon(
-          widget.icon,
-          size: 17,
-          color: _hovered ? Colors.white : widget.color,
         ),
       ),
     );

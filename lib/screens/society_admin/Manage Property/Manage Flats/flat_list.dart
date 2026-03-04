@@ -3,24 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visitorapp/screens/society_admin/Manage%20Property/Manage%20Flats/edit_flatts_form/edit_flatts_form.dart';
 import 'package:visitorapp/screens/society_admin/Manage%20Property/Manage%20Flats/edit_flatts_form/flat_bloc/flat_bloc.dart';
 import '../../../../constants/app_colors.dart';
-
-class Flat {
-  final String flatNumber;
-  final String tower;
-  final String wing;
-  final String floor;
-  final String? ownerName;
-  final bool isOccupied;
-
-  const Flat({
-    required this.flatNumber,
-    required this.tower,
-    required this.wing,
-    required this.floor,
-    this.ownerName,
-    required this.isOccupied,
-  });
-}
+import '../../../../widgets/owner_card.dart';
 
 class ManageFlatsScreen extends StatefulWidget {
   const ManageFlatsScreen({super.key});
@@ -32,15 +15,15 @@ class ManageFlatsScreen extends StatefulWidget {
 class _ManageFlatsScreenState extends State<ManageFlatsScreen>
     with TickerProviderStateMixin {
 
-  final List<Flat> _allFlats = const [
-    Flat(flatNumber: 'Flat 101', tower: 'Tower A', wing: 'A Wing', floor: 'Floor 1', ownerName: 'Rajesh Kumar', isOccupied: true),
-    Flat(flatNumber: 'Flat 102', tower: 'Tower A', wing: 'A Wing', floor: 'Floor 1', ownerName: 'Priya Sharma', isOccupied: true),
-    Flat(flatNumber: 'Flat 201', tower: 'Tower A', wing: 'A Wing', floor: 'Floor 2', ownerName: 'Amit Patel', isOccupied: true),
-    Flat(flatNumber: 'Flat 202', tower: 'Tower A', wing: 'A Wing', floor: 'Floor 2', ownerName: null, isOccupied: false),
-    Flat(flatNumber: 'Flat 301', tower: 'Tower B', wing: 'C Wing', floor: 'Floor 3', ownerName: 'Sunita Verma', isOccupied: true),
-    Flat(flatNumber: 'Flat 302', tower: 'Tower B', wing: 'B Wing', floor: 'Floor 3', ownerName: 'Karan Mehta', isOccupied: true),
-    Flat(flatNumber: 'Flat 401', tower: 'Tower C', wing: 'D Wing', floor: 'Floor 4', ownerName: null, isOccupied: false),
-    Flat(flatNumber: 'Flat 501', tower: 'Tower C', wing: 'C Wing', floor: 'Floor 5', ownerName: 'Meera Joshi', isOccupied: true),
+  final List<Owner> _allFlats = [
+    Owner.flat(name: 'Flat 101', flat: 'Flat 101', wing: 'A Wing', tower: 'Tower A', floor: 'Floor 1', isActive: true, ownerName: 'Rajesh Kumar'),
+    Owner.flat(name: 'Flat 102', flat: 'Flat 102', wing: 'A Wing', tower: 'Tower A', floor: 'Floor 1', isActive: true, ownerName: 'Priya Sharma'),
+    Owner.flat(name: 'Flat 201', flat: 'Flat 201', wing: 'A Wing', tower: 'Tower A', floor: 'Floor 2', isActive: true, ownerName: 'Amit Patel'),
+    Owner.flat(name: 'Flat 202', flat: 'Flat 202', wing: 'A Wing', tower: 'Tower A', floor: 'Floor 2', isActive: false, ownerName: null),
+    Owner.flat(name: 'Flat 301', flat: 'Flat 301', wing: 'C Wing', tower: 'Tower B', floor: 'Floor 3', isActive: true, ownerName: 'Sunita Verma'),
+    Owner.flat(name: 'Flat 302', flat: 'Flat 302', wing: 'B Wing', tower: 'Tower B', floor: 'Floor 3', isActive: true, ownerName: 'Karan Mehta'),
+    Owner.flat(name: 'Flat 401', flat: 'Flat 401', wing: 'D Wing', tower: 'Tower C', floor: 'Floor 4', isActive: false, ownerName: null),
+    Owner.flat(name: 'Flat 501', flat: 'Flat 501', wing: 'C Wing', tower: 'Tower C', floor: 'Floor 5', isActive: true, ownerName: 'Meera Joshi'),
   ];
 
   String _searchQuery = '';
@@ -48,12 +31,12 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
   late AnimationController _fabController;
   late Animation<double> _fabAnimation;
 
-  List<Flat> get _filteredFlats {
+  List<Owner> get _filteredFlats {
     return _allFlats.where((flat) {
       return _searchQuery.isEmpty ||
-          flat.flatNumber.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          (flat.ownerName?.toLowerCase().contains(_searchQuery.toLowerCase()) ?? false) ||
-          flat.tower.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          flat.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          flat.flat.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          (flat.tower?.toLowerCase().contains(_searchQuery.toLowerCase()) ?? false) ||
           flat.wing.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
   }
@@ -76,13 +59,13 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
     super.dispose();
   }
 
-  void _deleteFlat(Flat flat) {
+  void _deleteFlat(Owner flat) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('Delete Flat', style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.textDark)),
-        content: Text('Are you sure you want to remove ${flat.flatNumber}?', style: const TextStyle(color: AppColors.textMid)),
+        content: Text('Are you sure you want to remove ${flat.flat}?', style: const TextStyle(color: AppColors.textMid)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -97,7 +80,7 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
               Navigator.pop(ctx);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('${flat.flatNumber} removed'),
+                  content: Text('${flat.flat} removed'),
                   backgroundColor: AppColors.primaryColor,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -111,10 +94,10 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
     );
   }
 
-  void _editFlat(Flat flat) {
+  void _editFlat(Owner flat) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Editing ${flat.flatNumber}'),
+        content: Text('Editing ${flat.flat}'),
         backgroundColor: AppColors.primaryLight,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -226,14 +209,14 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                                   letterSpacing: -0.8,
                                 ),
                               ),
-                              Text(
-                                '${_allFlats.length} flats',
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  color: AppColors.textLight,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              // Text(
+                              //   '${_allFlats.length} flats',
+                              //   style: const TextStyle(
+                              //     fontSize: 13,
+                              //     color: AppColors.textLight,
+                              //     fontWeight: FontWeight.w500,
+                              //   ),
+                              // ),
                             ],
                           ),
                           const Spacer(),
@@ -325,8 +308,6 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                                 '${filtered.length} Flat${filtered.length != 1 ? 's' : ''}',
                                 style: const TextStyle(fontSize: 13, color: AppColors.textLight, fontWeight: FontWeight.w600),
                               ),
-                              const SizedBox(width: 4),
-                              _buildStatusCounts(filtered),
                             ],
                           ),
                           const Spacer(),
@@ -394,8 +375,8 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                 itemCount: filtered.length,
                 itemBuilder: (context, index) {
                   final flat = filtered[index];
-                  return _FlatCard(
-                    flat: flat,
+                  return OwnerCard(
+                    owner: flat,
                     onEdit: () {
                       Navigator.push(
                         context,
@@ -409,363 +390,12 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                     },
                     onDelete: () => _deleteFlat(flat),
                     index: index,
+                    showStatus: true,
                   );
                 },
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-Color _getStatusColor(String status) {
-  switch (status.toLowerCase()) {
-    case 'active':
-    case 'occupied':
-      return const Color(0xFF10B981); // Emerald green
-    case 'inactive':
-    case 'vacant':
-      return const Color(0xFFF59E0B); // Amber
-    case 'maintenance':
-      return const Color(0xFF3B82F6); // Blue
-    case 'under construction':
-      return const Color(0xFF8B5CF6); // Violet
-    default:
-      return const Color(0xFF6B7280); // Gray
-  }
-}
-
-Widget _buildStatusCounts(List<Flat> flats) {
-  final statusCounts = <String, int>{};
-
-  for (final flat in flats) {
-    final status = flat.isOccupied ? 'occupied' : 'vacant';
-    statusCounts[status] = (statusCounts[status] ?? 0) + 1;
-  }
-
-  final statusEntries = statusCounts.entries.toList()
-    ..sort((a, b) => b.value.compareTo(a.value));
-
-  return Wrap(
-    spacing: 8,
-    runSpacing: 4,
-    children: statusEntries.map((entry) {
-      final status = entry.key;
-      final count = entry.value;
-      final color = _getStatusColor(status);
-
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 6,
-              height: 6,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
-            ),
-            const SizedBox(width: 4),
-            Text(
-              '${status[0].toUpperCase()}${status.substring(1)}: $count',
-              style: TextStyle(
-                fontSize: 10,
-                color: color,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      );
-    }).toList(),
-  );
-}
-
-class _FlatCard extends StatefulWidget {
-  final Flat flat;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-  final int index;
-
-  const _FlatCard({
-    required this.flat,
-    required this.onEdit,
-    required this.onDelete,
-    required this.index,
-  });
-
-  @override
-  State<_FlatCard> createState() => _FlatCardState();
-}
-
-class _FlatCardState extends State<_FlatCard> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _slideAnimation;
-  late Animation<double> _fadeAnimation;
-  bool _pressed = false;
-
-  // Unique accent per flat based on index
-  Color get _accentColor {
-    final colors = [
-      const Color(0xFF2563EB),
-      const Color(0xFF059669),
-      const Color(0xFF7C3AED),
-      const Color(0xFFDC2626),
-      AppColors.primaryColor,
-      const Color(0xFF0891B2),
-    ];
-    return colors[widget.index % colors.length];
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _slideAnimation = Tween<double>(begin: 40, end: 0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
-    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
-
-    Future.delayed(Duration(milliseconds: 60 * widget.index), () {
-      if (mounted) _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) => Transform.translate(
-        offset: Offset(0, _slideAnimation.value),
-        child: Opacity(opacity: _fadeAnimation.value, child: child),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: GestureDetector(
-          onTapDown: (_) => setState(() => _pressed = true),
-          onTapUp: (_) => setState(() => _pressed = false),
-          onTapCancel: () => setState(() => _pressed = false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 120),
-            transform: Matrix4.identity()..scale(_pressed ? 0.97 : 1.0),
-            decoration: BoxDecoration(
-              color: AppColors.cardBg,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x66000000),
-                  blurRadius: 4,
-                  spreadRadius: 0,
-                  offset: Offset(0, 0),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Flat icon avatar
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          _accentColor.withOpacity(0.15),
-                          _accentColor.withOpacity(0.06),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: _accentColor.withOpacity(0.2),
-                        width: 1.5,
-                      ),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.meeting_room_rounded,
-                        color: _accentColor,
-                        size: 24,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-
-                  // Info
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.flat.flatNumber,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textDark,
-                            letterSpacing: -0.3,
-                          ),
-                        ),
-                        const SizedBox(height: 3),
-                        Row(
-                          children: [
-                            Icon(Icons.domain_rounded, size: 13, color: AppColors.primaryColor.withOpacity(0.7)),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${widget.flat.tower} • ${widget.flat.wing} • ${widget.flat.floor}',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: AppColors.textMid,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        if (widget.flat.ownerName != null) ...[
-                          const SizedBox(height: 3),
-                          Row(
-                            children: [
-                              Icon(Icons.person_rounded, size: 13, color: AppColors.primaryColor.withOpacity(0.7)),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Owner: ${widget.flat.ownerName}',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.textLight,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                        const SizedBox(height: 8),
-                        // Status badge
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: _getStatusColor(widget.flat.isOccupied ? 'occupied' : 'vacant').withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: _getStatusColor(widget.flat.isOccupied ? 'occupied' : 'vacant').withOpacity(0.25),
-                              width: 1,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 6,
-                                height: 6,
-                                decoration: BoxDecoration(
-                                  color: _getStatusColor(widget.flat.isOccupied ? 'occupied' : 'vacant'),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                widget.flat.isOccupied ? 'Occupied' : 'Vacant',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: _getStatusColor(widget.flat.isOccupied ? 'occupied' : 'vacant'),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Action buttons
-                  Column(
-                    children: [
-                      _ActionButton(
-                        icon: Icons.edit_rounded,
-                        color: AppColors.primaryColor,
-                        onTap: widget.onEdit,
-                      ),
-                      const SizedBox(height: 8),
-                      _ActionButton(
-                        icon: Icons.delete_outline_rounded,
-                        color: const Color(0xFFDC2626),
-                        onTap: widget.onDelete,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ActionButton extends StatefulWidget {
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _ActionButton({required this.icon, required this.color, required this.onTap});
-
-  @override
-  State<_ActionButton> createState() => _ActionButtonState();
-}
-
-class _ActionButtonState extends State<_ActionButton> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _hovered = true),
-      onTapUp: (_) {
-        setState(() => _hovered = false);
-        widget.onTap();
-      },
-      onTapCancel: () => setState(() => _hovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: _hovered ? widget.color : widget.color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: _hovered
-              ? [
-            BoxShadow(
-              color: widget.color.withOpacity(0.4),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            )
-          ]
-              : null,
-        ),
-        child: Icon(
-          widget.icon,
-          size: 17,
-          color: _hovered ? Colors.white : widget.color,
         ),
       ),
     );
