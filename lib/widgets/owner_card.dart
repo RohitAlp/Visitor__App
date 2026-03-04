@@ -581,7 +581,7 @@ class _OwnerCardState extends State<OwnerCard>
                                     width: 24,
                                     height: 24,
                                     fit: BoxFit.cover,
-                                    color: Color(0xFF357CB4), // Lighter blue color for images
+                                    color: Color(0xFF357CB4),
                                     errorBuilder: (context, error, stackTrace) {
                                       return Icon(
                                         _getProfileIcon(),
@@ -649,15 +649,14 @@ class _OwnerCardState extends State<OwnerCard>
 
                                               const SizedBox(width: 6),
 
-                                              /// Text
                                               Text(
                                                 widget.owner.isActive ? 'Active' : 'Inactive',
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w700,
                                                   color: widget.owner.isActive
-                                                      ? const Color(0xFF388E3C)   // balanced green
-                                                      : const Color(0xFFF57C00),  // balanced orange
+                                                      ? const Color(0xFF388E3C)
+                                                      : const Color(0xFFF57C00),
                                                   letterSpacing: 0.3,
                                                 ),
                                               ),
@@ -697,7 +696,6 @@ class _OwnerCardState extends State<OwnerCard>
                                           ),
                                         )
                                       else if (widget.owner.isFlat && widget.owner.occupancyInfo != null && widget.owner.occupancyInfo!.isNotEmpty)
-                                        // Don't show status badge for flats when occupancy info is present
                                         Container()
                                       else if (widget.owner.isFlat)
                                         Container(
