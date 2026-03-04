@@ -31,7 +31,7 @@ class CommonTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color effectiveBorderColor =
-        borderColor ?? Colors.grey.shade300;
+        borderColor ?? Colors.grey.shade100;
 
     return TextFormField(
       controller: controller,
@@ -40,15 +40,17 @@ class CommonTextField extends StatelessWidget {
       obscureText: obscureText,
       maxLength: maxLength,
       readOnly: readOnly,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 14,
+      ),
       decoration: InputDecoration(
         counterText: "",
-
-        // ⭐ Hint with optional *
         hint: RichText(
           text: TextSpan(
             text: hintText,
             style: const TextStyle(
-              color: Colors.grey,
+              color: Colors.white,
               fontSize: 14,
             ),
             children: isRequired
@@ -73,7 +75,7 @@ class CommonTextField extends StatelessWidget {
 
         // ⭐ light grey filled background
         filled: true,
-        fillColor: Colors.grey.shade100,
+        fillColor: Colors.transparent,
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
