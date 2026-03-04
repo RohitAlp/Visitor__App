@@ -5,6 +5,7 @@ import 'package:visitorapp/config/Routes/RouteName.dart';
 import '../../../../constants/app_colors.dart';
 import 'edit_wing_form/bloc/editwing_bloc.dart';
 import 'edit_wing_form/edit_wing_form.dart';
+import '../../../../widgets/owner_card.dart';
 
 
 class Wing {
@@ -26,30 +27,42 @@ class ManageWingScreen extends StatefulWidget {
 
 class _ManageWingScreenState extends State<ManageWingScreen>
     with TickerProviderStateMixin {
-  final List<Wing> _allWings = const [
-    Wing(
-      tower: 'Tower A',
-      status: 'Active',
+  final List<Owner> _allWings = [
+    Owner.tower(
+      name: 'Wing A-1',
+      towerCode: 'Tower A',
+      wings: 4,
+      isActive: true,
     ),
-    Wing(
-      tower: 'Tower A',
-      status: 'Active',
+    Owner.tower(
+      name: 'Wing A-2',
+      towerCode: 'Tower A',
+      wings: 4,
+      isActive: true,
     ),
-    Wing(
-      tower: 'Tower B',
-      status: 'Inactive',
+    Owner.tower(
+      name: 'Wing B-1',
+      towerCode: 'Tower B',
+      wings: 3,
+      isActive: false,
     ),
-    Wing(
-      tower: 'Tower B',
-      status: 'Active',
+    Owner.tower(
+      name: 'Wing B-2',
+      towerCode: 'Tower B',
+      wings: 3,
+      isActive: true,
     ),
-    Wing(
-      tower: 'Tower C',
-      status: 'Active',
+    Owner.tower(
+      name: 'Wing C-1',
+      towerCode: 'Tower C',
+      wings: 5,
+      isActive: true,
     ),
-    Wing(
-      tower: 'Tower C',
-      status: 'Inactive',
+    Owner.tower(
+      name: 'Wing C-2',
+      towerCode: 'Tower C',
+      wings: 5,
+      isActive: false,
     ),
   ];
 
@@ -60,12 +73,13 @@ class _ManageWingScreenState extends State<ManageWingScreen>
   late AnimationController _fabController;
   late Animation<double> _fabAnimation;
 
-  List<Wing> get _filteredGuards {
+  List<Owner> get _filteredGuards {
     return _allWings.where((wing) {
       final matchesWing = _selectedWing == 'All';
       final matchesSearch =
           _searchQuery.isEmpty ||
-              wing.tower.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              wing.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              wing.towerCode!.toLowerCase().contains(_searchQuery.toLowerCase()) ||
               wing.status.toLowerCase().contains(_searchQuery.toLowerCase());
       return matchesWing && matchesSearch;
     }).toList();
@@ -92,7 +106,7 @@ class _ManageWingScreenState extends State<ManageWingScreen>
     super.dispose();
   }
 
-  void _deleteOwner(Wing wing) {
+  void _deleteOwner(Owner wing) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -105,7 +119,7 @@ class _ManageWingScreenState extends State<ManageWingScreen>
           ),
         ),
         content: Text(
-          'Are you sure you want to remove this wing?',
+          'Are you sure you want to remove ${wing.name}?',
           style: const TextStyle(color: AppColors.textMid),
         ),
         actions: [
@@ -127,7 +141,7 @@ class _ManageWingScreenState extends State<ManageWingScreen>
               Navigator.pop(ctx);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Wing removed'),
+                  content: Text('${wing.name} removed'),
                   backgroundColor: AppColors.primaryColor,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
@@ -416,7 +430,7 @@ class _ManageWingScreenState extends State<ManageWingScreen>
                 itemCount: filtered.length,
                 itemBuilder: (context, index) {
                   final wing = filtered[index];
-                  return _OwnerCard(
+                  return OwnerCard(
                     owner: wing,
                     onEdit: () {
                       Navigator.push(
@@ -431,6 +445,7 @@ class _ManageWingScreenState extends State<ManageWingScreen>
                     },
                     onDelete: () => _deleteOwner(wing),
                     index: index,
+                    showStatus: true,
                   );
                 },
               ),
@@ -441,7 +456,7 @@ class _ManageWingScreenState extends State<ManageWingScreen>
     );
   }
 }
-Widget _buildStatusCounts(List<Wing> floors) {
+Widget _buildStatusCounts(List<Owner> floors) {
   final statusCounts = <String, int>{};
 
   for (final floor in floors) {
@@ -491,251 +506,6 @@ Widget _buildStatusCounts(List<Wing> floors) {
       );
     }).toList(),
   );
-}
-class _OwnerCard extends StatefulWidget {
-  final Wing owner;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-  final int index;
-
-  const _OwnerCard({
-    required this.owner,
-    required this.onEdit,
-    required this.onDelete,
-    required this.index,
-  });
-
-  @override
-  State<_OwnerCard> createState() => _OwnerCardState();
-}
-
-class _OwnerCardState extends State<_OwnerCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _slideAnimation;
-  late Animation<double> _fadeAnimation;
-
-  static const Color primaryColor = Color(0xFFC5610F);
-  static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color textDark = Color(0xFF1A1208);
-  static const Color textMid = Color(0xFF6B5A47);
-  static const Color textLight = Color(0xFF9C8872);
-
-  bool _pressed = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _slideAnimation = Tween<double>(
-      begin: 40,
-      end: 0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
-    );
-
-    Future.delayed(Duration(milliseconds: 60 * widget.index), () {
-      if (mounted) _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) => Transform.translate(
-        offset: Offset(0, _slideAnimation.value),
-        child: Opacity(opacity: _fadeAnimation.value, child: child),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: GestureDetector(
-          onTapDown: (_) => setState(() => _pressed = true),
-          onTapUp: (_) => setState(() => _pressed = false),
-          onTapCancel: () => setState(() => _pressed = false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 120),
-            transform: Matrix4.identity()..scale(_pressed ? 0.97 : 1.0),
-            decoration: BoxDecoration(
-              color: cardBg,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(_pressed ? 0.03 : 0.07),
-                  blurRadius: _pressed ? 8 : 20,
-                  offset: Offset(0, _pressed ? 2 : 8),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  // Wing Icon
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(
-                      Icons.apartment_rounded,
-                      color: AppColors.primaryColor,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-
-                  // Info
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Wing',
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: textDark,
-                                letterSpacing: -0.3,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on_rounded,
-                              size: 13,
-                              color: primaryColor.withOpacity(0.7),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Tower: ${widget.owner.tower}',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: textMid,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: _getStatusColor(widget.owner.status).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            widget.owner.status,
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: _getStatusColor(widget.owner.status),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Action buttons
-                  Column(
-                    children: [
-                      _ActionButton(
-                        icon: Icons.edit_rounded,
-                        color: primaryColor,
-                        onTap: widget.onEdit,
-                      ),
-                      const SizedBox(height: 8),
-                      _ActionButton(
-                        icon: Icons.delete_outline_rounded,
-                        color: const Color(0xFFDC2626),
-                        onTap: widget.onDelete,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class _ActionButton extends StatefulWidget {
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _ActionButton({
-    required this.icon,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  State<_ActionButton> createState() => _ActionButtonState();
-}
-
-class _ActionButtonState extends State<_ActionButton> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _hovered = true),
-      onTapUp: (_) {
-        setState(() => _hovered = false);
-        widget.onTap();
-      },
-      onTapCancel: () => setState(() => _hovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: _hovered ? widget.color : widget.color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: _hovered
-              ? [
-            BoxShadow(
-              color: widget.color.withOpacity(0.4),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ]
-              : null,
-        ),
-        child: Icon(
-          widget.icon,
-          size: 17,
-          color: _hovered ? Colors.white : widget.color,
-        ),
-      ),
-    );
-  }
-
 }
 Color _getStatusColor(String status) {
   switch (status.toLowerCase()) {

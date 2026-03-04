@@ -4,20 +4,9 @@ import 'package:visitorapp/config/Routes/RouteName.dart';
 import 'package:visitorapp/screens/society_admin/Manage%20User/Vendors/edit_vendor/edit_vendor_form.dart';
 
 import '../../../../constants/app_colors.dart';
+import '../../../../widgets/owner_card.dart';
 import 'edit_vendor/bloc/edit_vendor_bloc.dart' show EditVendorBloc;
 
-
-class Venders {
-  final String name;
-  final String services;
-  final String phone;
-
-  const Venders({
-    required this.name,
-    required this.services,
-    required this.phone,
-  });
-}
 
 class VendorsScreens extends StatefulWidget {
   const VendorsScreens({super.key});
@@ -28,33 +17,38 @@ class VendorsScreens extends StatefulWidget {
 
 class _VendorsScreensState extends State<VendorsScreens>
     with TickerProviderStateMixin {
-  final List<Venders> _allGuards = const [
-    Venders(
+  final List<Owner> _allGuards = [
+    Owner.vendor(
       name: 'ShreeRam Plumbing Services',
       phone: '+91 98765 43210',
       services: 'Plumbing Services',
+      avatarInitials: 'SP',
     ),
-    Venders(
+    Owner.vendor(
       name: 'Powerfix Electricals',
       phone: '+91 98765 43211',
       services: 'Electrical Services',
+      avatarInitials: 'PE',
     ),
 
-    Venders(
+    Owner.vendor(
       name: 'Greenleaf Cleaning Co.',
       phone: '+91 98765 43212',
       services: 'Housekeeping Services',
+      avatarInitials: 'GC',
     ),
-    Venders(
+    Owner.vendor(
       name: 'BuildRight Carpentry',
       phone: '+91 98765 43213',
       services: 'Carpentry Services',
+      avatarInitials: 'BC',
     ),
 
-    Venders(
+    Owner.vendor(
       name: 'Cool Air AC Services',
       phone: '+91 98765 43214',
       services: 'Appliance Repair Services',
+      avatarInitials: 'CA',
     ),
 
   ];
@@ -65,14 +59,14 @@ class _VendorsScreensState extends State<VendorsScreens>
   late AnimationController _fabController;
   late Animation<double> _fabAnimation;
 
-  List<Venders> get _filteredVenders {
+  List<Owner> get _filteredVenders {
     return _allGuards.where((owner) {
       final matchesWing = _selectedWing == 'All';
       final matchesCategory = _selectedCategory == 'All' || owner.services == _selectedCategory;
       final matchesSearch =
           _searchQuery.isEmpty ||
               owner.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              owner.services.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              owner.services!.toLowerCase().contains(_searchQuery.toLowerCase()) ||
               owner.phone.contains(_searchQuery);
       return matchesWing && matchesCategory && matchesSearch;
     }).toList();
@@ -99,7 +93,7 @@ class _VendorsScreensState extends State<VendorsScreens>
     super.dispose();
   }
 
-  void _deleteOwner(Venders owner) {
+  void _deleteOwner(Owner owner) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -280,11 +274,12 @@ class _VendorsScreensState extends State<VendorsScreens>
                           decoration: BoxDecoration(
                             color: AppColors.cardBg,
                             borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.06),
-                                blurRadius: 16,
-                                offset: const Offset(0, 4),
+                                color: Color(0x66000000),
+                                blurRadius: 3,
+                                spreadRadius: 0,
+                                offset: Offset(0, 0),
                               ),
                             ],
                           ),
@@ -332,7 +327,6 @@ class _VendorsScreensState extends State<VendorsScreens>
 
                       const SizedBox(width: 12),
 
-                      /// ⚙️ Advanced Filter Button
                       GestureDetector(
                         onTap: () {
                           _showFilterBottomSheet();
@@ -343,11 +337,12 @@ class _VendorsScreensState extends State<VendorsScreens>
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.06),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
+                                color: Color(0x66000000),
+                                blurRadius: 3,
+                                spreadRadius: 0,
+                                offset: Offset(0, 0),
                               ),
                             ],
                           ),
@@ -458,7 +453,7 @@ class _VendorsScreensState extends State<VendorsScreens>
                 itemCount: filtered.length,
                 itemBuilder: (context, index) {
                   final owner = filtered[index];
-                  return _OwnerCard(
+                  return OwnerCard(
                     owner: owner,
                     onEdit: () {
                       Navigator.push(
@@ -473,6 +468,7 @@ class _VendorsScreensState extends State<VendorsScreens>
                     },
                     onDelete: () => _deleteOwner(owner),
                     index: index,
+                    showStatus: false,
                   );
                 },
               ),
@@ -484,270 +480,10 @@ class _VendorsScreensState extends State<VendorsScreens>
   }
 }
 
-class _OwnerCard extends StatefulWidget {
-  final Venders owner;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-  final int index;
-
-  const _OwnerCard({
-    required this.owner,
-    required this.onEdit,
-    required this.onDelete,
-    required this.index,
-  });
-
-  @override
-  State<_OwnerCard> createState() => _OwnerCardState();
-}
-
-class _OwnerCardState extends State<_OwnerCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _slideAnimation;
-  late Animation<double> _fadeAnimation;
-
-  static const Color primaryColor = Color(0xFFC5610F);
-  static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color textDark = Color(0xFF1A1208);
-  static const Color textMid = Color(0xFF6B5A47);
-  static const Color textLight = Color(0xFF9C8872);
-
-  bool _pressed = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _slideAnimation = Tween<double>(
-      begin: 40,
-      end: 0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
-    );
-
-    Future.delayed(Duration(milliseconds: 60 * widget.index), () {
-      if (mounted) _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) => Transform.translate(
-        offset: Offset(0, _slideAnimation.value),
-        child: Opacity(opacity: _fadeAnimation.value, child: child),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: GestureDetector(
-          onTapDown: (_) => setState(() => _pressed = true),
-          onTapUp: (_) => setState(() => _pressed = false),
-          onTapCancel: () => setState(() => _pressed = false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 120),
-            transform: Matrix4.identity()..scale(_pressed ? 0.97 : 1.0),
-            decoration: BoxDecoration(
-              color: cardBg,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(_pressed ? 0.03 : 0.07),
-                  blurRadius: _pressed ? 8 : 20,
-                  offset: Offset(0, _pressed ? 2 : 8),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  // Avatar
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: AppColors.bgColor
-                    ),
-                    child: Center(
-                      child: Text(
-                        _getInitials(widget.owner.name),
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-
-                  // Info
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                widget.owner.name,
-                                softWrap: true,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.room_service_sharp,
-                              size: 13,
-                              color: primaryColor.withOpacity(0.7),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              widget.owner.services,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: textMid,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 3),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.phone_rounded,
-                              size: 13,
-                              color: primaryColor.withOpacity(0.7),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              widget.owner.phone,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: textLight,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Action buttons
-                  Column(
-                    children: [
-                      _ActionButton(
-                        icon: Icons.edit_rounded,
-                        color: primaryColor,
-                        onTap: widget.onEdit,
-                      ),
-                      const SizedBox(height: 8),
-                      _ActionButton(
-                        icon: Icons.delete_outline_rounded,
-                        color: const Color(0xFFDC2626),
-                        onTap: widget.onDelete,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-String _getInitials(String name) {
-  final words = name.trim().split(' ');
-
-  if (words.length == 1) {
-    return words.first.substring(0, 1).toUpperCase();
-  }
-
-  return (words.first[0] + words.last[0]).toUpperCase();
-}
-class _ActionButton extends StatefulWidget {
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _ActionButton({
-    required this.icon,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  State<_ActionButton> createState() => _ActionButtonState();
-}
-
-class _ActionButtonState extends State<_ActionButton> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _hovered = true),
-      onTapUp: (_) {
-        setState(() => _hovered = false);
-        widget.onTap();
-      },
-      onTapCancel: () => setState(() => _hovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: _hovered ? widget.color : widget.color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: _hovered
-              ? [
-            BoxShadow(
-              color: widget.color.withOpacity(0.4),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ]
-              : null,
-        ),
-        child: Icon(
-          widget.icon,
-          size: 17,
-          color: _hovered ? Colors.white : widget.color,
-        ),
-      ),
-    );
-  }
-}
-
 class _AnimatedFilterSheet extends StatefulWidget {
   final Function(String) onCategorySelected;
   final String selectedCategory;
-  final List<Venders> allGuards;
+  final List<Owner> allGuards;
 
   const _AnimatedFilterSheet({
     required this.onCategorySelected,
@@ -808,7 +544,7 @@ class _AnimatedFilterSheetState extends State<_AnimatedFilterSheet>
   }
 
   List<Widget> _buildDynamicFilterOptions() {
-    final uniqueServices = widget.allGuards.map((v) => v.services).toSet().toList();
+    final uniqueServices = widget.allGuards.map((v) => v.services!).toSet().toList();
     
     final List<Widget> options = [
       _AnimatedFilterOption(
