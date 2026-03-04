@@ -7,7 +7,7 @@ import '../../screens/society_admin/Manage Property/Manage Flats/flat_list.dart'
 import '../../screens/society_admin/Manage Property/Manage Tower/Add_tower.dart';
 import '../../screens/society_admin/Manage Property/Manage Tower/add_tower_form.dart';
 import '../../screens/society_admin/Manage Property/manage_amanities/amanities_screen.dart';
-import '../../screens/society_admin/Manage Property/manage_floors/manage_floors_screen.dart';
+import '../../screens/society_admin/Manage Property/manage_floors/floors_screens/manage_floors_screen.dart';
 import '../../screens/society_admin/Manage Property/manage_wings/edit_wing_form/edit_wing_form.dart';
 import '../../screens/society_admin/Manage Property/manage_wings/manage_wing_screen.dart';
 import '../../screens/society_admin/Manage User/Vendors/venders_screen.dart';

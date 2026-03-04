@@ -5,6 +5,7 @@ import 'package:visitorapp/screens/society_admin/Manage Property/manage_wings/ed
 import 'package:visitorapp/screens/society_admin/Manage%20Property/manage_floors/edit_floors_form/bloc/edit_floors_bloc.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
+import 'package:visitorapp/widgets/custom_dropdown.dart';
 
 import '../../../../../utils/enum.dart';
 
@@ -80,34 +81,15 @@ class _EditFloorFormState extends State<EditFloorForm> {
                         const SizedBox(height: 8),
                         BlocBuilder<EditFloorsBloc, EditFloorsState>(
                           builder: (context, state) {
-                            return Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey.shade300),
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: state.selectedTower.isEmpty ? null : state.selectedTower,
-                                  hint: const Text(
-                                    'Select Tower',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  items: towers.map((String tower) {
-                                    return DropdownMenuItem<String>(
-                                      value: tower,
-                                      child: Text(tower),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? value) {
-                                    if (value != null) {
-                                      context.read<EditFloorsBloc>().add(SelectFloorsTowerEvent(value));
-                                    }
-                                  },
-                                ),
-                              ),
+                            return CustomDropdown(
+                              value: state.selectedTower.isEmpty ? null : state.selectedTower,
+                              hintText: 'Select Tower',
+                              items: towers,
+                              onChanged: (String? value) {
+                                if (value != null) {
+                                  context.read<EditFloorsBloc>().add(SelectFloorsTowerEvent(value));
+                                }
+                              },
                             );
                           },
                         ),
@@ -118,34 +100,15 @@ class _EditFloorFormState extends State<EditFloorForm> {
                         const SizedBox(height: 8),
                         BlocBuilder<EditFloorsBloc, EditFloorsState>(
                           builder: (context, state) {
-                            return Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey.shade300),
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: state.wingName.isEmpty ? null : state.wingName,
-                                  hint: const Text(
-                                    'Select Wing',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  items: wings.map((String wing) {
-                                    return DropdownMenuItem<String>(
-                                      value: wing,
-                                      child: Text(wing),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? value) {
-                                    if (value != null) {
-                                      context.read<EditFloorsBloc>().add(EditWingNameEvent(value));
-                                    }
-                                  },
-                                ),
-                              ),
+                            return CustomDropdown(
+                              value: state.wingName.isEmpty ? null : state.wingName,
+                              hintText: 'Select Wing',
+                              items: wings,
+                              onChanged: (String? value) {
+                                if (value != null) {
+                                  context.read<EditFloorsBloc>().add(EditWingNameEvent(value));
+                                }
+                              },
                             );
                           },
                         ),

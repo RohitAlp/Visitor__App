@@ -129,202 +129,197 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: bgColor,
-        body: CustomScrollView(
-          slivers: [
-            // App Bar
-           
-      
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Header Row
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          onTap: () => Navigator.maybePop(context),
+        body: Column(
+          children: [
+            // Fixed Header
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header Row
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.maybePop(context),
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: cardBg,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.06),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(Icons.arrow_back_ios_rounded,
+                              size: 16, color: textDark),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Manage Towers',
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.w800,
+                              color: textDark,
+                              letterSpacing: -0.8,
+                            ),
+                          ),
+                          // Text(
+                          //   '${_allTowers.length} towers',
+                          //   style: const TextStyle(
+                          //     fontSize: 13,
+                          //     color: textLight,
+                          //     fontWeight: FontWeight.w500,
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                      const Spacer(),
+                      ScaleTransition(
+                        scale: _fabAnimation,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, RouteName.AddTowerForm);
+                          },
                           child: Container(
-                            width: 36,
-                            height: 36,
+                            width: 42,
+                            height: 42,
                             decoration: BoxDecoration(
-                              color: cardBg,
-                              borderRadius: BorderRadius.circular(12),
+                              gradient: const LinearGradient(
+                                colors: [primaryLight, primaryColor],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(14),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.06),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 2),
+                                  color: primaryColor.withOpacity(0.45),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 6),
                                 ),
                               ],
                             ),
-                            child: const Icon(Icons.arrow_back_ios_rounded,
-                                size: 16, color: textDark),
+                            child: Icon(Icons.add_rounded,
+                                color: Colors.white, size: 24),
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Manage Towers',
-                              style: TextStyle(
-                                fontSize: 26,
-                                fontWeight: FontWeight.w800,
-                                color: textDark,
-                                letterSpacing: -0.8,
-                              ),
-                            ),
-                            Text(
-                              '${_allTowers.length} towers',
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: textLight,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        ScaleTransition(
-                          scale: _fabAnimation,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, RouteName.AddTowerForm);
-                            },
-                            child: Container(
-                              width: 42,
-                              height: 42,
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [primaryLight, primaryColor],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                borderRadius: BorderRadius.circular(14),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: primaryColor.withOpacity(0.45),
-                                    blurRadius: 16,
-                                    offset: const Offset(0, 6),
-                                  ),
-                                ],
-                              ),
-                              child: Icon(Icons.add_rounded,
-                                  color: Colors.white, size: 24),
-                            ),
-                          ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Search Bar
+                  Container(
+                    decoration: BoxDecoration(
+                      color: cardBg,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.06),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
-      
-                    const SizedBox(height: 20),
-      
-                    // Search Bar
-                    Container(
-                      decoration: BoxDecoration(
-                        color: cardBg,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.06),
-                            blurRadius: 16,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: (val) =>
-                            setState(() => _searchQuery = val),
-                        style: const TextStyle(
-                            fontSize: 14,
-                            color: textDark,
-                            fontWeight: FontWeight.w500),
-                        decoration: InputDecoration(
-                          hintText: 'Search by tower name or code...',
-                          hintStyle:
-                          const TextStyle(color: textLight, fontSize: 14),
-                          prefixIcon: const Icon(Icons.search_rounded,
-                              color: primaryColor, size: 22),
-                          suffixIcon: _searchQuery.isNotEmpty
-                              ? GestureDetector(
-                            onTap: () {
-                              _searchController.clear();
-                              setState(() => _searchQuery = '');
-                            },
-                            child: const Icon(Icons.close_rounded,
-                                color: textLight, size: 18),
-                          )
-                              : null,
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 16),
-                        ),
+                    child: TextField(
+                      controller: _searchController,
+                      onChanged: (val) =>
+                          setState(() => _searchQuery = val),
+                      style: const TextStyle(
+                          fontSize: 14,
+                          color: textDark,
+                          fontWeight: FontWeight.w500),
+                      decoration: InputDecoration(
+                        hintText: 'Search by tower name or code...',
+                        hintStyle:
+                        const TextStyle(color: textLight, fontSize: 14),
+                        prefixIcon: const Icon(Icons.search_rounded,
+                            color: primaryColor, size: 22),
+                        suffixIcon: _searchQuery.isNotEmpty
+                            ? GestureDetector(
+                          onTap: () {
+                            _searchController.clear();
+                            setState(() => _searchQuery = '');
+                          },
+                          child: const Icon(Icons.close_rounded,
+                              color: textLight, size: 18),
+                        )
+                            : null,
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 16),
                       ),
                     ),
-      
-                    const SizedBox(height: 16),
-      
-                    // Count
-                    Row(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '${filtered.length} Tower${filtered.length != 1 ? 's' : ''}',
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: textLight,
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Count
+                  Row(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            '${filtered.length} Tower${filtered.length != 1 ? 's' : ''}',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: textLight,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          _buildStatusCounts(filtered),
+                        ],
+                      ),
+                      const Spacer(),
+                      if (_searchQuery.isNotEmpty)
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _searchQuery = '';
+                              _searchController.clear();
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: primaryColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              'Clear',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: primaryColor,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const SizedBox(width: 4),
-                            _buildStatusCounts(filtered),
-                          ],
-                        ),
-                        const Spacer(),
-                        if (_searchQuery.isNotEmpty)
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _searchQuery = '';
-                                _searchController.clear();
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: primaryColor.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Text(
-                                'Clear',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: primaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
                           ),
-                      ],
-                    ),
-      
-                    const SizedBox(height: 8),
-                  ],
-                ),
+                        ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16),
+                ],
               ),
             ),
-      
-            // Tower List
-            filtered.isEmpty
-                ? SliverFillRemaining(
-              child: Center(
+
+            // Scrollable List
+            Expanded(
+              child: filtered.isEmpty
+                  ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -355,23 +350,19 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                     ),
                   ],
                 ),
-              ),
-            )
-                : SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                    final tower = filtered[index];
-                    return _TowerCard(
-                      tower: tower,
-                      onEdit: () => _editTower(tower),
-                      onDelete: () => _deleteTower(tower),
-                      index: index,
-                    );
-                  },
-                  childCount: filtered.length,
-                ),
+              )
+                  : ListView.builder(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                itemCount: filtered.length,
+                itemBuilder: (context, index) {
+                  final tower = filtered[index];
+                  return _TowerCard(
+                    tower: tower,
+                    onEdit: () => _editTower(tower),
+                    onDelete: () => _deleteTower(tower),
+                    index: index,
+                  );
+                },
               ),
             ),
           ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
+import 'package:visitorapp/widgets/custom_dropdown.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
-import 'package:visitorapp/widgets/dropdown_form_field.dart';
 import 'Add_tower.dart';
 
 class AddTowerForm extends StatefulWidget {
@@ -113,11 +113,11 @@ class _AddTowerFormState extends State<AddTowerForm> {
                     const SizedBox(height: 16),
                     _buildLabel('Tower Status'),
                     const SizedBox(height: 6),
-                    CustomDropdownFormField(
+                    CustomDropdown(
+                      hintText: '',
                       value: _selectedStatus,
                       items: _statuses,
                       onChanged: (v) => setState(() => _selectedStatus = v),
-                      validator: (v) => v == null ? 'Required' : null,
                     ),
                   ],
                 ),
