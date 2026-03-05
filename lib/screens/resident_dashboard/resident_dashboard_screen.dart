@@ -5,6 +5,8 @@ import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
+import '../services/services.dart';
+import '../society_admin_dashboard/service_requests/service_request_list/service_request_list_screen.dart';
 
 void main() => runApp(const MaterialApp(home: DashboardScreen()));
 
@@ -30,9 +32,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const _DashboardHomePage(),
     const Payment(),
     const Notice(),
-    const Profile(),
-    // const Services(),
-    const Profile(),
+    const Services(),
+    // const Profile(),
+    const ServiceRequestListScreen(),
     // const ManageUsersScreen(type: 2,),
     //
     // const ManageUsersScreen(type: 1,),
