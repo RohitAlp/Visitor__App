@@ -363,11 +363,11 @@ class _OwnerCardState extends State<OwnerCard>
   String _getServiceImage(String service) {
     switch (service.toLowerCase()) {
       case 'plumbing services':
-        return 'assets/image/fauce.png'; // Using floor.png as plumbing tool
+        return 'assets/image/fauce.png';
       case 'electrical services':
-        return 'assets/image/Vector.svg'; // Using Vector.svg as electrical symbol
+        return 'assets/image/Vector.svg';
       case 'housekeeping services':
-        return 'assets/image/home-01.svg'; // Using home-01.svg for housekeeping
+        return 'assets/image/home-01.svg';
       case 'carpentry services':
         return 'assets/image/toolbo.png';
       case 'appliance repair services':
@@ -407,11 +407,10 @@ class _OwnerCardState extends State<OwnerCard>
       }
       return 'assets/image/house.png';
     } else if (widget.owner.isTower) {
-      // Check if it's a wing by name pattern, even though it uses tower constructor
       if (widget.owner.name.contains('Wing')) {
-        return 'assets/image/wings.png'; // Show wing image for wings
+        return 'assets/image/wings.png';
       }
-      return 'assets/image/tower.png'; // Show tower image for actual towers
+      return 'assets/image/tower.png';
     } else if (widget.owner.isAmenity) {
       return 'assets/image/wifi.png';
     } else {
