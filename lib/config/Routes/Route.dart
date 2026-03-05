@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:visitorapp/screens/Login/Login_screen.dart';
-import 'package:visitorapp/screens/society_admin/Manage%20User/security_guards/security_guards_screen.dart';
 
-import '../../screens/dashboard/dashboard_screen.dart';
-import '../../screens/society_admin/Manage Property/Manage Flats/flat_list.dart';
-import '../../screens/society_admin/Manage Property/Manage Tower/Add_tower.dart';
-import '../../screens/society_admin/Manage Property/Manage Tower/add_tower_form.dart';
-import '../../screens/society_admin/Manage Property/manage_amanities/amanities_screen.dart';
-import '../../screens/society_admin/Manage Property/manage_floors/floors_screens/manage_floors_screen.dart';
-import '../../screens/society_admin/Manage Property/manage_wings/edit_wing_form/edit_wing_form.dart';
-import '../../screens/society_admin/Manage Property/manage_wings/manage_wing_screen.dart';
-import '../../screens/society_admin/Manage User/Vendors/venders_screen.dart';
-import '../../screens/society_admin/manage_users_dashboard_screen.dart';
-import '../../screens/society_admin/Manage User/Add_flat_owner/flat_owner_list.dart';
-import '../../screens/society_admin/Manage User/security_guards/edit_guards_details_form/edit_security_guards_form.dart';
-import '../../screens/society_admin/Manage%20User/Add_flat_owner/Add_flat_owner_form.dart';
+import '../../screens/resident_dashboard/resident_dashboard_screen.dart';
+import '../../screens/society_admin_dashboard/Manage Property/Manage Flats/flat_list.dart';
+import '../../screens/society_admin_dashboard/Manage Property/Manage Tower/Add_tower.dart';
+import '../../screens/society_admin_dashboard/Manage Property/Manage Tower/add_tower_form.dart';
+import '../../screens/society_admin_dashboard/Manage Property/manage_amanities/amanities_screen.dart';
+import '../../screens/society_admin_dashboard/Manage Property/manage_floors/floors_screens/manage_floors_screen.dart';
+import '../../screens/society_admin_dashboard/Manage Property/manage_wings/edit_wing_form/edit_wing_form.dart';
+import '../../screens/society_admin_dashboard/Manage Property/manage_wings/manage_wing_screen.dart';
+import '../../screens/society_admin_dashboard/Manage User/Add_flat_owner/Add_flat_owner_form.dart';
+import '../../screens/society_admin_dashboard/Manage User/Add_flat_owner/flat_owner_list.dart';
+import '../../screens/society_admin_dashboard/Manage User/Vendors/venders_screen.dart';
+import '../../screens/society_admin_dashboard/Manage User/security_guards/edit_guards_details_form/edit_security_guards_form.dart';
+import '../../screens/society_admin_dashboard/Manage User/security_guards/security_guards_screen.dart';
+import '../../screens/society_admin_dashboard/manage_users_property_screen.dart';
 import '../../screens/splash_screen/SplashScreen.dart';
 
 import '../../screens/Notification/Notificarion.dart';
