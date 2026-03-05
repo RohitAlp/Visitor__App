@@ -190,14 +190,87 @@ class _DashboardHomePage extends StatelessWidget {
     );
   }
 
+  // Widget _buildQuickActionsGrid() {
+  //   final List<Map<String, dynamic>> items = [
+  //     {'emoji': '👥', 'label': 'Visitors',   'bg': const Color(0xFFFFF3E0)},
+  //     {'emoji': '🏢', 'label': 'Complaints', 'bg': const Color(0xFFFFEBEE)},
+  //     {'emoji': '🎧', 'label': 'Notice',     'bg': const Color(0xFFFFF8E1)},
+  //     {'emoji': '🏊', 'label': 'Deliveries', 'bg': const Color(0xFFE8F5E9)},
+  //     {'emoji': '📢', 'label': 'Amenities',  'bg': const Color(0xFFE3F2FD)},
+  //     {'emoji': '⚙️', 'label': 'Documents',  'bg': const Color(0xFFF3E5F5)},
+  //   ];
+  //
+  //   return GridView.builder(
+  //     shrinkWrap: true,
+  //     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //       crossAxisCount: 3,
+  //       crossAxisSpacing: 15,
+  //       mainAxisSpacing: 15,
+  //       childAspectRatio: 100 / 107,
+  //     ),
+  //     itemCount: items.length,
+  //     itemBuilder: (context, index) {
+  //       final item = items[index];
+  //
+  //       return Container(
+  //         decoration: BoxDecoration(
+  //           color: Colors.white,
+  //           borderRadius: BorderRadius.circular(15),
+  //           boxShadow: const [
+  //             BoxShadow(
+  //               color: Color.fromRGBO(110, 136, 157, 0.20),
+  //               offset: Offset(0, 4),
+  //               blurRadius: 20,
+  //             ),
+  //           ],
+  //         ),
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             // Colored circular background with emoji
+  //             Container(
+  //               width: 52,
+  //               height: 52,
+  //               decoration: BoxDecoration(
+  //                 color: item['bg'],
+  //                 shape: BoxShape.circle,
+  //               ),
+  //               alignment: Alignment.center,
+  //               child: Text(
+  //                 item['emoji'],
+  //                 style: const TextStyle(fontSize: 30),
+  //               ),
+  //             ),
+  //
+  //             const SizedBox(height: 10),
+  //
+  //             // Label
+  //             Text(
+  //               item['label'],
+  //               textAlign: TextAlign.center,
+  //               style: const TextStyle(
+  //                 color: Colors.black87,
+  //                 fontFamily: 'Mulish',
+  //                 fontSize: 12,
+  //                 fontWeight: FontWeight.w500,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
   Widget _buildQuickActionsGrid() {
     final List<Map<String, dynamic>> items = [
-      {'emoji': '👥', 'label': 'Visitors',   'bg': const Color(0xFFFFF3E0)},
-      {'emoji': '🏢', 'label': 'Complaints', 'bg': const Color(0xFFFFEBEE)},
-      {'emoji': '🎧', 'label': 'Notice',     'bg': const Color(0xFFFFF8E1)},
-      {'emoji': '🏊', 'label': 'Deliveries', 'bg': const Color(0xFFE8F5E9)},
-      {'emoji': '📢', 'label': 'Amenities',  'bg': const Color(0xFFE3F2FD)},
-      {'emoji': '⚙️', 'label': 'Documents',  'bg': const Color(0xFFF3E5F5)},
+      {'icon': 'assets/image/icons8-google-groups-96.png', 'label': 'Visitors'},
+      {'icon': 'assets/image/icons8-building-96.png', 'label': 'Notices'},
+      {'icon': 'assets/image/icons8-headset-96.png', 'label': 'Complaints'},
+      {'icon': 'assets/image/icons8-swimmer-96.png', 'label': 'Amenities'},
+      {'icon': 'assets/image/megaphone.png', 'label': 'Deliveries'},
+      {'icon': 'assets/image/icons8-settings-96.png', 'label': 'Documents'},
     ];
 
     return GridView.builder(
@@ -208,7 +281,7 @@ class _DashboardHomePage extends StatelessWidget {
         crossAxisCount: 3,
         crossAxisSpacing: 15,
         mainAxisSpacing: 15,
-        childAspectRatio: 100 / 107,
+        childAspectRatio: 1, // Square tiles usually look cleaner for 3x3 grids
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
@@ -220,40 +293,30 @@ class _DashboardHomePage extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             boxShadow: const [
               BoxShadow(
-                color: Color.fromRGBO(110, 136, 157, 0.20),
+                color: Color.fromRGBO(110, 136, 157, 0.15),
                 offset: Offset(0, 4),
-                blurRadius: 20,
-              ),
+                blurRadius: 12,
+              )
             ],
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center, // Centering vertically
+            crossAxisAlignment: CrossAxisAlignment.center, // Centering horizontally
             children: [
-              // Colored circular background with emoji
-              Container(
-                width: 52,
-                height: 52,
-                decoration: BoxDecoration(
-                  color: item['bg'],
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  item['emoji'],
-                  style: const TextStyle(fontSize: 30),
-                ),
+              Image.asset(
+                item['icon'],
+                width: 35,
+                height: 35,
+                fit: BoxFit.contain,
               ),
-
-              const SizedBox(height: 10),
-
-              // Label
+              const SizedBox(height: 10), // Space between image and text
               Text(
                 item['label'],
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  color: Colors.black87,
+                  color: Colors.black,
                   fontFamily: 'Mulish',
-                  fontSize: 12,
+                  fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
               ),
