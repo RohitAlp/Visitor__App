@@ -387,20 +387,20 @@ class _OwnerCardState extends State<OwnerCard>
     return Color(0xFFE7FCEE);
   }
 
-  String _getAmenityEmoji() {
+  String _getAmenityImage() {
     switch (widget.owner.category?.toLowerCase()) {
       case 'recreation':
-        return Constant.recreationEmoji;
+        return 'assets/image/icons8-swimmer-96.png';
       case 'fitness':
-        return Constant.fitnessEmoji;
+        return 'assets/image/icons8-dumbbell-96.png';
       case 'events':
-        return Constant.eventsEmoji;
+        return 'assets/image/icons8-confetti-96.png';
       case 'sports':
-        return Constant.sportsEmoji;
-      case 'children':
-        return Constant.childrenEmoji;
+        return 'assets/image/icons8-badminton-96.png';
+      case 'walking':
+        return 'assets/image/icons8-map-pin-96.png';
       default:
-        return Constant.defaultAmenityEmoji;
+        return 'assets/image/icons8-building-96.png';
     }
   }
 
@@ -669,12 +669,20 @@ class _OwnerCardState extends State<OwnerCard>
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: widget.owner.isAmenity
-                                ? Center(
-                                    child: Text(
-                                      _getAmenityEmoji(),
-                                      style: const TextStyle(
-                                        fontSize: 28,
-                                      ),
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(14),
+                                    child: Image.asset(
+                                      _getAmenityImage(),
+                                      width: 28,
+                                      height: 28,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Icon(
+                                          _getProfileIcon(),
+                                          color: AppColors.purple700,
+                                          size: 24,
+                                        );
+                                      },
                                     ),
                                   )
                                 : (widget.owner.name.contains('Wing') || widget.owner.isTower)
