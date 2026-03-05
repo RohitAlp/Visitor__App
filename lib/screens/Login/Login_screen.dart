@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen>
                   child: Image.asset(
                     _images[_currentImageIndex],
                     key: ValueKey(_images[_currentImageIndex]),
-                    fit: BoxFit.cover, // 👈 fills & crops properly
+                    fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
                   ),
@@ -179,7 +179,6 @@ class _LoginScreenState extends State<LoginScreen>
 
                     const SizedBox(height: 20),
 
-                    /// Button
                     Center(
                       child: InkWell(
                         onTap: () {
@@ -191,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen>
                             return;
                           }
 
-                          Navigator.pop(context); // close bottom sheet
+                          Navigator.pop(context);
 
                           Navigator.push(
                             context,
