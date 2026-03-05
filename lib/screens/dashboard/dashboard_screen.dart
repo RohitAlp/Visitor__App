@@ -241,7 +241,9 @@ class _DashboardHomePage extends StatelessWidget {
 
               // // Circular Shadow/Background behind Icon
               // Positioned(
-              //   top: 10,
+              //   top: 10,create design for custom header widget
+              // create design for custom bottom bar widget
+              // Dashboard desing for the User (Resedent)
               //   left: 22,
               //   child: Container(
               //     width: 55.8,
