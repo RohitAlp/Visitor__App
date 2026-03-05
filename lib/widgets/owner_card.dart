@@ -84,7 +84,6 @@ class Owner {
        isOccupied = false,
        isVacant = false;
 
-  // Constructor for vendors
   Owner.vendor({
     required this.name,
     required this.services,
@@ -112,7 +111,6 @@ class Owner {
        isOccupied = false,
        isVacant = false;
 
-  // Constructor for flats
   Owner.flat({
     required this.name,
     required this.flat,
@@ -167,7 +165,6 @@ class Owner {
        isOccupied = false,
        isVacant = false;
 
-  // Constructor for amenities
   Owner.amenity({
     required this.name,
     required this.category,
@@ -224,19 +221,10 @@ class _OwnerCardState extends State<OwnerCard>
   late Animation<double> _slideAnimation;
   late Animation<double> _fadeAnimation;
 
-  static const Color primaryColor = Color(0xFFC5610F);
-  static const Color primaryLight = Color(0xFFE8832A);
-  static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color textDark = Color(0xFF1A1208);
-  static const Color textMid = Color(0xFF6B5A47);
-  static const Color textLight = Color(0xFF9C8872);
+
 
   bool _pressed = false;
   bool _isRevealed = false;
-
-  Color get _wingColor {
-    return primaryColor;
-  }
 
   @override
   void initState() {
@@ -275,13 +263,13 @@ class _OwnerCardState extends State<OwnerCard>
   Color _getAmenityStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'active':
-        return const Color(0xFF10B981); // Emerald green
+        return AppColors.successGreen;
       case 'maintenance':
-        return const Color(0xFF3B82F6); // Blue
+        return AppColors.infoBlue;
       case 'closed':
-        return const Color(0xFFEF4444); // Red
+        return AppColors.errorRed;
       default:
-        return const Color(0xFF6B7280); // Gray
+        return AppColors.grayDefault;
     }
   }
 
@@ -299,20 +287,18 @@ class _OwnerCardState extends State<OwnerCard>
   }
 
   Color _getOccupancyColor(String occupancyInfo) {
-    // Extract numbers from format like "0/4 Occupied"
     final match = RegExp(r'(\d+)/(\d+)').firstMatch(occupancyInfo);
     if (match != null) {
       final occupied = int.tryParse(match.group(1) ?? '0') ?? 0;
       final total = int.tryParse(match.group(2) ?? '0') ?? 1;
       
       final percentage = ((occupied / total) * 100).round();
-      return percentage == 0 ? const Color(0xFFEF4444) : const Color(0xFF10B981); // Red for vacant (0%), Green for occupied
+      return percentage == 0 ? AppColors.errorRed : AppColors.successGreen;
     }
-    return const Color(0xFF6B7280); // Gray default
+    return AppColors.grayDefault;
   }
 
   String _getOccupancyText(String occupancyInfo) {
-    // Extract numbers from format like "0/4 Occupied"
     final match = RegExp(r'(\d+)/(\d+)').firstMatch(occupancyInfo);
     if (match != null) {
       final occupied = int.tryParse(match.group(1) ?? '0') ?? 0;
@@ -327,37 +313,6 @@ class _OwnerCardState extends State<OwnerCard>
       }
     }
     return occupancyInfo; // Fallback to original text
-  }
-
-  Color _getOccupancyStatusColor(String occupancyInfo) {
-    // Extract numbers from format like "0/4 Occupied"
-    final match = RegExp(r'(\d+)/(\d+)').firstMatch(occupancyInfo);
-    if (match != null) {
-      final occupied = int.tryParse(match.group(1) ?? '0') ?? 0;
-      final total = int.tryParse(match.group(2) ?? '0') ?? 1;
-      
-      final percentage = ((occupied / total) * 100).round();
-      return percentage == 0 ? const Color(0xFFEF4444) : const Color(0xFF10B981); // Red for vacant (0%), Green for occupied
-    }
-    return const Color(0xFF6B7280); // Gray default
-  }
-
-  String _getOccupancyStatusText(String occupancyInfo) {
-    // Extract numbers from format like "0/4 Occupied"
-    final match = RegExp(r'(\d+)/(\d+)').firstMatch(occupancyInfo);
-    if (match != null) {
-      final occupied = int.tryParse(match.group(1) ?? '0') ?? 0;
-      final total = int.tryParse(match.group(2) ?? '0') ?? 1;
-      
-      final percentage = ((occupied / total) * 100).round();
-      
-      if (percentage == 0) {
-        return 'Vacant';
-      } else {
-        return 'Occupied';
-      }
-    }
-    return 'Unknown'; // Fallback text
   }
 
   String _getServiceImage(String service) {
@@ -412,7 +367,28 @@ class _OwnerCardState extends State<OwnerCard>
       }
       return 'assets/image/tower.png';
     } else if (widget.owner.isAmenity) {
-      return 'assets/image/wifi.png';
+      // Return specific images based on amenity name
+      if (widget.owner.name.toLowerCase().contains('swimming') || widget.owner.name.toLowerCase().contains('pool')) {
+        return 'assets/image/swimming_pool.png';
+      } else if (widget.owner.name.toLowerCase().contains('gym') || widget.owner.name.toLowerCase().contains('fitness')) {
+        return 'assets/image/gym.png';
+      } else if (widget.owner.name.toLowerCase().contains('community') || widget.owner.name.toLowerCase().contains('hall')) {
+        return 'assets/image/community_hall.png';
+      } else if (widget.owner.name.toLowerCase().contains('play') || widget.owner.name.toLowerCase().contains('children')) {
+        return 'assets/image/play_area.png';
+      } else if (widget.owner.name.toLowerCase().contains('garden') || widget.owner.name.toLowerCase().contains('park')) {
+        return 'assets/image/garden.png';
+      } else if (widget.owner.name.toLowerCase().contains('parking')) {
+        return 'assets/image/parking.png';
+      } else if (widget.owner.name.toLowerCase().contains('security') || widget.owner.name.toLowerCase().contains('guard')) {
+        return 'assets/image/security.png';
+      } else if (widget.owner.name.toLowerCase().contains('elevator') || widget.owner.name.toLowerCase().contains('lift')) {
+        return 'assets/image/elevator.png';
+      } else if (widget.owner.name.toLowerCase().contains('water') || widget.owner.name.toLowerCase().contains('tank')) {
+        return 'assets/image/water_tank.png';
+      } else {
+        return 'assets/image/wifi.png'; // Default amenity image
+      } 
     } else {
       return 'assets/image/profile.png'; 
     }
@@ -422,7 +398,7 @@ class _OwnerCardState extends State<OwnerCard>
     if (widget.owner.isGuard) {
       return Icons.person_rounded; 
     } else if (widget.owner.isVendor) {
-      return Icons.home_repair_service_sharp; // Service icon for vendors
+      return Icons.home_repair_service_sharp;
     } else if (widget.owner.isFlat) {
       if (widget.owner.name.contains('Wing')) {
         return Icons.meeting_room_rounded;
@@ -431,13 +407,32 @@ class _OwnerCardState extends State<OwnerCard>
       }
       return Icons.apartment_rounded;
     } else if (widget.owner.isTower) {
-      // Check if it's a wing by name pattern, even though it uses tower constructor
       if (widget.owner.name.contains('Wing')) {
-        return Icons.meeting_room_rounded; // Wing icon for wings
+        return Icons.meeting_room_rounded;
       }
-      return Icons.domain_rounded; // Tower icon for actual towers
+      return Icons.domain_rounded;
     } else if (widget.owner.isAmenity) {
-      return Icons.pool_rounded;
+      if (widget.owner.name.toLowerCase().contains('swimming') || widget.owner.name.toLowerCase().contains('pool')) {
+        return Icons.pool_rounded;
+      } else if (widget.owner.name.toLowerCase().contains('gym') || widget.owner.name.toLowerCase().contains('fitness')) {
+        return Icons.fitness_center_rounded;
+      } else if (widget.owner.name.toLowerCase().contains('community') || widget.owner.name.toLowerCase().contains('hall')) {
+        return Icons.meeting_room_rounded;
+      } else if (widget.owner.name.toLowerCase().contains('play') || widget.owner.name.toLowerCase().contains('children')) {
+        return Icons.toys_rounded;
+      } else if (widget.owner.name.toLowerCase().contains('garden') || widget.owner.name.toLowerCase().contains('park')) {
+        return Icons.park_rounded;
+      } else if (widget.owner.name.toLowerCase().contains('parking')) {
+        return Icons.local_parking_rounded;
+      } else if (widget.owner.name.toLowerCase().contains('security') || widget.owner.name.toLowerCase().contains('guard')) {
+        return Icons.security_rounded;
+      } else if (widget.owner.name.toLowerCase().contains('elevator') || widget.owner.name.toLowerCase().contains('lift')) {
+        return Icons.elevator_rounded;
+      } else if (widget.owner.name.toLowerCase().contains('water') || widget.owner.name.toLowerCase().contains('tank')) {
+        return Icons.water_drop_rounded;
+      } else {
+        return Icons.wifi_rounded;
+      }
     } else {
       return Icons.person_rounded;
     }
@@ -466,7 +461,7 @@ class _OwnerCardState extends State<OwnerCard>
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       gradient: const LinearGradient(
-                        colors: [primaryLight, primaryColor],
+                        colors: [AppColors.primaryLight, AppColors.primaryColor],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -572,10 +567,10 @@ class _OwnerCardState extends State<OwnerCard>
                               width: 50,
                               height: 50,
                               decoration: BoxDecoration(
-                                color: const Color(0xFFEDE7F6),
+                                color: AppColors.purple100,
                                 borderRadius: BorderRadius.circular(15),
                                 border: Border.all(
-                                  color: const Color(0xFFD1C4E9),
+                                  color: AppColors.purple200,
                                   width: 1,
                                 ),
                               ),
@@ -588,11 +583,11 @@ class _OwnerCardState extends State<OwnerCard>
                                     width: 24,
                                     height: 24,
                                     fit: BoxFit.cover,
-                                    color: Color(0xFF357CB4),
+                                    color: AppColors.blue700,
                                     errorBuilder: (context, error, stackTrace) {
                                       return Icon(
                                         _getProfileIcon(),
-                                        color: Color(0xFF512DA8),
+                                        color: AppColors.purple700,
                                         size: 24,
                                       );
                                     },
@@ -614,7 +609,7 @@ class _OwnerCardState extends State<OwnerCard>
                                           style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w800,
-                                            color: textDark,
+                                            color: AppColors.textDark,
                                             letterSpacing: -0.3,
                                           ),
                                         ),
@@ -629,13 +624,13 @@ class _OwnerCardState extends State<OwnerCard>
                                           ),
                                           decoration: BoxDecoration(
                                             color: widget.owner.isActive
-                                                ? const Color(0xFF4CAF50).withOpacity(0.08)
-                                                : const Color(0xFFFF9800).withOpacity(0.08),
+                                                ? AppColors.green400.withOpacity(0.08)
+                                                : AppColors.orange600.withOpacity(0.08),
                                             borderRadius: BorderRadius.circular(8),
                                             border: Border.all(
                                               color: widget.owner.isActive
-                                                  ? const Color(0xFF4CAF50).withOpacity(0.35)
-                                                  : const Color(0xFFFF9800).withOpacity(0.35),
+                                                  ? AppColors.green400.withOpacity(0.35)
+                                                  : AppColors.orange600.withOpacity(0.35),
                                               width: 1,
                                             ),
                                           ),
@@ -649,8 +644,8 @@ class _OwnerCardState extends State<OwnerCard>
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: widget.owner.isActive
-                                                      ? const Color(0xFF43A047)
-                                                      : const Color(0xFFFB8C00),
+                                                      ? AppColors.green600
+                                                      : AppColors.orange800,
                                                 ),
                                               ),
 
@@ -662,8 +657,8 @@ class _OwnerCardState extends State<OwnerCard>
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w700,
                                                   color: widget.owner.isActive
-                                                      ? const Color(0xFF388E3C)
-                                                      : const Color(0xFFF57C00),
+                                                      ? AppColors.green700
+                                                      : AppColors.orange700,
                                                   letterSpacing: 0.3,
                                                 ),
                                               ),
@@ -674,7 +669,7 @@ class _OwnerCardState extends State<OwnerCard>
                                         Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                                           decoration: BoxDecoration(
-                                            color: primaryColor.withOpacity(0.1),
+                                            color: AppColors.primaryColor.withOpacity(0.1),
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                           child: Text(
@@ -682,7 +677,7 @@ class _OwnerCardState extends State<OwnerCard>
                                             style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w800,
-                                              color: primaryColor,
+                                              color: AppColors.primaryColor,
                                             ),
                                           ),
                                         )
@@ -708,7 +703,7 @@ class _OwnerCardState extends State<OwnerCard>
                                         Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                                           decoration: BoxDecoration(
-                                            color: widget.owner.isVacant ? const Color(0xFFEF4444).withOpacity(0.1) : const Color(0xFF10B981).withOpacity(0.1),
+                                            color: widget.owner.isVacant ? AppColors.errorRed.withOpacity(0.1) : AppColors.successGreen.withOpacity(0.1),
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                           child: Text(
@@ -716,7 +711,7 @@ class _OwnerCardState extends State<OwnerCard>
                                             style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w800,
-                                              color: widget.owner.isVacant ? const Color(0xFFEF4444) : const Color(0xFF10B981),
+                                              color: widget.owner.isVacant ? AppColors.errorRed : AppColors.successGreen,
                                             ),
                                           ),
                                         )
@@ -724,7 +719,7 @@ class _OwnerCardState extends State<OwnerCard>
                                         Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                                           decoration: BoxDecoration(
-                                            color: widget.owner.isActive ? const Color(0xFF10B981).withOpacity(0.1) : const Color(0xFFF59E0B).withOpacity(0.1),
+                                            color: widget.owner.isActive ? AppColors.successGreen.withOpacity(0.1) : AppColors.warningOrange.withOpacity(0.1),
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                           child: Text(
@@ -732,7 +727,7 @@ class _OwnerCardState extends State<OwnerCard>
                                             style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w800,
-                                              color: widget.owner.isActive ? const Color(0xFF10B981) : const Color(0xFFF59E0B),
+                                              color: widget.owner.isActive ? AppColors.successGreen : AppColors.warningOrange,
                                             ),
                                           ),
                                         )
@@ -770,7 +765,7 @@ class _OwnerCardState extends State<OwnerCard>
                                                     : 'assets/image/house.png',
                                         width: 14,
                                         height: 14,
-                                        color: textMid,
+                                        color: AppColors.textMid,
                                         errorBuilder: (context, error, stackTrace) {
                                           return Icon(
                                             widget.owner.isGuard 
@@ -781,7 +776,7 @@ class _OwnerCardState extends State<OwnerCard>
                                                         ? Icons.domain_rounded
                                                         : Icons.apartment_rounded,
                                             size: 14,
-                                            color: textMid,
+                                            color: AppColors.textMid,
                                           );
                                         },
                                       ),
@@ -796,12 +791,12 @@ class _OwnerCardState extends State<OwnerCard>
                                                   'assets/image/tower.png',
                                                   width: 12,
                                                   height: 12,
-                                                  color: textMid,
+                                                  color: AppColors.textMid,
                                                   errorBuilder: (context, error, stackTrace) {
                                                     return const Icon(
                                                       Icons.domain_rounded,
                                                       size: 12,
-                                                      color: textMid,
+                                                      color: AppColors.textMid,
                                                     );
                                                   },
                                                 ),
@@ -810,7 +805,7 @@ class _OwnerCardState extends State<OwnerCard>
                                                   '${widget.owner.tower} • ',
                                                   style: TextStyle(
                                                     fontSize: 12,
-                                                    color: Colors.grey.shade800,
+                                                    color: AppColors.grey800,
                                                     fontWeight: FontWeight.w600,
                                                     letterSpacing: 0.2,
                                                   ),
@@ -821,12 +816,12 @@ class _OwnerCardState extends State<OwnerCard>
                                               'assets/image/wings.png',
                                               width: 12,
                                               height: 12,
-                                              color: textMid,
+                                              color: AppColors.textMid,
                                               errorBuilder: (context, error, stackTrace) {
                                                 return const Icon(
                                                   Icons.meeting_room_rounded,
                                                   size: 12,
-                                                  color: textMid,
+                                                  color: AppColors.textMid,
                                                 );
                                               },
                                             ),
@@ -835,7 +830,7 @@ class _OwnerCardState extends State<OwnerCard>
                                               ' ${widget.owner.wing}',
                                               style: TextStyle(
                                                 fontSize: 12,
-                                                color: Colors.grey.shade800,
+                                                color: AppColors.grey800,
                                                 fontWeight: FontWeight.w600,
                                                 letterSpacing: 0.2,
                                               ),
@@ -848,12 +843,12 @@ class _OwnerCardState extends State<OwnerCard>
                                                   'assets/image/floor.png',
                                                   width: 12,
                                                   height: 12,
-                                                  color: textMid,
+                                                  color: AppColors.textMid,
                                                   errorBuilder: (context, error, stackTrace) {
                                                     return const Icon(
                                                       Icons.layers_rounded,
                                                       size: 12,
-                                                      color: textMid,
+                                                      color: AppColors.textMid,
                                                     );
                                                   },
                                                 ),
@@ -862,7 +857,7 @@ class _OwnerCardState extends State<OwnerCard>
                                                   widget.owner.floor!,
                                                   style: TextStyle(
                                                     fontSize: 12,
-                                                    color: Colors.grey.shade800,
+                                                    color: AppColors.grey800,
                                                     fontWeight: FontWeight.w600,
                                                     letterSpacing: 0.2,
                                                   ),
@@ -879,7 +874,7 @@ class _OwnerCardState extends State<OwnerCard>
                                                 '${widget.owner.towerCode ?? ''} • ',
                                                 style: TextStyle(
                                                   fontSize: 12,
-                                                  color: Colors.grey.shade800,
+                                                  color: AppColors.grey800,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 0.2,
                                                 ),
@@ -888,12 +883,12 @@ class _OwnerCardState extends State<OwnerCard>
                                                 'assets/image/wings.png',
                                                 width: 12,
                                                 height: 12,
-                                                color: textMid,
+                                                color: AppColors.textMid,
                                                 errorBuilder: (context, error, stackTrace) {
                                                   return const Icon(
                                                     Icons.domain_rounded,
                                                     size: 12,
-                                                    color: textMid,
+                                                    color: AppColors.textMid,
                                                   );
                                                 },
                                               ),
@@ -902,7 +897,7 @@ class _OwnerCardState extends State<OwnerCard>
                                                 ' ${widget.owner.wings ?? 0} Wings',
                                                 style: TextStyle(
                                                   fontSize: 12,
-                                                  color: Colors.grey.shade800,
+                                                  color: AppColors.grey800,
                                                   fontWeight: FontWeight.w600,
                                                   letterSpacing: 0.2,
                                                 ),
@@ -920,7 +915,7 @@ class _OwnerCardState extends State<OwnerCard>
                                                         : widget.owner.flat,
                                             style: TextStyle(
                                               fontSize: 12,
-                                              color: Colors.grey.shade800,
+                                              color: AppColors.grey800,
                                               fontWeight: FontWeight.w600,
                                               letterSpacing: 0.2,
                                             ),
@@ -939,12 +934,12 @@ class _OwnerCardState extends State<OwnerCard>
                                             'assets/image/Documents.svg',
                                             width: 14,
                                             height: 14,
-                                            color: textMid,
+                                            color: AppColors.textMid,
                                             errorBuilder: (context, error, stackTrace) {
                                               return const Icon(
                                                 Icons.home,
                                                 size: 14,
-                                                color: textMid,
+                                                color: AppColors.textMid,
                                               );
                                             },
                                           ),
@@ -953,7 +948,7 @@ class _OwnerCardState extends State<OwnerCard>
                                             widget.owner.flat,
                                             style: TextStyle(
                                               fontSize: 12,
-                                              color: Colors.grey.shade800,
+                                              color: AppColors.grey800,
                                               fontWeight: FontWeight.w600,
                                               letterSpacing: 0.2,
                                             ),
@@ -976,7 +971,7 @@ class _OwnerCardState extends State<OwnerCard>
                                               return const Icon(
                                                 Icons.person_rounded,
                                                 size: 14,
-                                                color: textMid,
+                                                color: AppColors.textMid,
                                               );
                                             },
                                           ),
@@ -985,7 +980,7 @@ class _OwnerCardState extends State<OwnerCard>
                                             widget.owner.ownerName!,
                                             style: TextStyle(
                                               fontSize: 12,
-                                              color: Colors.grey.shade800,
+                                              color: AppColors.grey800,
                                               fontWeight: FontWeight.w600,
                                               letterSpacing: 0.2,
                                             ),
@@ -1004,12 +999,12 @@ class _OwnerCardState extends State<OwnerCard>
                                             'assets/image/Group.svg',
                                             width: 14,
                                             height: 14,
-                                            color: textMid,
+                                            color: AppColors.textMid,
                                             errorBuilder: (context, error, stackTrace) {
                                               return const Icon(
                                                 Icons.person_off_rounded,
                                                 size: 14,
-                                                color: textMid,
+                                                color: AppColors.textMid,
                                               );
                                             },
                                           ),
@@ -1018,7 +1013,7 @@ class _OwnerCardState extends State<OwnerCard>
                                             'No owner assigned',
                                             style: TextStyle(
                                               fontSize: 12,
-                                              color: Colors.grey.shade600,
+                                              color: AppColors.grey600,
                                               fontWeight: FontWeight.w500,
                                               fontStyle: FontStyle.italic,
                                               letterSpacing: 0.2,
@@ -1039,12 +1034,12 @@ class _OwnerCardState extends State<OwnerCard>
                                           'assets/image/Vector.svg',
                                           width: 14,
                                           height: 14,
-                                          color: textMid,
+                                          color: AppColors.textMid,
                                           errorBuilder: (context, error, stackTrace) {
                                             return const Icon(
                                               Icons.location_on_rounded,
                                               size: 14,
-                                              color: textMid,
+                                              color: AppColors.textMid,
                                             );
                                           },
                                         ),
@@ -1053,7 +1048,7 @@ class _OwnerCardState extends State<OwnerCard>
                                           widget.owner.location!,
                                           style: TextStyle(
                                             fontSize: 12,
-                                            color: Colors.grey.shade800,
+                                            color: AppColors.grey800,
                                             fontWeight: FontWeight.w600,
                                             letterSpacing: 0.2,
                                           ),
@@ -1072,12 +1067,12 @@ class _OwnerCardState extends State<OwnerCard>
                                           'assets/image/Notice.svg',
                                           width: 14,
                                           height: 14,
-                                          color: textMid,
+                                          color: AppColors.textMid,
                                           errorBuilder: (context, error, stackTrace) {
                                             return const Icon(
                                               Icons.access_time_rounded,
                                               size: 14,
-                                              color: textMid,
+                                              color: AppColors.textMid,
                                             );
                                           },
                                         ),
@@ -1086,7 +1081,7 @@ class _OwnerCardState extends State<OwnerCard>
                                           widget.owner.timing!,
                                           style: TextStyle(
                                             fontSize: 12,
-                                            color: Colors.grey.shade800,
+                                            color: AppColors.grey800,
                                             fontWeight: FontWeight.w600,
                                             letterSpacing: 0.2,
                                           ),
@@ -1105,12 +1100,12 @@ class _OwnerCardState extends State<OwnerCard>
                                           'assets/image/complaints.svg',
                                           width: 14,
                                           height: 14,
-                                          color: textMid,
+                                          color: AppColors.textMid,
                                           errorBuilder: (context, error, stackTrace) {
                                             return const Icon(
                                               Icons.phone_rounded,
                                               size: 14,
-                                              color: textMid,
+                                              color: AppColors.textMid,
                                             );
                                           },
                                         ),
@@ -1119,7 +1114,7 @@ class _OwnerCardState extends State<OwnerCard>
                                           widget.owner.phone,
                                           style: TextStyle(
                                             fontSize: 12,
-                                            color: Colors.grey.shade800,
+                                            color: AppColors.grey800,
                                             fontWeight: FontWeight.w500,
                                             letterSpacing: 0.2,
                                           ),
@@ -1140,12 +1135,12 @@ class _OwnerCardState extends State<OwnerCard>
                                             'assets/image/Documents.svg',
                                             width: 14,
                                             height: 14,
-                                            color: textMid,
+                                            color: AppColors.textMid,
                                             errorBuilder: (context, error, stackTrace) {
                                               return const Icon(
                                                 Icons.home_work_rounded,
                                                 size: 14,
-                                                color: textMid,
+                                                color: AppColors.textMid,
                                               );
                                             },
                                           ),
