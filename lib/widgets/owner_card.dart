@@ -407,7 +407,11 @@ class _OwnerCardState extends State<OwnerCard>
       }
       return 'assets/image/house.png';
     } else if (widget.owner.isTower) {
-      return 'assets/image/tower.png';
+      // Check if it's a wing by name pattern, even though it uses tower constructor
+      if (widget.owner.name.contains('Wing')) {
+        return 'assets/image/wings.png'; // Show wing image for wings
+      }
+      return 'assets/image/tower.png'; // Show tower image for actual towers
     } else if (widget.owner.isAmenity) {
       return 'assets/image/wifi.png';
     } else {
@@ -428,7 +432,11 @@ class _OwnerCardState extends State<OwnerCard>
       }
       return Icons.apartment_rounded;
     } else if (widget.owner.isTower) {
-      return Icons.domain_rounded;
+      // Check if it's a wing by name pattern, even though it uses tower constructor
+      if (widget.owner.name.contains('Wing')) {
+        return Icons.meeting_room_rounded; // Wing icon for wings
+      }
+      return Icons.domain_rounded; // Tower icon for actual towers
     } else if (widget.owner.isAmenity) {
       return Icons.pool_rounded;
     } else {
@@ -622,8 +630,8 @@ class _OwnerCardState extends State<OwnerCard>
                                           ),
                                           decoration: BoxDecoration(
                                             color: widget.owner.isActive
-                                                ? const Color(0xFF4CAF50).withOpacity(0.08)   // softer green bg
-                                                : const Color(0xFFFF9800).withOpacity(0.08),  // softer orange bg
+                                                ? const Color(0xFF4CAF50).withOpacity(0.08)
+                                                : const Color(0xFFFF9800).withOpacity(0.08),
                                             borderRadius: BorderRadius.circular(8),
                                             border: Border.all(
                                               color: widget.owner.isActive
@@ -642,8 +650,8 @@ class _OwnerCardState extends State<OwnerCard>
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: widget.owner.isActive
-                                                      ? const Color(0xFF43A047)   // medium green
-                                                      : const Color(0xFFFB8C00),  // medium orange
+                                                      ? const Color(0xFF43A047)
+                                                      : const Color(0xFFFB8C00),
                                                 ),
                                               ),
 
