@@ -1,9 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../config/Routes/RouteName.dart';
 import '../../constants/app_colors.dart';
+import '../../constants/constant.dart';
 import '../../constants/utils.dart';
+import '../../controller/login_controller.dart';
+import '../../model/VerifyOtpResponse.dart';
 import '../../widgets/common_otp_field.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -48,19 +53,75 @@ class _OtpScreenState extends State<OtpScreen> {
         context,
         message: "Please enter valid OTP",
         backgroundColor: Colors.red,
-
-
       );
       return;
+    } else {
+      _verifyOtpAPI();
     }
+  }
 
-    Navigator.pushNamed(
-      context,
-      // RouteName.manageUsersSocietyAdmin,
-      // arguments: 2,
-      RouteName.dashboardScreen,
+  Future<void> _verifyOtpAPI() async {
+    if (await Utils.isConnected()) {
+      final box = GetStorage();
 
-    );
+      bool _isLoading = true;
+      Utils.onLoading(context);
+      Map<String, dynamic> data = {
+        "mobileNumber": widget.mobileNumber, //"7770028773",
+        "otp": _enteredOtp, //"123456"
+      };
+
+      LoginController loginUserController = LoginController();
+      try {
+        final response = await loginUserController.verifyOtp(data);
+
+        if (response != null) {
+          VerifyOtpResponse verifyOtpResponse = VerifyOtpResponse.fromJson(
+            response.data,
+          );
+          if (verifyOtpResponse.status==true) {
+            String loginResponse = jsonEncode(response.data);
+            box.write(Constant.loginResponse, loginResponse);
+            box.write(Constant.userId, verifyOtpResponse.userId);
+            box.write(Constant.roleId, verifyOtpResponse.roleId);
+            box.write(Constant.tokenMobile, verifyOtpResponse.token);
+
+            Utils.showToast(context, message: '${verifyOtpResponse.message}');
+            Navigator.pop(context);
+            _isLoading = false;
+            Navigator.pushNamed(
+              context,
+              // RouteName.manageUsersSocietyAdmin,
+              // arguments: 2,
+              RouteName.dashboardScreen,
+            );
+          } else {
+            if(verifyOtpResponse.message=="Too many attempts. Account locked for 30 minutes."){
+              Navigator.pop(context);
+              _isLoading = false;
+              Navigator.pushNamed(
+                context,
+                RouteName.loginScreen,
+              );
+            }
+            Utils.showToast(context, message: '${verifyOtpResponse.message}');
+
+          }
+        } else {
+          Utils.showToast(context, message: 'Something went wrong!');
+          print(response);
+        }
+      } catch (e) {
+        Utils.showToast(context, message: 'Something went wrong!');
+        print(e);
+      } finally {
+        if (_isLoading) {
+          Navigator.pop(context);
+        }
+      }
+    } else {
+      Utils.showToast(context, message: Constant.internetConMsg);
+    }
   }
 
   void _resendOtp() {
@@ -92,10 +153,7 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
           title: const Text(
             "OTP Verification",
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
         ),
         body: Padding(
@@ -113,15 +171,15 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                 ),
               ),
-               SizedBox(height: 8),
+              SizedBox(height: 8),
               Center(
                 child: Text(
                   " +91-${widget.mobileNumber}",
-                  style:  TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
-               SizedBox(height: 60),
-      
+              SizedBox(height: 60),
+
               /// OTP Field
               CommonOtpField(
                 length: 6,
@@ -129,9 +187,9 @@ class _OtpScreenState extends State<OtpScreen> {
                   _enteredOtp = otp;
                 },
               ),
-      
+
               const SizedBox(height: 20),
-      
+
               /// OTP Timer + Resend (Single Line)
               Center(
                 child: Row(
@@ -139,10 +197,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   children: [
                     Text(
                       "Didn't get the OTP? ",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                      ),
+                      style: const TextStyle(color: Colors.black, fontSize: 12),
                     ),
                     GestureDetector(
                       onTap: _canResend ? _resendOtp : null,
@@ -158,7 +213,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                   : Colors.grey,
                             ),
                           ),
-      
+
                           if (!_canResend) ...[
                             const SizedBox(width: 4),
                             Text(
@@ -193,6 +248,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
               ),
               SizedBox(height: 15),
+
               /// Verify Button
               InkWell(
                 onTap: _verifyOtp,

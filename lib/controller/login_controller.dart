@@ -4,13 +4,9 @@ import 'package:visitorapp/networking/api_endpoints.dart';
 import 'package:visitorapp/networking/dio_client.dart';
 
 class LoginController extends ApiService {
+  Future<Response?> getLogin(jsonData) async =>
+      await requestPOST(path: "/sendotp", data: jsonData, token: '');
 
-  Future<Response?> login(String token) async {
-    return await requestPOST(
-      path: ApiEndpoints.login,
-      token: token,
-      data: '',
-    );
-  }
-
+  Future<Response?> verifyOtp(jsonData) async =>
+      await requestPOST(path: "/verifyotp", data: jsonData, token: '');
 }
