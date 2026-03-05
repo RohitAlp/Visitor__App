@@ -241,6 +241,8 @@ class _LoginScreenState extends State<LoginScreen>
                           } else {
                             // Navigator.pop(context);
 
+                            FocusManager.instance.primaryFocus?.unfocus();
+
                             _userLogin(context);
                           }
                         },
