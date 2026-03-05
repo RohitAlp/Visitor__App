@@ -84,7 +84,7 @@ class _OtpScreenState extends State<OtpScreen> {
           leading: IconButton(
             icon: const Icon(
               CupertinoIcons.back,
-              color: Colors.black, // change if needed
+              color: Colors.black,
             ),
             onPressed: () {
               Navigator.pop(context);
