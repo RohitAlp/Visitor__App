@@ -5,6 +5,7 @@ class RouteName {
   static const String loginScreen = 'loginScreen';
   static const String settingsScreen = 'settingsScreen';
   static const String dashboardScreen = 'dashboardScreen';
+  static const String SocietyAdminDashboardScreen = 'SocietyAdminDashboardScreen';
   static const String paymentScreen = 'paymentScreen';
   static const String noticeScreen = 'noticeScreen';
   static const String servicesScreen = 'servicesScreen';
@@ -23,4 +24,5 @@ class RouteName {
   static const String ManageFlatsScreen = 'ManageFlatsScreen';
   static const String ManageFloorsScreen = 'ManageFloorsScreen';
   static const String ManageAmanitiesScreen = 'ManageAmanitiesScreen';
+  static const String ServiceRequestListScreen = 'ServiceRequestListScreen';
 }

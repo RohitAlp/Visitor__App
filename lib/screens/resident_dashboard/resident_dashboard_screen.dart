@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/model/LoginResponse.dart';
 import '../../constants/constant.dart';
@@ -10,8 +9,10 @@ import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
+import '../services/services.dart';
+import '../society_admin_dashboard/service_requests/service_request_list/service_request_list_screen.dart';
 
-void main() => runApp(const MaterialApp(home: DashboardScreen()));
+
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -36,9 +37,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const _DashboardHomePage(),
     const Payment(),
     const Notice(),
-    const Profile(),
-    // const Services(),
-    const Profile(),
+    const Services(),
+    // const Profile(),
+    const ServiceRequestListScreen(),
     // const ManageUsersScreen(type: 2,),
     //
     // const ManageUsersScreen(type: 1,),
@@ -248,7 +249,9 @@ class _DashboardHomePage extends StatelessWidget {
 
               // // Circular Shadow/Background behind Icon
               // Positioned(
-              //   top: 10,
+              //   top: 10,create design for custom header widget
+              // create design for custom bottom bar widget
+              // Dashboard desing for the User (Resedent)
               //   left: 22,
               //   child: Container(
               //     width: 55.8,
