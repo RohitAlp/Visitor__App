@@ -5,7 +5,6 @@ import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
-import '../services/services.dart';
 
 void main() => runApp(const MaterialApp(home: DashboardScreen()));
 
@@ -31,12 +30,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const _DashboardHomePage(),
     const Payment(),
     const Notice(),
-    const Services(),
     const Profile(),
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return SafeArea(
       top: false,
       child: Scaffold(
