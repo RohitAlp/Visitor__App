@@ -407,7 +407,11 @@ class _OwnerCardState extends State<OwnerCard>
       }
       return 'assets/image/house.png';
     } else if (widget.owner.isTower) {
-      return 'assets/image/tower.png';
+      // Check if it's a wing by name pattern, even though it uses tower constructor
+      if (widget.owner.name.contains('Wing')) {
+        return 'assets/image/wings.png'; // Show wing image for wings
+      }
+      return 'assets/image/tower.png'; // Show tower image for actual towers
     } else if (widget.owner.isAmenity) {
       return 'assets/image/wifi.png';
     } else {
@@ -428,7 +432,11 @@ class _OwnerCardState extends State<OwnerCard>
       }
       return Icons.apartment_rounded;
     } else if (widget.owner.isTower) {
-      return Icons.domain_rounded;
+      // Check if it's a wing by name pattern, even though it uses tower constructor
+      if (widget.owner.name.contains('Wing')) {
+        return Icons.meeting_room_rounded; // Wing icon for wings
+      }
+      return Icons.domain_rounded; // Tower icon for actual towers
     } else if (widget.owner.isAmenity) {
       return Icons.pool_rounded;
     } else {
@@ -581,7 +589,7 @@ class _OwnerCardState extends State<OwnerCard>
                                     width: 24,
                                     height: 24,
                                     fit: BoxFit.cover,
-                                    color: Color(0xFF357CB4), // Lighter blue color for images
+                                    color: Color(0xFF357CB4),
                                     errorBuilder: (context, error, stackTrace) {
                                       return Icon(
                                         _getProfileIcon(),
@@ -622,8 +630,8 @@ class _OwnerCardState extends State<OwnerCard>
                                           ),
                                           decoration: BoxDecoration(
                                             color: widget.owner.isActive
-                                                ? const Color(0xFF4CAF50).withOpacity(0.08)   // softer green bg
-                                                : const Color(0xFFFF9800).withOpacity(0.08),  // softer orange bg
+                                                ? const Color(0xFF4CAF50).withOpacity(0.08)
+                                                : const Color(0xFFFF9800).withOpacity(0.08),
                                             borderRadius: BorderRadius.circular(8),
                                             border: Border.all(
                                               color: widget.owner.isActive
@@ -642,22 +650,21 @@ class _OwnerCardState extends State<OwnerCard>
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: widget.owner.isActive
-                                                      ? const Color(0xFF43A047)   // medium green
-                                                      : const Color(0xFFFB8C00),  // medium orange
+                                                      ? const Color(0xFF43A047)
+                                                      : const Color(0xFFFB8C00),
                                                 ),
                                               ),
 
                                               const SizedBox(width: 6),
 
-                                              /// Text
                                               Text(
                                                 widget.owner.isActive ? 'Active' : 'Inactive',
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w700,
                                                   color: widget.owner.isActive
-                                                      ? const Color(0xFF388E3C)   // balanced green
-                                                      : const Color(0xFFF57C00),  // balanced orange
+                                                      ? const Color(0xFF388E3C)
+                                                      : const Color(0xFFF57C00),
                                                   letterSpacing: 0.3,
                                                 ),
                                               ),
@@ -697,7 +704,6 @@ class _OwnerCardState extends State<OwnerCard>
                                           ),
                                         )
                                       else if (widget.owner.isFlat && widget.owner.occupancyInfo != null && widget.owner.occupancyInfo!.isNotEmpty)
-                                        // Don't show status badge for flats when occupancy info is present
                                         Container()
                                       else if (widget.owner.isFlat)
                                         Container(

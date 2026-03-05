@@ -65,6 +65,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                   ? [
                 _UserCard(
                   icon: Icons.people_outline,
+                  imagePath: 'assets/image/house.png',
                   title: "Flat Owners\n(Residents)",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.FlatOwnersScreen);
@@ -72,6 +73,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 ),
                  _UserCard(
                   icon: Icons.shield_outlined,
+                  imagePath: 'assets/image/profile.png',
                   title: "Security Guards",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.SecurityGuardsScreen);
@@ -79,10 +81,12 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 ),
                 const _UserCard(
                   icon: Icons.work_outline,
+                  imagePath: null,
                   title: "Support Staff",
                 ),
                  _UserCard(
                   icon: Icons.build_outlined,
+                  imagePath: 'assets/image/tools.png',
                   title: "Vendors",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.VendorsScreens);
@@ -92,6 +96,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                   :  [
                 _UserCard(
                   icon: Icons.build_outlined,
+                  imagePath: 'assets/image/tower.png',
                   title: "Manage Tower",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.ManageTowersScreen);
@@ -99,6 +104,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 ),
                 _UserCard(
                   icon: Icons.build_outlined,
+                  imagePath: 'assets/image/wings.png',
                   title: "Manage Wings",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.ManageWingScreen);
@@ -106,6 +112,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 ),
                 _UserCard(
                   icon: Icons.build_outlined,
+                  imagePath: 'assets/image/flor.png',
                   title: "Manage Floors",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.ManageFloorsScreen);
@@ -113,6 +120,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 ),
                 _UserCard(
                   icon: Icons.build_outlined,
+                  imagePath: 'assets/image/house.png',
                   title: "Manage Flats",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.ManageFlatsScreen);
@@ -120,6 +128,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                 ),
                 _UserCard(
                   icon: Icons.build_outlined,
+                  imagePath: 'assets/image/wifi.png',
                   title: "Manage Amenities",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.ManageAmanitiesScreen);
@@ -137,11 +146,13 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
 
 class _UserCard extends StatelessWidget {
   final IconData icon;
+  final String? imagePath;
   final String title;
   final VoidCallback? onTap;
 
   const _UserCard({
     required this.icon,
+    this.imagePath,
     required this.title,
     this.onTap,
   });
@@ -176,11 +187,25 @@ class _UserCard extends StatelessWidget {
                   color: const Color(0xffFBE9E0),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  icon,
-                  color: Colors.deepOrange,
-                  size: 26,
-                ),
+                child: imagePath != null
+                    ? Image.asset(
+                        imagePath!,
+                        width: 26,
+                        height: 26,
+                        color: Colors.deepOrange,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            icon,
+                            color: Colors.deepOrange,
+                            size: 26,
+                          );
+                        },
+                      )
+                    : Icon(
+                        icon,
+                        color: Colors.deepOrange,
+                        size: 26,
+                      ),
               ),
               const SizedBox(height: 14),
               Text(
