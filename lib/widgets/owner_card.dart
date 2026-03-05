@@ -929,6 +929,39 @@ class _OwnerCardState extends State<OwnerCard>
                                   ),
                                   const SizedBox(height: 5),
 
+                                  if (widget.owner.isFlat)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 6.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            'assets/image/Documents.svg',
+                                            width: 14,
+                                            height: 14,
+                                            color: textMid,
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return const Icon(
+                                                Icons.home,
+                                                size: 14,
+                                                color: textMid,
+                                              );
+                                            },
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            widget.owner.flat,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey.shade800,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 0.2,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
                                   if (widget.owner.isFlat && widget.owner.isOccupied && widget.owner.ownerName != null && widget.owner.ownerName!.isNotEmpty)
                                     Padding(
                                       padding: const EdgeInsets.only(left: 6.0),
@@ -1098,44 +1131,47 @@ class _OwnerCardState extends State<OwnerCard>
                                     const SizedBox(height: 5),
 
                                   if (widget.owner.isFlat && widget.owner.occupancyInfo != null && widget.owner.occupancyInfo!.isNotEmpty)
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset(
-                                          'assets/image/Documents.svg',
-                                          width: 14,
-                                          height: 14,
-                                          color: textMid,
-                                          errorBuilder: (context, error, stackTrace) {
-                                            return const Icon(
-                                              Icons.home_work_rounded,
-                                              size: 14,
-                                              color: textMid,
-                                            );
-                                          },
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                          decoration: BoxDecoration(
-                                            color: _getOccupancyColor(widget.owner.occupancyInfo!).withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(6),
-                                            border: Border.all(
-                                              color: _getOccupancyColor(widget.owner.occupancyInfo!).withOpacity(0.3),
-                                              width: 1,
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            'assets/image/Documents.svg',
+                                            width: 14,
+                                            height: 14,
+                                            color: textMid,
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return const Icon(
+                                                Icons.home_work_rounded,
+                                                size: 14,
+                                                color: textMid,
+                                              );
+                                            },
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                            decoration: BoxDecoration(
+                                              color: _getOccupancyColor(widget.owner.occupancyInfo!).withOpacity(0.1),
+                                              borderRadius: BorderRadius.circular(6),
+                                              border: Border.all(
+                                                color: _getOccupancyColor(widget.owner.occupancyInfo!).withOpacity(0.3),
+                                                width: 1,
+                                              ),
+                                            ),
+                                            child: Text(
+                                              _getOccupancyText(widget.owner.occupancyInfo!),
+                                              style: TextStyle(
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.w700,
+                                                color: _getOccupancyColor(widget.owner.occupancyInfo!),
+                                                letterSpacing: 0.3,
+                                              ),
                                             ),
                                           ),
-                                          child: Text(
-                                            _getOccupancyText(widget.owner.occupancyInfo!),
-                                            style: TextStyle(
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w700,
-                                              color: _getOccupancyColor(widget.owner.occupancyInfo!),
-                                              letterSpacing: 0.3,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                 ],
                               ),
