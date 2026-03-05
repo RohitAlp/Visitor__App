@@ -64,29 +64,29 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
               children: widget.type == 1
                   ? [
                 _UserCard(
-                  icon: Icons.people_outline,
-                  imagePath: 'assets/image/house.png',
+                  // icon: Icons.people_outline,
+                  text: '👤',
                   title: "Flat Owners\n(Residents)",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.FlatOwnersScreen);
                   },
                 ),
                  _UserCard(
-                  icon: Icons.shield_outlined,
-                  imagePath: 'assets/image/profile.png',
+                  // icon: Icons.shield_outlined,
+                   text: '🛡️',
                   title: "Security Guards",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.SecurityGuardsScreen);
                   },
                 ),
                 const _UserCard(
-                  icon: Icons.work_outline,
-                  imagePath: null,
+                  // icon: Icons.work_outline,
+                  text: '👔',
                   title: "Support Staff",
                 ),
                  _UserCard(
-                  icon: Icons.build_outlined,
-                  imagePath: 'assets/image/tools.png',
+                  // icon: Icons.build_outlined,
+                   text: '🔧',
                   title: "Vendors",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.VendorsScreens);
@@ -95,40 +95,40 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
               ]
                   :  [
                 _UserCard(
-                  icon: Icons.build_outlined,
-                  imagePath: 'assets/image/tower.png',
+                  // icon: Icons.build_outlined,
+                  text: '🏢',
                   title: "Manage Tower",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.ManageTowersScreen);
                   },
                 ),
                 _UserCard(
-                  icon: Icons.build_outlined,
-                  imagePath: 'assets/image/wings.png',
+                  // icon: Icons.build_outlined,
+                  text: '🏛️',
                   title: "Manage Wings",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.ManageWingScreen);
                   },
                 ),
                 _UserCard(
-                  icon: Icons.build_outlined,
-                  imagePath: 'assets/image/flor.png',
+                  // icon: Icons.build_outlined,
+                  text: '🏗️',
                   title: "Manage Floors",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.ManageFloorsScreen);
                   },
                 ),
                 _UserCard(
-                  icon: Icons.build_outlined,
-                  imagePath: 'assets/image/house.png',
+                  // icon: Icons.build_outlined,
+                  text: '🏠',
                   title: "Manage Flats",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.ManageFlatsScreen);
                   },
                 ),
                 _UserCard(
-                  icon: Icons.build_outlined,
-                  imagePath: 'assets/image/wifi.png',
+                  // icon: Icons.build_outlined,
+                  text: '🌴',
                   title: "Manage Amenities",
                   onTap: () {
                     Navigator.pushNamed(context, RouteName.ManageAmanitiesScreen);
@@ -145,14 +145,14 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
 
 
 class _UserCard extends StatelessWidget {
-  final IconData icon;
-  final String? imagePath;
+  final IconData? icon;
+  final String? text;
   final String title;
   final VoidCallback? onTap;
 
   const _UserCard({
-    required this.icon,
-    this.imagePath,
+     this.icon,
+    this.text,
     required this.title,
     this.onTap,
   });
@@ -183,36 +183,44 @@ class _UserCard extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: const Color(0xffFBE9E0),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: imagePath != null
-                    ? Image.asset(
-                        imagePath!,
-                        width: 26,
-                        height: 26,
-                        color: Colors.deepOrange,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(
-                            icon,
+                // decoration: BoxDecoration(
+                //   color: const Color(0xffFBE9E0),
+                //   borderRadius: BorderRadius.circular(12),
+                // ),
+                child: text != null
+                    ? (text!.startsWith('👤') || text!.startsWith('🛡️') || text!.startsWith('👔') || text!.startsWith('🔧') || text!.startsWith('🏢') || text!.startsWith('🏛️') || text!.startsWith('🏗️') || text!.startsWith('🏠') || text!.startsWith('🌴'))
+                        ? Text(
+                            text!,
+                            style: const TextStyle(
+                              fontSize: 45,
+                              color: Colors.deepOrange,
+                            ),
+                          )
+                        : Image.asset(
+                            text!,
+                            width: 26,
+                            height: 26,
                             color: Colors.deepOrange,
-                            size: 26,
-                          );
-                        },
-                      )
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(
+                                icon,
+                                color: Colors.deepOrange,
+                                size: 26,
+                              );
+                            },
+                          )
                     : Icon(
                         icon,
                         color: Colors.deepOrange,
                         size: 26,
                       ),
               ),
-              const SizedBox(height: 14),
+              // const SizedBox(height: 8),
               Text(
                 title,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 14,
+                  fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.black87,
                 ),

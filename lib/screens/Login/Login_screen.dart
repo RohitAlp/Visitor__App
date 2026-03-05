@@ -8,7 +8,10 @@ import 'package:visitorapp/screens/Login/Otp_screen.dart';
 
 import '../../config/Routes/RouteName.dart';
 import '../../constants/app_colors.dart';
+import '../../constants/constant.dart';
 import '../../constants/utils.dart';
+import '../../controller/login_controller.dart';
+import '../../model/LoginResponse.dart';
 import '../../widgets/CommonTextField.dart';
 import '../../widgets/common_otp_field.dart';
 
@@ -53,6 +56,56 @@ class _LoginScreenState extends State<LoginScreen>
     super.dispose();
   }
 
+  Future<void> _userLogin(BuildContext context) async {
+    if (await Utils.isConnected()) {
+      bool _isLoading = true;
+      Utils.onLoading(context);
+      String mobileNo = mobileController.text;
+
+      Map<String, dynamic> data = {
+        "mobileNumber": mobileNo, // "7770028773"
+      };
+
+      LoginController loginUserController = LoginController();
+      try {
+        final response = await loginUserController.getLogin(data);
+
+        if (response != null) {
+          LoginResponse loginUser = LoginResponse.fromJson(response.data);
+
+          if (loginUser.status==true && loginUser.message=="OTP sent successfully") {
+            Utils.showToast(context, message: '${loginUser.message}');
+
+            Navigator.pop(context);
+            _isLoading = false;
+
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => OtpScreen(mobileNumber: mobileController.text),
+              ),
+            );
+
+          } else {
+            Utils.showToast(context, message: '${loginUser.message}');
+          }
+        } else {
+          Utils.showToast(context, message: 'Something went wrong!');
+          print(response);
+        }
+      } catch (e) {
+        Utils.showToast(context, message: 'Something went wrong!');
+        print(e);
+      } finally {
+        if (_isLoading) {
+          Navigator.pop(context);
+        }
+      }
+    } else {
+      Utils.showToast(context, message: Constant.internetConMsg);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -66,14 +119,14 @@ class _LoginScreenState extends State<LoginScreen>
                   child: Image.asset(
                     _images[_currentImageIndex],
                     key: ValueKey(_images[_currentImageIndex]),
-                    fit: BoxFit.cover, // 👈 fills & crops properly
+                    fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
                   ),
                 ),
               ),
             ),
-      
+
             if (_showStartButton)
               Positioned(
                 bottom: 60,
@@ -96,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen>
                         mobileController.clear();
                         _showStartButton = false;
                       });
-      
+
                       _openLoginBottomSheet();
                     },
                     child: const Text(
@@ -132,9 +185,7 @@ class _LoginScreenState extends State<LoginScreen>
             return Container(
               decoration: const BoxDecoration(
                 color: Colors.transparent,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(25),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
               ),
               padding: EdgeInsets.only(
                 left: 16,
@@ -164,6 +215,7 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                     ),
                     const SizedBox(height: 20),
+
                     /// Mobile Field
                     CommonTextField(
                       hintText: "Enter mobile number",
@@ -171,15 +223,12 @@ class _LoginScreenState extends State<LoginScreen>
                       iconColor: AppColors.appPrimaryColor,
                       controller: mobileController,
                       keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       maxLength: 10,
                     ),
 
                     const SizedBox(height: 20),
 
-                    /// Button
                     Center(
                       child: InkWell(
                         onTap: () {
@@ -189,18 +238,11 @@ class _LoginScreenState extends State<LoginScreen>
                               message: "Enter valid mobile number",
                             );
                             return;
+                          } else {
+                            // Navigator.pop(context);
+
+                            _userLogin(context);
                           }
-
-                          Navigator.pop(context); // close bottom sheet
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => OtpScreen(
-                                mobileNumber: mobileController.text,
-                              ),
-                            ),
-                          );
                         },
                         child: Container(
                           height: 50,

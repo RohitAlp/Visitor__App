@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:visitorapp/networking/api_endpoints.dart';
 
 class ApiService {
   late Dio _dio;
 
   ApiService() {
     BaseOptions options = BaseOptions(
-      baseUrl: "https://your-base-url.com",
+      baseUrl:ApiEndpoints.login,// "https://your-base-url.com",
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       headers: {
