@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
+import '../constants/constant.dart';
 
 class Owner {
   final String name;
@@ -322,21 +323,21 @@ class _OwnerCardState extends State<OwnerCard>
   String _getServiceEmoji(String service) {
     switch (service.toLowerCase()) {
       case 'plumbing services':
-        return '🔧';
+        return Constant.plumbingEmoji;
       case 'electrical services':
-        return '⚡';
+        return Constant.electricalEmoji;
       case 'housekeeping services':
-        return '✨';
+        return Constant.housekeepingEmoji;
       case 'carpentry services':
-        return '🔨';
+        return Constant.carpentryEmoji;
       case 'appliance repair services':
-        return '⚙️';
+        return Constant.applianceRepairEmoji;
       case 'pest control':
-        return '🐛';
+        return Constant.pestControlEmoji;
       case 'civil services':
-        return '🏗️';
+        return Constant.civilServicesEmoji;
       default:
-        return '🔧';
+        return Constant.defaultServiceEmoji;
     }
   }
 
@@ -358,18 +359,18 @@ class _OwnerCardState extends State<OwnerCard>
   }
 
   String _getFlatEmoji() {
-    return '🏠'; // For actual flats (apartments/houses)
+    return Constant.flatEmoji; // For actual flats (apartments/houses)
   }
 
   String _getFloorEmoji() {
-    return '🏗️'; // For floors (building levels)
+    return Constant.floorEmoji; // For floors (building levels)
   }
 
   String _getWingTowerEmoji() {
     if (widget.owner.name.contains('Wing')) {
-      return '🏛️';
+      return Constant.wingEmoji;
     } else if (widget.owner.isTower || widget.owner.name.toLowerCase().contains('tower')) {
-      return '🏢';
+      return Constant.towerEmoji;
     }
     return '';
   }
@@ -389,17 +390,17 @@ class _OwnerCardState extends State<OwnerCard>
   String _getAmenityEmoji() {
     switch (widget.owner.category?.toLowerCase()) {
       case 'recreation':
-        return '🏊';
+        return Constant.recreationEmoji;
       case 'fitness':
-        return '💪';
+        return Constant.fitnessEmoji;
       case 'events':
-        return '🎉';
+        return Constant.eventsEmoji;
       case 'sports':
-        return '🏸';
+        return Constant.sportsEmoji;
       case 'children':
-        return '🛝';
+        return Constant.childrenEmoji;
       default:
-        return '🌴';
+        return Constant.defaultAmenityEmoji;
     }
   }
 
@@ -652,9 +653,13 @@ class _OwnerCardState extends State<OwnerCard>
                               decoration: BoxDecoration(
                                 color: widget.owner.isAmenity 
                                     ? _getSpecificAmenityColor()
-                                    : (widget.owner.name.contains('Wing') || widget.owner.isTower || widget.owner.isFlat)
-                                        ? Color(0xFFE4F0FF)
-                                        : AppColors.purple100,
+                                    : (widget.owner.floor != null && widget.owner.name.toLowerCase().contains('floor'))
+                                        ? Color(0xFFE7FCEE)
+                                        : (widget.owner.name.contains('Wing'))
+                                            ? Color(0x80E4F0FF)  // 50% opacity for wings
+                                            : (widget.owner.isTower || widget.owner.isFlat)
+                                                ? Color(0x80E4F0FF)  // 50% opacity for towers and flats
+                                                : AppColors.purple100,
                                 borderRadius: BorderRadius.circular(15),
                                 // border: Border.all(
                                 //   color: AppColors.purple200,
@@ -695,7 +700,7 @@ class _OwnerCardState extends State<OwnerCard>
                                 : widget.owner.isVendor
                                 ? Center(
                                     child: Text(
-                                      '🔧',
+                                      Constant.defaultServiceEmoji,
                                       style: const TextStyle(
                                         fontSize: 28,
                                       ),
