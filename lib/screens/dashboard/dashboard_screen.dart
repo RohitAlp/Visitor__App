@@ -6,6 +6,7 @@ import '../Notice/notice.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
 import '../services/services.dart';
+import '../society_admin/manage_users_screen.dart';
 
 void main() => runApp(const MaterialApp(home: DashboardScreen()));
 
@@ -31,8 +32,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const _DashboardHomePage(),
     const Payment(),
     const Notice(),
-    const Services(),
-    const Profile(),
+    // const Services(),
+    // const Profile(),
+    const ManageUsersScreen(type: 2,),
+
+    const ManageUsersScreen(type: 1,),
+
   ];
 
   @override
