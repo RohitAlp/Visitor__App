@@ -24,6 +24,15 @@ class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
       isActive: true,
       status: 'active',
     ),
+
+    Owner.amenity(
+      name: 'Garden',
+      category: 'Walking',
+      location: 'Block A - Ground Floor',
+      timing: '6 AM - 10 PM',
+      isActive: true,
+      status: 'active',
+    ),
     Owner.amenity(
       name: 'Gymnasium',
       category: 'Fitness',

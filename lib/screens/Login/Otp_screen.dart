@@ -79,7 +79,8 @@ class _OtpScreenState extends State<OtpScreen> {
           VerifyOtpResponse verifyOtpResponse = VerifyOtpResponse.fromJson(
             response.data,
           );
-          if (verifyOtpResponse.status==true) {
+          if (verifyOtpResponse.
+          status==true) {
             String loginResponse = jsonEncode(response.data);
             box.write(Constant.loginResponse, loginResponse);
             box.write(Constant.userId, verifyOtpResponse.userId);
