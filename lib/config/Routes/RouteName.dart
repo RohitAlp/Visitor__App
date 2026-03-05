@@ -1,6 +1,6 @@
 library route_name;
 
-class RouteName{
+class RouteName {
   static const String splashScreen = 'splashScreen';
   static const String loginScreen = 'loginScreen';
   static const String settingsScreen = 'settingsScreen';
@@ -24,4 +24,5 @@ class RouteName{
   static const String ManageFlatsScreen = 'ManageFlatsScreen';
   static const String ManageFloorsScreen = 'ManageFloorsScreen';
   static const String ManageAmanitiesScreen = 'ManageAmanitiesScreen';
+  static const String ServiceRequestListScreen = 'ServiceRequestListScreen';
 }
