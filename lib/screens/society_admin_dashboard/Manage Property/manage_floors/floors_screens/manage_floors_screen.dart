@@ -583,11 +583,10 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
     );
   }
   
-  // Helper method to map Floor to Owner
   Owner _mapFloorToOwner(Floor floor) {
     return Owner.flat(
       name: floor.floorNumber,
-      flat: '${floor.totalFlats} Flats',
+      flat: '🏠 ${floor.totalFlats} Flats',
       wing: floor.wing,
       tower: floor.tower,
       floor: floor.floorNumber,
@@ -595,7 +594,7 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
       avatarInitials: 'F',
       isActive: floor.status.toLowerCase() == 'active',
       ownerName: null, 
-      occupancyInfo: '${floor.occupiedFlats}/${floor.totalFlats} Occupied',
+      occupancyInfo: '${floor.occupiedFlats}/${floor.totalFlats}',
     );
   }
 }
