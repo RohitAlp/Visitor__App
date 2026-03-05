@@ -6,7 +6,7 @@ import '../Notice/notice.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
 
-void main() => runApp(const MaterialApp(home: DashboardScreen()));
+
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});

@@ -56,9 +56,10 @@ class _OtpScreenState extends State<OtpScreen> {
 
     Navigator.pushNamed(
       context,
-      RouteName.manageUsersSocietyAdmin,
-      arguments: 1,
-      // RouteName.dashboardScreen,
+      // RouteName.manageUsersSocietyAdmin,
+      // arguments: 1,
+     // RouteName.SocietyAdminDashboardScreen,
+      RouteName.dashboardScreen,
 
     );
   }
@@ -84,7 +85,7 @@ class _OtpScreenState extends State<OtpScreen> {
           leading: IconButton(
             icon: const Icon(
               CupertinoIcons.back,
-              color: Colors.black, // change if needed
+              color: Colors.black,
             ),
             onPressed: () {
               Navigator.pop(context);

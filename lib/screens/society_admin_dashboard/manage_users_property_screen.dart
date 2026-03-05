@@ -6,6 +6,7 @@ import '../../config/Routes/RouteName.dart';
 
 class ManageUsersScreen extends StatefulWidget {
   final int type;
+  
 
   const ManageUsersScreen({super.key,required this.type});
 
@@ -142,6 +143,7 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
     );
   }
 }
+
 
 
 class _UserCard extends StatelessWidget {

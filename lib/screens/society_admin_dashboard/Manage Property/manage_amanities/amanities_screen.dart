@@ -15,6 +15,7 @@ class ManageAmanitiesScreen extends StatefulWidget {
 class _ManageAmanitiesScreenState extends State<ManageAmanitiesScreen>
     with TickerProviderStateMixin {
 
+
   final List<Owner> _allAmenities = [
     Owner.amenity(
       name: 'Swimming Pool',

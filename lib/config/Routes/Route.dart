@@ -15,6 +15,7 @@ import '../../screens/society_admin_dashboard/Manage User/Vendors/venders_screen
 import '../../screens/society_admin_dashboard/Manage User/security_guards/edit_guards_details_form/edit_security_guards_form.dart';
 import '../../screens/society_admin_dashboard/Manage User/security_guards/security_guards_screen.dart';
 import '../../screens/society_admin_dashboard/manage_users_property_screen.dart';
+import '../../screens/society_admin_dashboard/society_admin_dashboard_screen.dart';
 import '../../screens/splash_screen/SplashScreen.dart';
 
 import '../../screens/Notification/Notificarion.dart';
@@ -33,6 +34,8 @@ class Routes {
         return MaterialPageRoute(builder: (context) => SettingsScreen());
       case RouteName.dashboardScreen:
         return MaterialPageRoute(builder: (context) => DashboardScreen());
+      case RouteName.SocietyAdminDashboardScreen:
+        return MaterialPageRoute(builder: (context) => SocietyAdminDashboardScreen());
       case RouteName.manageUsersSocietyAdmin:
         final args = setting.arguments as int;
         return MaterialPageRoute(
