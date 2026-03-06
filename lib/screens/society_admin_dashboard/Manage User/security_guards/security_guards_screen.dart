@@ -16,13 +16,6 @@ class SecurityGuardsScreen extends StatefulWidget {
 
 class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
     with TickerProviderStateMixin {
-  static const Color primaryColor = Color(0xFFC5610F);
-  static const Color primaryLight = Color(0xFFE8832A);
-  static const Color bgColor = Color(0xFFF5F0EB);
-  static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color textDark = Color(0xFF1A1208);
-  static const Color textMid = Color(0xFF6B5A47);
-  static const Color textLight = Color(0xFF9C8872);
   final List<Owner> _allGuards =  [
     Owner.guard(
       name: 'Rajesh Kumar',
@@ -153,7 +146,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                 ),
               );
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+            child: const Text('Delete', style: TextStyle(color: AppColors.white)),
           ),
         ],
       ),
@@ -256,11 +249,11 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                   // Search Bar
                   Container(
                     decoration: BoxDecoration(
-                      color: cardBg,
+                      color: AppColors.cardBg,
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: const [
                         BoxShadow(
-                          color: Color(0x66000000),
+                          color: AppColors.shadowColor,
                           blurRadius: 3,
                           spreadRadius: 0,
                           offset: Offset(0, 0),
@@ -270,18 +263,18 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                     child: TextField(
                       controller: _searchController,
                       onChanged: (val) => setState(() => _searchQuery = val),
-                      style: const TextStyle(fontSize: 14, color: textDark, fontWeight: FontWeight.w500),
+                      style: const TextStyle(fontSize: 14, color: AppColors.textDark, fontWeight: FontWeight.w500),
                       decoration: InputDecoration(
                         hintText: 'Search by guard name...',
-                        hintStyle: const TextStyle(color: textLight, fontSize: 14),
-                        prefixIcon: const Icon(Icons.search_rounded, color: primaryColor, size: 22),
+                        hintStyle: const TextStyle(color: AppColors.textLight, fontSize: 14),
+                        prefixIcon: const Icon(Icons.search_rounded, color: AppColors.primaryColor, size: 22),
                         suffixIcon: _searchQuery.isNotEmpty
                             ? GestureDetector(
                           onTap: () {
                             _searchController.clear();
                             setState(() => _searchQuery = '');
                           },
-                          child: const Icon(Icons.close_rounded, color: textLight, size: 18),
+                          child: const Icon(Icons.close_rounded, color: AppColors.textLight, size: 18),
                         )
                             : null,
                         border: InputBorder.none,
@@ -314,17 +307,17 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                             decoration: BoxDecoration(
                               gradient: isSelected
                                   ? const LinearGradient(
-                                colors: [primaryLight, primaryColor],
+                                colors: [AppColors.primaryLight, AppColors.primaryColor],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               )
                                   : null,
-                              color: isSelected ? null : cardBg,
+                              color: isSelected ? null : AppColors.cardBg,
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: isSelected
                                   ? [
                                 BoxShadow(
-                                  color: primaryColor.withOpacity(0.3),
+                                  color: AppColors.primaryColor.withOpacity(0.3),
                                   blurRadius: 12,
                                   spreadRadius: 1,
                                   offset: const Offset(0, 0),
@@ -344,7 +337,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                               style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
-                                color: isSelected ? Colors.white : textMid,
+                                color: isSelected ? AppColors.white : AppColors.textMid,
                                 letterSpacing: 0.2,
                               ),
                             ),
@@ -362,7 +355,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                         '${filtered.length} Guard${filtered.length != 1 ? 's' : ''}',
                         style: const TextStyle(
                           fontSize: 13,
-                          color: textLight,
+                          color: AppColors.textLight,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -433,9 +426,9 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                       ),
                     ),
                     const SizedBox(height: 6),
-                    const Text(
+                     Text(
                       'Try adjusting your search or filters',
-                      style: TextStyle(fontSize: 13, color: textLight),
+                      style: TextStyle(fontSize: 13, color: AppColors.textLight),
                     ),
                   ],
                 ),

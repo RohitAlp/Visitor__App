@@ -99,7 +99,7 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                 ),
               );
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+            child: const Text('Delete', style: TextStyle(color: AppColors.white)),
           ),
         ],
       ),
@@ -109,15 +109,15 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'active':
-        return const Color(0xFF10B981); // Emerald green
+        return AppColors.statusGreen; // Emerald green
       case 'inactive':
-        return const Color(0xFFF59E0B); // Amber
+        return AppColors.statusOrange; // Amber
       case 'maintenance':
-        return const Color(0xFF3B82F6); // Blue
+        return AppColors.maintenanceBlue; // Blue
       case 'under construction':
-        return const Color(0xFF8B5CF6); // Violet
+        return AppColors.purple700; // Violet
       default:
-        return const Color(0xFF6B7280); // Gray
+        return AppColors.grayDefault; // Gray
     }
   }
 
@@ -268,7 +268,7 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                                 ),
                                 child: const Icon(
                                   Icons.add_rounded,
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   size: 24,
                                 ),
                               ),
@@ -285,7 +285,7 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: const [
                             BoxShadow(
-                              color: Color(0x66000000),
+                              color: AppColors.shadowColor,
                               blurRadius: 2,
                               spreadRadius: 0,
                               offset: Offset(0, 0),
@@ -348,7 +348,7 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                                 border: Border.all(color: AppColors.textLight.withOpacity(0.2)),
                                 boxShadow: const [
                                   BoxShadow(
-                                    color: Color(0x66000000),
+                                    color: AppColors.shadowColor,
                                     blurRadius: 1,
                                     spreadRadius: 0,
                                     offset: Offset(0, 0),
@@ -394,7 +394,7 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                                 border: Border.all(color: AppColors.textLight.withOpacity(0.2)),
                                 boxShadow: const [
                                   BoxShadow(
-                                    color: Color(0x66000000),
+                                    color: AppColors.shadowColor,
                                     blurRadius: 1,
                                     spreadRadius: 0,
                                     offset: Offset(0, 0),
@@ -447,7 +447,7 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                             width: 8,
                             height: 8,
                             decoration: const BoxDecoration(
-                              color: Color(0xFF10B981),
+                              color: AppColors.statusGreen,
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -461,7 +461,7 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                             width: 8,
                             height: 8,
                             decoration: const BoxDecoration(
-                              color: Color(0xFFF59E0B),
+                              color: AppColors.statusOrange,
                               shape: BoxShape.circle,
                             ),
                           ),
