@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen>
         if (response != null) {
           LoginResponse loginUser = LoginResponse.fromJson(response.data);
 
-          if (loginUser.status==true && loginUser.message=="OTP sent successfully") {
+          if (loginUser.status == true) {
             Utils.showToast(context, message: '${loginUser.message}');
 
             Navigator.pop(context);
@@ -85,7 +85,6 @@ class _LoginScreenState extends State<LoginScreen>
                 builder: (_) => OtpScreen(mobileNumber: mobileController.text),
               ),
             );
-
           } else {
             Utils.showToast(context, message: '${loginUser.message}');
             print(loginUser.message);

@@ -148,8 +148,7 @@ class _OtpScreenState extends State<OtpScreen> {
         if (response != null) {
           LoginResponse loginUser = LoginResponse.fromJson(response.data);
 
-          if (loginUser.status == true &&
-              loginUser.message == "OTP sent successfully") {
+          if (loginUser.status == true ) {
             // Utils.showToast(context, message: '${loginUser.message}');
 
             Navigator.pop(context);
