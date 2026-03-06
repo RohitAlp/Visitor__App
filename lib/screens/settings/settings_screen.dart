@@ -66,7 +66,6 @@ class _SettingsScreenState extends State<SettingsScreen>
       curve: Curves.easeInOut,
     ));
 
-    // Start animations after a small delay to ensure widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         _fadeController.forward();
@@ -126,7 +125,6 @@ class _SettingsScreenState extends State<SettingsScreen>
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                // Profile Section with animation
                 AnimatedBuilder(
                   animation: _profileController,
                   builder: (context, child) {
@@ -287,7 +285,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                   icon: Icons.person_outline,
                   title: 'Personal Information',
                   onTap: () {
-                    // Navigate to personal information
+                   Navigator.pushNamed(context, RouteName.Profile);
                   },
                 ),
                 _buildDivider(),

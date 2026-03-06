@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/model/LoginResponse.dart';
+import 'package:visitorapp/screens/settings/settings_screen.dart';
 import '../../constants/constant.dart';
 import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice.dart';
@@ -40,9 +41,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const Notice(),
     // const Services(),
     // const Profile(),
+    const SettingsScreen(),
     const ServiceRequestListScreen(),
     const ManageUsersScreen(type: 2,),
-    //
     // const ManageUsersScreen(type: 1,),
 
   ];

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visitorapp/screens/Login/Login_screen.dart';
 
 import '../../screens/profile/profile.dart';
+import '../../screens/profile/bloc/profile_bloc.dart';
 import '../../screens/resident_dashboard/resident_dashboard_screen.dart';
 import '../../screens/society_admin_dashboard/Manage Property/Manage Flats/flat_list.dart';
 import '../../screens/society_admin_dashboard/Manage Property/Manage Tower/Add_tower.dart';
@@ -69,7 +71,12 @@ class Routes {
       case RouteName.ManageAmanitiesScreen:
         return MaterialPageRoute(builder: (context) => const ManageAmanitiesScreen());
       case RouteName.Profile:
-        return MaterialPageRoute(builder: (context) => const Profile());
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => ProfileBloc(),
+            child: const Profile(),
+          ),
+        );
       case RouteName.AddFlatOwnerForm:
         final args = setting.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
