@@ -37,5 +37,7 @@ class AppColors {
   // Grey colors for text
   static const Color grey600 = Color(0xFF757575);
   static const Color grey800 = Color(0xFF424242);
+  static const Color MaintenanceCardColor = Color(0xFFFEF0E6);
+
 
 }
