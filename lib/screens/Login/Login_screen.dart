@@ -88,6 +88,7 @@ class _LoginScreenState extends State<LoginScreen>
 
           } else {
             Utils.showToast(context, message: '${loginUser.message}');
+            print(loginUser.message);
           }
         } else {
           Utils.showToast(context, message: 'Something went wrong!');
@@ -216,7 +217,6 @@ class _LoginScreenState extends State<LoginScreen>
                     ),
                     const SizedBox(height: 20),
 
-                    /// Mobile Field
                     CommonTextField(
                       hintText: "Enter mobile number",
                       prefixIcon: Icons.phone,
@@ -240,6 +240,8 @@ class _LoginScreenState extends State<LoginScreen>
                             return;
                           } else {
                             // Navigator.pop(context);
+
+                            FocusManager.instance.primaryFocus?.unfocus();
 
                             _userLogin(context);
                           }

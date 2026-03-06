@@ -13,7 +13,7 @@ import '../services/services.dart';
 import '../society_admin_dashboard/manage_users_property_screen.dart';
 import '../society_admin_dashboard/service_requests/service_request_list/service_request_list_screen.dart';
 
-void main() => runApp(const MaterialApp(home: DashboardScreen()));
+
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -250,7 +250,9 @@ class _DashboardHomePage extends StatelessWidget {
 
               // // Circular Shadow/Background behind Icon
               // Positioned(
-              //   top: 10,
+              //   top: 10,create design for custom header widget
+              // create design for custom bottom bar widget
+              // Dashboard desing for the User (Resedent)
               //   left: 22,
               //   child: Container(
               //     width: 55.8,
