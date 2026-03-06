@@ -8,6 +8,7 @@ import '../../constants/app_colors.dart';
 import '../../constants/constant.dart';
 import '../../constants/utils.dart';
 import '../../controller/login_controller.dart';
+import '../../model/LoginResponse.dart';
 import '../../model/VerifyOtpResponse.dart';
 import '../../widgets/common_otp_field.dart';
 
@@ -56,6 +57,8 @@ class _OtpScreenState extends State<OtpScreen> {
       );
       return;
     } else {
+      FocusManager.instance.primaryFocus?.unfocus();
+
       _verifyOtpAPI();
     }
   }
@@ -79,8 +82,7 @@ class _OtpScreenState extends State<OtpScreen> {
           VerifyOtpResponse verifyOtpResponse = VerifyOtpResponse.fromJson(
             response.data,
           );
-          if (verifyOtpResponse.
-          status==true) {
+          if (verifyOtpResponse.status == true) {
             String loginResponse = jsonEncode(response.data);
             box.write(Constant.loginResponse, loginResponse);
             box.write(Constant.userId, verifyOtpResponse.userId);
@@ -99,16 +101,13 @@ class _OtpScreenState extends State<OtpScreen> {
               // RouteName.dashboardScreen,
             );
           } else {
-            if(verifyOtpResponse.message=="Too many attempts. Account locked for 30 minutes."){
+            if (verifyOtpResponse.message ==
+                "Too many attempts. Account locked for 30 minutes.") {
               Navigator.pop(context);
               _isLoading = false;
-              Navigator.pushNamed(
-                context,
-                RouteName.loginScreen,
-              );
+              Navigator.pushNamed(context, RouteName.loginScreen);
             }
             Utils.showToast(context, message: '${verifyOtpResponse.message}');
-
           }
         } else {
           Utils.showToast(context, message: 'Something went wrong!');
@@ -127,9 +126,58 @@ class _OtpScreenState extends State<OtpScreen> {
     }
   }
 
-  void _resendOtp() {
-    _startTimer();
-    Utils.showToast(context, message: "OTP Resent");
+  void _resendOtp() async {
+    await _resentOtp(context);
+    /*_startTimer();
+
+    Utils.showToast(context, message: "OTP Resent");*/
+  }
+
+  Future<void> _resentOtp(BuildContext context) async {
+    if (await Utils.isConnected()) {
+      bool _isLoading = true;
+      Utils.onLoading(context);
+      String mobileNo = widget.mobileNumber;
+
+      Map<String, dynamic> data = {
+        "mobileNumber": mobileNo, // "7770028773"
+      };
+
+      LoginController loginUserController = LoginController();
+      try {
+        final response = await loginUserController.getLogin(data);
+
+        if (response != null) {
+          LoginResponse loginUser = LoginResponse.fromJson(response.data);
+
+          if (loginUser.status == true &&
+              loginUser.message == "OTP sent successfully") {
+            // Utils.showToast(context, message: '${loginUser.message}');
+
+            Navigator.pop(context);
+            _isLoading = false;
+
+            _startTimer();
+
+            Utils.showToast(context, message: "OTP Resent");
+          } else {
+            Utils.showToast(context, message: '${loginUser.message}');
+          }
+        } else {
+          Utils.showToast(context, message: 'Something went wrong!');
+          print(response);
+        }
+      } catch (e) {
+        Utils.showToast(context, message: 'Something went wrong!');
+        print(e);
+      } finally {
+        if (_isLoading) {
+          Navigator.pop(context);
+        }
+      }
+    } else {
+      Utils.showToast(context, message: Constant.internetConMsg);
+    }
   }
 
   @override

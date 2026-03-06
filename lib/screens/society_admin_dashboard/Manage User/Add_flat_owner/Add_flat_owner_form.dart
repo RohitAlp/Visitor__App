@@ -69,7 +69,7 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
         appBar:   CustomAppBar(title: 'Add Flat Owner'),
         body: SafeArea(
           child: Container(
-            color: const Color(0xFFF5F5F5),
+            color: AppColors.scaffoldBg,
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Form(
@@ -78,7 +78,7 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
@@ -205,17 +205,17 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                             decoration: BoxDecoration(
                               color: const Color(0xFFFFF7F0),
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: const Color(0xFFCC6A00)),
+                              border: Border.all(color: AppColors.loadingOrange),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
-                                Icon(Icons.add, color: Color(0xFFCC6A00)),
+                                Icon(Icons.add, color: AppColors.loadingOrange),
                                 SizedBox(width: 8),
                                 Text(
                                   'Add Another Vehicle',
                                   style: TextStyle(
-                                    color: Color(0xFFCC6A00),
+                                    color: AppColors.loadingOrange,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -238,7 +238,7 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
             height: 45,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFCC6A00),
+                backgroundColor: AppColors.loadingOrange,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -249,7 +249,7 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Owner saved'),
-                      backgroundColor: Colors.green,
+                      backgroundColor: AppColors.successGreen,
                     ),
                   );
                   Navigator.pop(context);
@@ -279,7 +279,7 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: AppColors.grey300),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,13 +307,13 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFEFEF),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFFDC2626)),
+                      border: Border.all(color: AppColors.deleteRed),
                     ),
                     child: const Text(
                       'Delete',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFFDC2626),
+                        color: AppColors.deleteRed,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -375,7 +375,7 @@ Widget _buildLabel(String text, {bool isRequired = true}) {
     text: TextSpan(
       text: text,
       style: const TextStyle(
-        color: Colors.black,
+        color: AppColors.black,
         fontSize: 13,
         fontWeight: FontWeight.w500,
       ),
@@ -383,7 +383,7 @@ Widget _buildLabel(String text, {bool isRequired = true}) {
           ? const [
               TextSpan(
                 text: ' *',
-                style: TextStyle(color: Colors.red),
+                style: TextStyle(color: AppColors.errorRed),
               )
             ]
           : [],

@@ -31,13 +31,6 @@ class FlatOwnersScreen extends StatefulWidget {
 
 class _FlatOwnersScreenState extends State<FlatOwnersScreen>
     with TickerProviderStateMixin {
-  static const Color primaryColor = Color(0xFFC5610F);
-  static const Color primaryLight = Color(0xFFE8832A);
-  static const Color bgColor = Color(0xFFF5F0EB);
-  static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color textDark = Color(0xFF1A1208);
-  static const Color textMid = Color(0xFF6B5A47);
-  static const Color textLight = Color(0xFF9C8872);
 
   final List<FlatOwner> _allOwners = const [
     FlatOwner(name: 'Nikhil Dattatray Bhandigare', flat: 'Flat A-302', phone: '+91 98765 43210', wing: 'A', avatarInitials: 'RK', isActive: true),
@@ -93,16 +86,16 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Delete Owner', style: TextStyle(fontWeight: FontWeight.w700, color: textDark)),
-        content: Text('Are you sure you want to remove ${owner.name}?', style: const TextStyle(color: textMid)),
+        title: const Text('Delete Owner', style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.textDark)),
+        content: Text('Are you sure you want to remove ${owner.name}?', style: const TextStyle(color: AppColors.textMid)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel', style: TextStyle(color: textLight)),
+            child: const Text('Cancel', style: TextStyle(color: AppColors.textLight)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: primaryColor,
+              backgroundColor: AppColors.primaryColor,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
             onPressed: () {
@@ -110,13 +103,13 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('${owner.name} removed'),
-                  backgroundColor: primaryColor,
+                  backgroundColor: AppColors.primaryColor,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
               );
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+            child: const Text('Delete', style: TextStyle(color: AppColors.white)),
           ),
         ],
       ),
@@ -159,7 +152,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                           width: 36,
                           height: 36,
                           decoration: BoxDecoration(
-                            color: cardBg,
+                            color: AppColors.cardBg,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
@@ -169,7 +162,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                               ),
                             ],
                           ),
-                          child: const Icon(Icons.arrow_back_ios_rounded, size: 16, color: textDark),
+                          child: const Icon(Icons.arrow_back_ios_rounded, size: 16, color: AppColors.textDark),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -178,7 +171,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
-                          color: textDark,
+                          color: AppColors.textDark,
                           letterSpacing: -0.8,
                         ),
                       ),
@@ -194,20 +187,20 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                             height: 30,
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
-                                colors: [primaryLight, primaryColor],
+                                colors: [AppColors.primaryLight, AppColors.primaryColor],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
-                                  color: primaryColor.withOpacity(0.45),
+                                  color: AppColors.primaryColor.withOpacity(0.45),
                                   blurRadius: 16,
                                   offset: const Offset(0, 6),
                                 ),
                               ],
                             ),
-                            child: const Icon(Icons.add_rounded, color: Colors.white, size: 20),
+                            child: const Icon(Icons.add_rounded, color: AppColors.white, size: 20),
                           ),
                         ),
                       ),
@@ -218,11 +211,11 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
 
                   Container(
                     decoration: BoxDecoration(
-                      color: cardBg,
+                      color: AppColors.cardBg,
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: const [
                         BoxShadow(
-                          color: Color(0x66000000),
+                          color: AppColors.shadowColor,
                           blurRadius: 3,
                           spreadRadius: 0,
                           offset: Offset(0, 0),
@@ -232,18 +225,18 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                     child: TextField(
                       controller: _searchController,
                       onChanged: (val) => setState(() => _searchQuery = val),
-                      style: const TextStyle(fontSize: 14, color: textDark, fontWeight: FontWeight.w500),
+                      style: const TextStyle(fontSize: 14, color: AppColors.textDark, fontWeight: FontWeight.w500),
                       decoration: InputDecoration(
                         hintText: 'Search by owner name...',
-                        hintStyle: const TextStyle(color: textLight, fontSize: 14),
-                        prefixIcon: const Icon(Icons.search_rounded, color: primaryColor, size: 22),
+                        hintStyle: const TextStyle(color: AppColors.textLight, fontSize: 14),
+                        prefixIcon: const Icon(Icons.search_rounded, color: AppColors.primaryColor, size: 22),
                         suffixIcon: _searchQuery.isNotEmpty
                             ? GestureDetector(
                           onTap: () {
                             _searchController.clear();
                             setState(() => _searchQuery = '');
                           },
-                          child: const Icon(Icons.close_rounded, color: textLight, size: 18),
+                          child: const Icon(Icons.close_rounded, color: AppColors.textLight, size: 18),
                         )
                             : null,
                         border: InputBorder.none,
@@ -273,17 +266,17 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                             decoration: BoxDecoration(
                               gradient: isSelected
                                   ? const LinearGradient(
-                                colors: [primaryLight, primaryColor],
+                                colors: [AppColors.primaryLight, AppColors.primaryColor],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               )
                                   : null,
-                              color: isSelected ? null : cardBg,
+                              color: isSelected ? null : AppColors.cardBg,
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: isSelected
                                   ? [
                                 BoxShadow(
-                                  color: primaryColor.withOpacity(0.3),
+                                  color: AppColors.primaryColor.withOpacity(0.3),
                                   blurRadius: 12,
                                   spreadRadius: 1,
                                   offset: const Offset(0, 0),
@@ -303,7 +296,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                               style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
-                                color: isSelected ? Colors.white : textMid,
+                                color: isSelected ? AppColors.white : AppColors.textMid,
                                 letterSpacing: 0.2,
                               ),
                             ),
@@ -321,7 +314,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                         '${filtered.length} Owner${filtered.length != 1 ? 's' : ''}',
                         style: const TextStyle(
                           fontSize: 13,
-                          color: textLight,
+                          color: AppColors.textLight,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -338,14 +331,14 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                             decoration: BoxDecoration(
-                              color: primaryColor.withOpacity(0.1),
+                              color: AppColors.primaryColor.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Text(
                               'Clear filters',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: primaryColor,
+                                color: AppColors.primaryColor,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -370,10 +363,10 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.08),
+                        color: AppColors.primaryColor.withOpacity(0.08),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.person_search_rounded, size: 40, color: primaryColor),
+                      child: const Icon(Icons.person_search_rounded, size: 40, color: AppColors.primaryColor),
                     ),
                     const SizedBox(height: 16),
                     const Text(
@@ -381,13 +374,13 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        color: textDark,
+                        color: AppColors.textDark,
                       ),
                     ),
                     const SizedBox(height: 6),
                     const Text(
                       'Try adjusting your search or filters',
-                      style: TextStyle(fontSize: 13, color: textLight),
+                      style: TextStyle(fontSize: 13, color: AppColors.textLight),
                     ),
                   ],
                 ),

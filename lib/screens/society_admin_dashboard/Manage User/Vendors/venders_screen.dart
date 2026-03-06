@@ -136,7 +136,7 @@ class _VendorsScreensState extends State<VendorsScreens>
                 ),
               );
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+            child: const Text('Delete', style: TextStyle(color: AppColors.white)),
           ),
         ],
       ),
@@ -253,7 +253,7 @@ class _VendorsScreensState extends State<VendorsScreens>
                             ),
                             child: const Icon(
                               Icons.add_rounded,
-                              color: Colors.white,
+                              color: AppColors.white,
                               size: 24,
                             ),
                           ),
@@ -275,7 +275,7 @@ class _VendorsScreensState extends State<VendorsScreens>
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: const [
                               BoxShadow(
-                                color: Color(0x66000000),
+                                color: AppColors.shadowColor,
                                 blurRadius: 3,
                                 spreadRadius: 0,
                                 offset: Offset(0, 0),
@@ -334,11 +334,11 @@ class _VendorsScreensState extends State<VendorsScreens>
                           height: 54,
                           width: 54,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: AppColors.white,
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: const [
                               BoxShadow(
-                                color: Color(0x66000000),
+                                color: AppColors.shadowColor,
                                 blurRadius: 3,
                                 spreadRadius: 0,
                                 offset: Offset(0, 0),
@@ -597,7 +597,7 @@ class _AnimatedFilterSheetState extends State<_AnimatedFilterSheet>
         child: Container(
           height: MediaQuery.of(context).size.height * 0.7,
           decoration: const BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30),
               topRight: Radius.circular(30),

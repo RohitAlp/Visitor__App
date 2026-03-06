@@ -10,6 +10,7 @@ import '../Notice/notice.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
 import '../services/services.dart';
+import '../society_admin_dashboard/manage_users_property_screen.dart';
 import '../society_admin_dashboard/service_requests/service_request_list/service_request_list_screen.dart';
 
 
@@ -37,10 +38,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const _DashboardHomePage(),
     const Payment(),
     const Notice(),
-    const Services(),
+    // const Services(),
     // const Profile(),
     const ServiceRequestListScreen(),
-    // const ManageUsersScreen(type: 2,),
+    const ManageUsersScreen(type: 2,),
     //
     // const ManageUsersScreen(type: 1,),
 
@@ -125,7 +126,6 @@ class _DashboardHomePage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // Profile photo + greeting
         Row(
           children: [
             CircleAvatar(
@@ -156,7 +156,6 @@ class _DashboardHomePage extends StatelessWidget {
           ],
         ),
 
-        // Notification bell
         Stack(
           children: [
             const Icon(
@@ -286,7 +285,6 @@ class _DashboardHomePage extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.hardEdge,
           children: [
-            // Darker OVAL — TOP-RIGHT corner
             Positioned(
               top: -25,
               right: -25,

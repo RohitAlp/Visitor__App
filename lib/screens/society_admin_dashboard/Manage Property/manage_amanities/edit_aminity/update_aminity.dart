@@ -35,7 +35,7 @@ class _EditAminityFormState extends State<EditAminityForm> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Amenity updated successfully'),
-                  backgroundColor: Colors.green,
+                  backgroundColor: AppColors.successGreen,
                 ),
               );
               Navigator.pop(context);
@@ -45,14 +45,14 @@ class _EditAminityFormState extends State<EditAminityForm> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.errorMessage ?? 'Something went wrong'),
-                  backgroundColor: Colors.red,
+                  backgroundColor: AppColors.errorRed,
                 ),
               );
             }
           },
           child: SafeArea(
             child: Container(
-              color: const Color(0xFFF5F5F5),
+              color: AppColors.scaffoldBg,
               padding: const EdgeInsets.all(16),
               child: Form(
                 key: _formKey,
@@ -60,7 +60,7 @@ class _EditAminityFormState extends State<EditAminityForm> {
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
@@ -266,9 +266,9 @@ class _EditAminityFormState extends State<EditAminityForm> {
                                     }
                                     context.read<AminityBloc>().add(OpenDaysChangedEvent(updatedDays));
                                   },
-                                  backgroundColor: Colors.grey.shade200,
-                                  selectedColor: const Color(0xFFCC6A00).withOpacity(0.2),
-                                  checkmarkColor: const Color(0xFFCC6A00),
+                                  backgroundColor: AppColors.grey200,
+                                  selectedColor: AppColors.chipSelectedBg.withOpacity(0.2),
+                                  checkmarkColor: AppColors.chipSelectedColor,
                                 );
                               }).toList(),
                             );
@@ -288,14 +288,14 @@ class _EditAminityFormState extends State<EditAminityForm> {
           builder: (context, state) {
             return SafeArea(
               child: Container(
-                color: const Color(0xFFF5F5F5),
+                color: AppColors.scaffoldBg,
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
                     Expanded(
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Color(0xFFCC6A00)),
+                          side: const BorderSide(color: AppColors.loadingOrange),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -304,7 +304,7 @@ class _EditAminityFormState extends State<EditAminityForm> {
                         child: const Text(
                           'Cancel',
                           style: TextStyle(
-                            color: Color(0xFFCC6A00),
+                            color: AppColors.loadingOrange,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -314,7 +314,7 @@ class _EditAminityFormState extends State<EditAminityForm> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFCC6A00),
+                          backgroundColor: AppColors.loadingOrange,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -328,7 +328,7 @@ class _EditAminityFormState extends State<EditAminityForm> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Please fill all required fields'),
-                                backgroundColor: Colors.orange,
+                                backgroundColor: AppColors.warningOrange,
                               ),
                             );
                           }
@@ -338,14 +338,14 @@ class _EditAminityFormState extends State<EditAminityForm> {
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: AppColors.white,
                             strokeWidth: 2,
                           ),
                         )
                             : const Text(
                           'Update Amenity',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.white,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -366,7 +366,7 @@ class _EditAminityFormState extends State<EditAminityForm> {
       text: TextSpan(
         text: text,
         style: const TextStyle(
-          color: Colors.black,
+          color: AppColors.black,
           fontSize: 13,
           fontWeight: FontWeight.w500,
         ),
@@ -374,7 +374,7 @@ class _EditAminityFormState extends State<EditAminityForm> {
             ? const [
           TextSpan(
             text: " *",
-            style: TextStyle(color: Colors.red),
+            style: TextStyle(color: AppColors.errorRed),
           )
         ]
             : [],
