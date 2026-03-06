@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../constants/app_colors.dart';
 import '../../../../constants/utils.dart';
+import '../../../../widgets/swipenoticecard.dart';
 import '../add_service_request/add_service_request_screen.dart';
 import '../request_details/request_details_screen.dart';
 
@@ -110,7 +111,28 @@ class _ServiceRequestListScreenState extends State<ServiceRequestListScreen>
       date: DateTime(2026, 2, 8),
     ),
   ];
+  String getIssueImage(String issue) {
+    switch (issue) {
+      case "Water Leakage":
+        return "assets/image/iconswaterdrop.png";
 
+      case "Electrical Issue":
+      case "Light Switch Broken":
+        return "assets/image/lightning_bolt.png";
+
+      case "Paint Work Required":
+        return "assets/image/paint_palette.png";
+
+      case "AC Not Working":
+      case "Light Switch Broke":
+        return "assets/image/setting.png";
+
+      case "Door Lock Required":
+        return "assets/image/hammer.png";
+      default:
+        return "assets/image/setting.png";
+    }
+  }
   /// Dynamic Count
   Map<String, int> get _serviceCounts {
     Map<String, int> counts = {
@@ -402,26 +424,9 @@ class _ServiceRequestListScreenState extends State<ServiceRequestListScreen>
                 itemBuilder: (context, index) {
                   final request = filteredRequests[index];
 
-                  return Dismissible(
-                    key: Key(request.id), // ✅ unique id
-                    direction: DismissDirection.endToStart,
-                    background: Container(
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        gradient: const LinearGradient(
-                          colors: [AppColors.primaryLight, AppColors.primaryColor],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                      ),
-                    ),
-                    confirmDismiss: (direction) async {
+                  return SwipeNoticeCard(
+                    onDelete: () async {
+
                       final bool? confirmed = await showDialog(
                         context: context,
                         builder: (ctx) => AlertDialog(
@@ -442,33 +447,38 @@ class _ServiceRequestListScreenState extends State<ServiceRequestListScreen>
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(ctx, false),
-                              child: const Text('Cancel', style: TextStyle(color: AppColors.textLight)),
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(color: AppColors.textLight),
+                              ),
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primaryColor,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
                               onPressed: () => Navigator.pop(ctx, true),
-                              child: const Text('Delete', style: TextStyle(color: Colors.white)),
+                              child: const Text(
+                                'Delete',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           ],
                         ),
                       );
 
                       if (confirmed == true) {
-                        // ⚡ Remove the item immediately here
                         setState(() {
-                          filteredRequests.removeWhere((r) => r.id == request.id);
+                          requests.removeWhere((r) => r.id == request.id);
                         });
 
                         Utils.showToast(context, message: 'Request deleted');
                       }
+                    },
 
-                      return confirmed; // tell Dismissible if it should animate away
-                    },
-                    onDismissed: (_) {
-                    },
+
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -480,7 +490,7 @@ class _ServiceRequestListScreenState extends State<ServiceRequestListScreen>
                           ),
                         );
                       },
-                      child: requestCard(request), // ✅ keep your design
+                      child: requestCard(request),
                     ),
                   );
                 },
@@ -515,10 +525,12 @@ class _ServiceRequestListScreenState extends State<ServiceRequestListScreen>
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(
-              Icons.build_outlined,
-              size: 24,
-              color: Colors.grey,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Image.asset(
+                getIssueImage(request.issue),
+                fit: BoxFit.contain,
+              ),
             ),
           ),
 
