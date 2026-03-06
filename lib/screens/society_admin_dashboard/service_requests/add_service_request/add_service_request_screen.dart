@@ -457,7 +457,6 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
 
                         const SizedBox(height: 12),
 
-                        /// Selected File UI
                         if (selectedFile != null)
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
