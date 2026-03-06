@@ -5,15 +5,28 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../constants/app_colors.dart';
+import '../../../../constants/utils.dart';
 
 class AddServiceRequestScreen extends StatefulWidget {
   const AddServiceRequestScreen({super.key});
 
   @override
-  State<AddServiceRequestScreen> createState() => _AddServiceRequestScreenState();
+  State<AddServiceRequestScreen> createState() =>
+      _AddServiceRequestScreenState();
 }
 
 class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
+  // Inside your StatefulWidget
+  final _formKey = GlobalKey<FormState>();
+  List<PlatformFile> uploadedFiles = [];
+  final TextEditingController descriptionController = TextEditingController();
+
+  // Focus nodes
+  final FocusNode towerFocus = FocusNode();
+  final FocusNode wingFocus = FocusNode();
+  final FocusNode categoryFocus = FocusNode();
+  final FocusNode priorityFocus = FocusNode();
+  final FocusNode descriptionFocus = FocusNode();
   File? selectedFile;
   final ImagePicker picker = ImagePicker();
   String? fileName;
@@ -21,12 +34,12 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4'],
+      allowMultiple: true, // ✅ allow multiple files
     );
 
     if (result != null) {
       setState(() {
-        selectedFile = File(result.files.single.path!);
-        fileName = result.files.single.name;
+        uploadedFiles.addAll(result.files); // add new files to the list
       });
     }
   }
@@ -34,9 +47,7 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
   String? selectedWing;
   String? selectedCategories;
   String? selectedPriority;
-  List<String> houseServicePriority = [
-    "High","Low","Medium"
-];
+  List<String> houseServicePriority = ["High", "Low", "Medium"];
 
   List<String> houseServiceSubCategories = [
     "Pest Control",
@@ -60,13 +71,7 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
     "Ocean View Tower ",
   ];
 
-  List<String> wingsList = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E"
-  ];
+  List<String> wingsList = ["A", "B", "C", "D", "E"];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -130,7 +135,9 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
+            child: Form(
+              key: _formKey,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
@@ -152,13 +159,20 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                       children: [
                         Text(
                           "Location Details",
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
+                        SizedBox(height: 20),
                         Row(
                           children: [
                             Text(
                               "Tower",
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             Text(
                               " *",
@@ -169,11 +183,13 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                               ),
                             ),
                           ],
-                        ),                        SizedBox(height: 5),
+                        ),
+                        SizedBox(height: 10),
                         commonDropdownField(
                           hint: "Select Tower",
                           items: towersList,
                           value: selectedTower,
+                          focusNode: towerFocus,
                           onChanged: (value) {
                             setState(() {
                               selectedTower = value;
@@ -185,7 +201,10 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                           children: [
                             Text(
                               "wing",
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             Text(
                               " *",
@@ -197,17 +216,19 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 5),
+                        SizedBox(height: 10),
                         commonDropdownField(
                           hint: "Select Wing",
                           items: wingsList,
                           value: selectedWing,
+                          focusNode: wingFocus,
                           onChanged: (value) {
                             setState(() {
                               selectedWing = value;
                             });
                           },
-                        ),                      ],
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 20),
@@ -232,7 +253,10 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                           children: [
                             Text(
                               "Request Category",
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             Text(
                               " *",
@@ -244,18 +268,19 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 5),
+                        SizedBox(height: 10),
                         commonDropdownField(
                           hint: "Select Category",
                           items: houseServiceSubCategories,
                           value: selectedCategories,
+                          focusNode: categoryFocus,
                           onChanged: (value) {
                             setState(() {
                               selectedCategories = value;
                             });
                           },
                         ),
-                                            ],
+                      ],
                     ),
                   ),
                   SizedBox(height: 20),
@@ -280,7 +305,10 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                           children: [
                             Text(
                               "Priority",
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             Text(
                               " *",
@@ -292,11 +320,12 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 5),
+                        SizedBox(height: 10),
                         commonDropdownField(
                           hint: "Select Priority",
                           items: houseServicePriority,
                           value: selectedPriority,
+                          focusNode: priorityFocus,
                           onChanged: (value) {
                             setState(() {
                               selectedPriority = value;
@@ -328,7 +357,10 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                           children: const [
                             Text(
                               "Description",
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             Text(
                               " *",
@@ -341,9 +373,11 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                           ],
                         ),
 
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 10),
 
-                        TextField(
+                        TextFormField(
+                          controller: descriptionController,
+                          focusNode: descriptionFocus,
                           maxLines: 5,
                           style: const TextStyle(fontSize: 12),
                           decoration: InputDecoration(
@@ -360,15 +394,21 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(14),
-                              borderSide: BorderSide(color: Colors.grey.shade300),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(14),
-                              borderSide: BorderSide(color: Colors.grey.shade300),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(14),
-                              borderSide: BorderSide(color: Colors.grey.shade400),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade400,
+                              ),
                             ),
                           ),
                         ),
@@ -387,13 +427,12 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                           color: Colors.grey.shade100,
                           blurRadius: 6,
                           offset: const Offset(0, 2),
-                        )
+                        ),
                       ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         const Text(
                           "Upload Photo/Video (Optional)",
                           style: TextStyle(
@@ -401,12 +440,11 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-
                         const SizedBox(height: 10),
 
                         /// Upload Box
                         GestureDetector(
-                          onTap: pickFile,
+                          onTap: pickFile, // function to pick multiple files
                           child: DottedBorder(
                             dashPattern: const [6, 4],
                             borderType: BorderType.RRect,
@@ -422,27 +460,23 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-
-                                  Icon(
-                                    Icons.upload_outlined,
-                                    size: 28,
+                                children: [
+                                  Image.asset(
+                                    'assets/image/upload.png',
+                                    width: 28,
+                                    height: 28,
                                     color: Colors.grey,
                                   ),
-
-                                  SizedBox(height: 8),
-
-                                  Text(
+                                  const SizedBox(height: 8),
+                                  const Text(
                                     "Click to upload files",
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-
-                                  SizedBox(height: 4),
-
-                                  Text(
+                                  const SizedBox(height: 4),
+                                  const Text(
                                     "Image or Video (Max 10MB)",
                                     style: TextStyle(
                                       fontSize: 12,
@@ -454,53 +488,54 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                             ),
                           ),
                         ),
-
                         const SizedBox(height: 12),
 
-                        if (selectedFile != null)
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: Theme.of(context).primaryColor.withOpacity(0.4),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-
-                                Icon(
-                                  Icons.upload_file,
-                                  color: Theme.of(context).primaryColor,
-                                  size: 20,
-                                ),
-
-                                const SizedBox(width: 8),
-
-                                Expanded(
-                                  child: Text(
-                                    fileName ?? "",
-                                    style: const TextStyle(fontSize: 13),
-                                    overflow: TextOverflow.ellipsis,
+                        /// Show uploaded files
+                        if (uploadedFiles.isNotEmpty)
+                          Column(
+                            children: uploadedFiles.map((file) {
+                              return Container(
+                                margin: const EdgeInsets.symmetric(vertical: 6),
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor.withOpacity(0.08),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: AppColors.primaryColor.withOpacity(0.4),
                                   ),
                                 ),
-
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      selectedFile = null;
-                                      fileName = null;
-                                    });
-                                  },
-                                  child: const Icon(
-                                    Icons.close,
-                                    color: Colors.red,
-                                    size: 18,
-                                  ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/image/upload.png',
+                                      width: 20,
+                                      height: 20,
+                                      color: AppColors.primaryColor,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        "${file.name} (${(file.size / 1024).toStringAsFixed(1)} KB)", // show size in KB
+                                        style: const TextStyle(fontSize: 13),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          uploadedFiles.remove(file);
+                                        });
+                                      },
+                                      child: Icon(
+                                        Icons.close,
+                                        color: AppColors.primaryColor,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              );
+                            }).toList(),
                           ),
                       ],
                     ),
@@ -510,46 +545,77 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                      },
-
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor,
-                        disabledBackgroundColor: AppColors.primaryColor.withOpacity(0.60),
+                        disabledBackgroundColor: AppColors.primaryColor
+                            .withOpacity(0.60),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
+                      onPressed: () {
+                        // Validate form
+                        if (_formKey.currentState!.validate()) {
+                          // Validate dropdowns manually
+                          if (selectedTower == null) {
+                            Utils.showToast(context, message: "Please select a Tower");
+                            FocusScope.of(context).requestFocus(towerFocus);
+                            return;
+                          }
+                          if (selectedWing == null) {
+                            Utils.showToast(context, message: "Please select a Wing");
+                            FocusScope.of(context).requestFocus(wingFocus);
+                            return;
+                          }
+                          if (selectedCategories == null) {
+                            Utils.showToast(context, message: "Please select a Category");
+                            FocusScope.of(context).requestFocus(categoryFocus);
+                            return;
+                          }
+                          if (selectedPriority == null) {
+                            Utils.showToast(context, message: "Please select a Priority");
+                            FocusScope.of(context).requestFocus(priorityFocus);
+                            return;
+                          }
 
+                          Navigator.pop(context);
+                        } else {
+                          // Description field is invalid – focus on it
+                          Utils.showToast(context, message: "Please enter a description");
+                          FocusScope.of(context).requestFocus(descriptionFocus);
+                        }
+                      },
                       child: Text(
                         "Submit Request",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.w600,
                           color: Colors.white,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ),
-                  )
-                ]),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
+
   Widget commonDropdownField({
     required String hint,
     required List<String> items,
     required String? value,
     required Function(String?) onChanged,
+    FocusNode? focusNode, // ✅ Add this optional parameter
   }) {
     return DropdownButtonFormField<String>(
       value: value,
-      hint: Text(
-        hint,
-        style: const TextStyle(fontSize: 12),
-      ),
+      focusNode: focusNode, // ✅ Pass it here
+      hint: Text(hint, style: const TextStyle(fontSize: 12)),
       isExpanded: true,
       dropdownColor: Colors.white,
       borderRadius: BorderRadius.circular(10),
@@ -558,8 +624,10 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.grey.shade100,
-        contentPadding:
-        const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 10,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -596,10 +664,7 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
             alignment: Alignment.centerLeft,
             child: Text(
               item,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
             ),
           );
         }).toList();
