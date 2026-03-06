@@ -37,7 +37,9 @@ class AppColors {
   // Grey colors for text
   static const Color grey600 = Color(0xFF757575);
   static const Color grey800 = Color(0xFF424242);
-  
+  static const Color MaintenanceCardColor = Color(0xFFFEF0E6);
+
+
   // Additional colors for flat management
   static const Color scaffoldBg = Color(0xFFF5F5F5);
   static const Color deleteRed = Color(0xFFDC2626);
@@ -46,12 +48,12 @@ class AppColors {
   static const Color statusGreen = Color(0xFF10B981);
   static const Color statusOrange = Color(0xFFF59E0B);
   static const Color shadowColor = Color(0x66000000);
-  
+
   // Additional colors for amenities management
   static const Color maintenanceBlue = Color(0xFF3B82F6);
   static const Color chipSelectedBg = Color(0xFFCC6A00);
   static const Color chipSelectedColor = Color(0xFFCC6A00);
-  
+
   // Common colors
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
