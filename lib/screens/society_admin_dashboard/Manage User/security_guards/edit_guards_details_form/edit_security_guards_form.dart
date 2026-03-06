@@ -38,7 +38,7 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Guard updated successfully'),
-                backgroundColor: Colors.green,
+                backgroundColor: AppColors.successGreen,
               ),
             );
 
@@ -49,7 +49,7 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.errorMessage ?? 'Something went wrong'),
-                backgroundColor: Colors.red,
+                backgroundColor: AppColors.errorRed,
               ),
             );
           }
@@ -57,7 +57,7 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
 
         child: SafeArea(
           child: Container(
-            color: const Color(0xFFF5F5F5),
+            color: AppColors.scaffoldBg,
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Form(
@@ -66,7 +66,7 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
@@ -166,10 +166,10 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       border: Border.all(
-                                        color: Colors.grey.shade300,
+                                        color: AppColors.grey300,
                                         style: BorderStyle.solid,
                                       ),
-                                      color: Colors.grey.shade50,
+                                      color: AppColors.grey50,
                                     ),
                                     child: state.guardPhotoBase64 != null
                                         ? _buildDocumentPreview(state.guardPhotoBase64!)
@@ -195,13 +195,13 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
         builder: (context, state) {
           return SafeArea(
             child: Container(
-              color: const Color(0xFFF5F5F5),
+              color: AppColors.scaffoldBg,
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               child: SizedBox(
                 height: 45,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFCC6A00),
+                    backgroundColor: AppColors.loadingOrange,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -222,7 +222,7 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
                       : const Text(
                     'Update Security Guard',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -382,7 +382,7 @@ Widget _buildDocumentPreview(String base64String){
               const Icon(
                 Icons.picture_as_pdf,
                 size: 40,
-                color: Colors.red,
+                color: AppColors.deleteRed,
               ),
               const SizedBox(height: 8),
               Text(
@@ -431,7 +431,7 @@ Widget _buildUploadPlaceholder() {
         "Tap to upload or drag and drop",
         style: TextStyle(
           fontSize: 12,
-          color: Colors.grey,
+          color: AppColors.grey,
         ),
       ),
       const SizedBox(height: 4),
@@ -439,7 +439,7 @@ Widget _buildUploadPlaceholder() {
         "PNG, JPG, PDF (max. 5MB)",
         style: TextStyle(
           fontSize: 11,
-          color: Colors.grey,
+          color: AppColors.grey,
         ),
       ),
     ],
@@ -451,7 +451,7 @@ Widget _buildLabel(String text, {bool isRequired = true}) {
     text: TextSpan(
       text: text,
       style: const TextStyle(
-        color: Colors.black,
+        color: AppColors.black,
         fontSize: 13,
         fontWeight: FontWeight.w500,
       ),
@@ -459,7 +459,7 @@ Widget _buildLabel(String text, {bool isRequired = true}) {
           ? const [
         TextSpan(
           text: " *",
-          style: TextStyle(color: Colors.red),
+          style: TextStyle(color: AppColors.errorRed),
         )
       ]
           : [],

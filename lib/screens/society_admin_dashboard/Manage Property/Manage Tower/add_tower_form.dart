@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 import 'package:visitorapp/widgets/custom_dropdown.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
@@ -54,7 +55,7 @@ class _AddTowerFormState extends State<AddTowerForm> {
       child: Scaffold(
         appBar: CustomAppBar(title: _isEdit ? 'Update Tower' : 'Add Tower'),
         body: Container(
-          color: const Color(0xFFF5F5F5),
+          color: AppColors.scaffoldBg,
           padding: const EdgeInsets.all(16),
           child: Form(
             key: _formKey,
@@ -127,7 +128,7 @@ class _AddTowerFormState extends State<AddTowerForm> {
           ),
         ),
         bottomNavigationBar: Container(
-          color: const Color(0xFFF5F5F5),
+          color: AppColors.scaffoldBg,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
           child: SizedBox(
             height: 45,
@@ -136,7 +137,7 @@ class _AddTowerFormState extends State<AddTowerForm> {
                 Expanded(
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Color(0xFFCC6A00)),
+                      side: const BorderSide(color: AppColors.loadingOrange),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -145,7 +146,7 @@ class _AddTowerFormState extends State<AddTowerForm> {
                     child: const Text(
                       'Cancel',
                       style: TextStyle(
-                        color: Color(0xFFCC6A00),
+                        color: AppColors.loadingOrange,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -155,7 +156,7 @@ class _AddTowerFormState extends State<AddTowerForm> {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFCC6A00),
+                      backgroundColor: AppColors.loadingOrange,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -167,7 +168,7 @@ class _AddTowerFormState extends State<AddTowerForm> {
                           SnackBar(
                             content:
                                 Text(_isEdit ? 'Tower updated' : 'Tower added'),
-                            backgroundColor: Colors.green,
+                            backgroundColor: AppColors.successGreen,
                           ),
                         );
                         Navigator.pop(context);
@@ -204,7 +205,7 @@ Widget _buildLabel(String text, {bool isRequired = true}) {
           ? const [
               TextSpan(
                 text: ' *',
-                style: TextStyle(color: Colors.red),
+                style: TextStyle(color: AppColors.errorRed),
               )
             ]
           : [],

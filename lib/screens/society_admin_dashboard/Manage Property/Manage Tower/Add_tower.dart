@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../config/Routes/RouteName.dart';
-import '../../../../constants/app_colors.dart' show AppColors;
+import '../../../../constants/app_colors.dart';
 import '../../../../widgets/owner_card.dart';
 
 class ManageTowersScreen extends StatefulWidget {
@@ -12,13 +12,6 @@ class ManageTowersScreen extends StatefulWidget {
 
 class _ManageTowersScreenState extends State<ManageTowersScreen>
     with TickerProviderStateMixin {
-  static const Color primaryColor = Color(0xFFC5610F);
-  static const Color primaryLight = Color(0xFFE8832A);
-  static const Color bgColor = Color(0xFFF5F0EB);
-  static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color textDark = Color(0xFF1A1208);
-  static const Color textMid = Color(0xFF6B5A47);
-  static const Color textLight = Color(0xFF9C8872);
 
   final List<Owner> _allTowers = [
     Owner.tower(name: 'Tower A', towerCode: 'TWR-A-001', wings: 4, isActive: true),
@@ -66,17 +59,17 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('Delete Tower',
-            style: TextStyle(fontWeight: FontWeight.w700, color: textDark)),
+            style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.textDark)),
         content: Text('Are you sure you want to remove ${tower.name}?',
-            style: const TextStyle(color: textMid)),
+            style: const TextStyle(color: AppColors.textMid)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel', style: TextStyle(color: textLight)),
+            child: const Text('Cancel', style: TextStyle(color: AppColors.textLight)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFDC2626),
+              backgroundColor: AppColors.deleteRed,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
             ),
@@ -85,7 +78,7 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('${tower.name} removed'),
-                  backgroundColor: primaryColor,
+                  backgroundColor: AppColors.primaryColor,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
@@ -135,7 +128,7 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                           width: 36,
                           height: 36,
                           decoration: BoxDecoration(
-                            color: cardBg,
+                            color: AppColors.cardBg,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
@@ -146,7 +139,7 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                             ],
                           ),
                           child: const Icon(Icons.arrow_back_ios_rounded,
-                              size: 16, color: textDark),
+                              size: 16, color: AppColors.textDark),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -158,7 +151,7 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                             style: TextStyle(
                               fontSize: 26,
                               fontWeight: FontWeight.w800,
-                              color: textDark,
+                              color: AppColors.textDark,
                               letterSpacing: -0.8,
                             ),
                           ),
@@ -184,14 +177,14 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                             height: 42,
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
-                                colors: [primaryLight, primaryColor],
+                                colors: [AppColors.primaryLight, AppColors.primaryColor],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
                               borderRadius: BorderRadius.circular(14),
                               boxShadow: [
                                 BoxShadow(
-                                  color: primaryColor.withOpacity(0.45),
+                                  color: AppColors.primaryColor.withOpacity(0.45),
                                   blurRadius: 16,
                                   offset: const Offset(0, 6),
                                 ),
@@ -214,7 +207,7 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: const [
                         BoxShadow(
-                          color: Color(0x66000000),
+                          color: AppColors.shadowColor,
                           blurRadius: 2,
                           spreadRadius: 0,
                           offset: Offset(0, 0),
@@ -227,14 +220,14 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                           setState(() => _searchQuery = val),
                       style: const TextStyle(
                           fontSize: 14,
-                          color: textDark,
+                          color: AppColors.textDark,
                           fontWeight: FontWeight.w500),
                       decoration: InputDecoration(
                         hintText: 'Search by tower name or code...',
                         hintStyle:
-                        const TextStyle(color: textLight, fontSize: 14),
+                        const TextStyle(color: AppColors.textLight, fontSize: 14),
                         prefixIcon: const Icon(Icons.search_rounded,
-                            color: primaryColor, size: 22),
+                            color: AppColors.primaryColor, size: 22),
                         suffixIcon: _searchQuery.isNotEmpty
                             ? GestureDetector(
                           onTap: () {
@@ -242,7 +235,7 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                             setState(() => _searchQuery = '');
                           },
                           child: const Icon(Icons.close_rounded,
-                              color: textLight, size: 18),
+                              color: AppColors.textLight, size: 18),
                         )
                             : null,
                         border: InputBorder.none,
@@ -261,7 +254,7 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                         '${filtered.length} Tower${filtered.length != 1 ? 's' : ''}',
                         style: const TextStyle(
                           fontSize: 13,
-                          color: textLight,
+                          color: AppColors.textLight,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -270,28 +263,28 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                         width: 8,
                         height: 8,
                         decoration: const BoxDecoration(
-                          color: Color(0xFF10B981),
+                          color: AppColors.statusGreen,
                           shape: BoxShape.circle,
                         ),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '${filtered.where((tower) => tower.isActive).length} Active',
-                        style: const TextStyle(fontSize: 11, color: textLight, fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontSize: 11, color: AppColors.textLight, fontWeight: FontWeight.w500),
                       ),
                       const SizedBox(width: 12),
                       Container(
                         width: 8,
                         height: 8,
                         decoration: const BoxDecoration(
-                          color: Color(0xFFF59E0B),
+                          color: AppColors.statusOrange,
                           shape: BoxShape.circle,
                         ),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '${filtered.where((tower) => !tower.isActive).length} Inactive',
-                        style: const TextStyle(fontSize: 11, color: textLight, fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontSize: 11, color: AppColors.textLight, fontWeight: FontWeight.w500),
                       ),
                       const Spacer(),
                       if (_searchQuery.isNotEmpty)
@@ -306,14 +299,14 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 4),
                             decoration: BoxDecoration(
-                              color: primaryColor.withOpacity(0.1),
+                              color: AppColors.primaryColor.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Text(
                               'Clear',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: primaryColor,
+                                color: AppColors.primaryColor,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -338,11 +331,11 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.08),
+                        color: AppColors.primaryColor.withOpacity(0.08),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.domain_rounded,
-                          size: 40, color: primaryColor),
+                          size: 40, color: AppColors.primaryColor),
                     ),
                     const SizedBox(height: 16),
                     const Text(
@@ -350,14 +343,14 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        color: textDark,
+                        color: AppColors.textDark,
                       ),
                     ),
                     const SizedBox(height: 6),
                     const Text(
                       'Try adjusting your search',
                       style:
-                      TextStyle(fontSize: 13, color: textLight),
+                      TextStyle(fontSize: 13, color: AppColors.textLight),
                     ),
                   ],
                 ),

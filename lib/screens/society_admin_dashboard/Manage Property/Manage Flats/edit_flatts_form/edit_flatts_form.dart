@@ -31,7 +31,7 @@ class _EditFlatFormState extends State<EditFlatForm> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Flat updated successfully'),
-                  backgroundColor: Colors.green,
+                  backgroundColor: AppColors.successGreen,
                 ),
               );
               Navigator.pop(context);
@@ -41,14 +41,14 @@ class _EditFlatFormState extends State<EditFlatForm> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.errorMessage ?? 'Something went wrong'),
-                  backgroundColor: Colors.red,
+                  backgroundColor: AppColors.errorRed,
                 ),
               );
             }
           },
           child: SafeArea(
             child: Container(
-              color: const Color(0xFFF5F5F5),
+              color: AppColors.scaffoldBg,
               padding: const EdgeInsets.all(16),
               child: Form(
                 key: _formKey,
@@ -111,7 +111,7 @@ class _EditFlatFormState extends State<EditFlatForm> {
                                     height: 16,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      color: Color(0xFFCC6A00),
+                                      color: AppColors.loadingOrange,
                                     ),
                                   ),
                                   SizedBox(width: 8),
@@ -149,7 +149,7 @@ class _EditFlatFormState extends State<EditFlatForm> {
                                     height: 16,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      color: Color(0xFFCC6A00),
+                                      color: AppColors.loadingOrange,
                                     ),
                                   ),
                                   SizedBox(width: 8),
@@ -199,14 +199,14 @@ class _EditFlatFormState extends State<EditFlatForm> {
           builder: (context, state) {
             return SafeArea(
               child: Container(
-                color: const Color(0xFFF5F5F5),
+                color: AppColors.scaffoldBg,
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
                     Expanded(
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Color(0xFFCC6A00)),
+                          side: const BorderSide(color: AppColors.loadingOrange),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -215,7 +215,7 @@ class _EditFlatFormState extends State<EditFlatForm> {
                         child: const Text(
                           'Cancel',
                           style: TextStyle(
-                            color: Color(0xFFCC6A00),
+                            color: AppColors.loadingOrange,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -225,7 +225,7 @@ class _EditFlatFormState extends State<EditFlatForm> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFCC6A00),
+                          backgroundColor: AppColors.loadingOrange,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -239,7 +239,7 @@ class _EditFlatFormState extends State<EditFlatForm> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Please fill all required fields'),
-                                backgroundColor: Colors.orange,
+                                backgroundColor: AppColors.warningOrange,
                               ),
                             );
                           }

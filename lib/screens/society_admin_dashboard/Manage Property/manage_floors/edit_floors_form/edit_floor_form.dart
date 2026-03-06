@@ -34,7 +34,7 @@ class _EditFloorFormState extends State<EditFloorForm> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Wing updated successfully'),
-                backgroundColor: Colors.green,
+                backgroundColor: AppColors.successGreen,
               ),
             );
             Navigator.pop(context);
@@ -44,7 +44,7 @@ class _EditFloorFormState extends State<EditFloorForm> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.errorMessage ?? 'Something went wrong'),
-                backgroundColor: Colors.red,
+                backgroundColor: AppColors.errorRed,
               ),
             );
           }
@@ -52,7 +52,7 @@ class _EditFloorFormState extends State<EditFloorForm> {
 
         child: SafeArea(
           child: Container(
-            color: const Color(0xFFF5F5F5),
+            color: AppColors.scaffoldBg,
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Form(
@@ -61,7 +61,7 @@ class _EditFloorFormState extends State<EditFloorForm> {
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
@@ -163,7 +163,7 @@ class _EditFloorFormState extends State<EditFloorForm> {
         builder: (context, state) {
           return SafeArea(
             child: Container(
-              color: const Color(0xFFF5F5F5),
+              color: AppColors.scaffoldBg,
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
@@ -181,7 +181,7 @@ class _EditFloorFormState extends State<EditFloorForm> {
                       child: const Text(
                         'Cancel',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: AppColors.black,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -191,7 +191,7 @@ class _EditFloorFormState extends State<EditFloorForm> {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFCC6A00),
+                        backgroundColor: AppColors.loadingOrange,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -207,7 +207,7 @@ class _EditFloorFormState extends State<EditFloorForm> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Please fill all required fields'),
-                              backgroundColor: Colors.orange,
+                              backgroundColor: AppColors.warningOrange,
                             ),
                           );
                         }
@@ -217,14 +217,14 @@ class _EditFloorFormState extends State<EditFloorForm> {
                         height: 20,
                         width: 20,
                         child: CircularProgressIndicator(
-                          color: Colors.white,
+                          color: AppColors.white,
                           strokeWidth: 2,
                         ),
                       )
                           : const Text(
                         'Update Floor',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -244,7 +244,7 @@ class _EditFloorFormState extends State<EditFloorForm> {
       text: TextSpan(
         text: text,
         style: const TextStyle(
-          color: Colors.black,
+          color: AppColors.black,
           fontSize: 13,
           fontWeight: FontWeight.w500,
         ),
@@ -252,7 +252,7 @@ class _EditFloorFormState extends State<EditFloorForm> {
             ? const [
           TextSpan(
             text: " *",
-            style: TextStyle(color: Colors.red),
+            style: TextStyle(color: AppColors.errorRed),
           )
         ]
             : [],

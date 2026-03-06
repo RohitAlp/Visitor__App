@@ -73,7 +73,7 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFDC2626),
+              backgroundColor: AppColors.deleteRed,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
             onPressed: () {
@@ -164,7 +164,7 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                               width: 8,
                               height: 8,
                               decoration: const BoxDecoration(
-                                color: Color(0xFFFF4444),
+                                color: AppColors.notificationRed,
                                 shape: BoxShape.circle,
                               ),
                             ),
@@ -291,7 +291,7 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: const [
                             BoxShadow(
-                              color: Color(0x66000000),
+                              color: AppColors.shadowColor,
                               blurRadius: 2,
                               spreadRadius: 0,
                               offset: Offset(0, 0),
@@ -350,7 +350,7 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                             width: 8,
                             height: 8,
                             decoration: const BoxDecoration(
-                              color: Color(0xFF10B981),
+                              color: AppColors.statusGreen,
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -364,7 +364,7 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                             width: 8,
                             height: 8,
                             decoration: const BoxDecoration(
-                              color: Color(0xFFF59E0B),
+                              color: AppColors.statusOrange,
                               shape: BoxShape.circle,
                             ),
                           ),
