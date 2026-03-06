@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:visitorapp/screens/Login/Login_screen.dart';
 
+import '../../screens/developer_admin_dashboard/developer_admin_dashboard_screen.dart';
 import '../../screens/profile/profile.dart';
 import '../../screens/resident_dashboard/resident_dashboard_screen.dart';
 import '../../screens/society_admin_dashboard/Manage Property/Manage Flats/flat_list.dart';
@@ -17,6 +18,7 @@ import '../../screens/society_admin_dashboard/Manage User/security_guards/edit_g
 import '../../screens/society_admin_dashboard/Manage User/security_guards/security_guards_screen.dart';
 import '../../screens/society_admin_dashboard/manage_users_property_screen.dart';
 import '../../screens/society_admin_dashboard/service_requests/service_request_list/service_request_list_screen.dart';
+import '../../screens/society_admin_dashboard/society_admin_dashboard_screen.dart';
 import '../../screens/splash_screen/SplashScreen.dart';
 
 import '../../screens/Notification/Notificarion.dart';
@@ -51,6 +53,8 @@ class Routes {
         return MaterialPageRoute(builder: (context) => const AddTowerForm());
         case RouteName.ManageFlatsScreen:
         return MaterialPageRoute(builder: (context) => const ManageFlatsScreen());
+      case RouteName.SocietyAdminDashboardScreen:
+        return MaterialPageRoute(builder: (context) =>   const SocietyAdminDashboardScreen());
 
       case RouteName.notificationScreen:
         return MaterialPageRoute(builder: (context) => const NotificationScreen());
@@ -68,6 +72,11 @@ class Routes {
         return MaterialPageRoute(builder: (context) => const ManageFloorsScreen());
       case RouteName.ManageAmanitiesScreen:
         return MaterialPageRoute(builder: (context) => const ManageAmanitiesScreen());
+      case RouteName.DeveloperAdminDashboardScreen:
+        return MaterialPageRoute(builder: (context) => const DeveloperAdminDashboardScreen());
+
+
+        case RouteName.AddFlatOwnerForm:
       case RouteName.Profile:
         return MaterialPageRoute(builder: (context) => const Profile());
       case RouteName.AddFlatOwnerForm:

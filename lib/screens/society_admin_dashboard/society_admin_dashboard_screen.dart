@@ -8,6 +8,7 @@ import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
+import '../../config/Routes/RouteName.dart';
 
 class SocietyAdminDashboardScreen extends StatefulWidget {
   const SocietyAdminDashboardScreen({super.key});
@@ -102,7 +103,7 @@ class _DashboardHomePage extends StatelessWidget {
                           _buildQuickActionsGrid(),
                           const SizedBox(height: 5),
                           _buildNoticeSlider(),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           _buildRecentActivity(),
                           const SizedBox(height: 100),
                         ],
@@ -137,7 +138,7 @@ class _DashboardHomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 Text(
-                  "Hi, Runal",
+                  "Hi, Admin",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -145,7 +146,7 @@ class _DashboardHomePage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Wing A - Flat 912",
+                  "Society Manager",
                   style: TextStyle(fontSize: 13, color: Colors.white70),
                 ),
               ],
@@ -265,12 +266,12 @@ class _DashboardHomePage extends StatelessWidget {
   // }
   Widget _buildQuickActionsGrid() {
     final List<Map<String, dynamic>> items = [
-      {'icon': 'assets/image/icons8-google-groups-96.png', 'label': 'Visitors'},
-      {'icon': 'assets/image/icons8-building-96.png', 'label': 'Notices'},
-      {'icon': 'assets/image/icons8-headset-96.png', 'label': 'Complaints'},
+      {'icon': 'assets/image/icons8-google-groups-96.png', 'label': 'Manage User'},
+      {'icon': 'assets/image/icons8-building-96.png', 'label': 'Manage Property'},
+      {'icon': 'assets/image/icons8-headset-96.png', 'label': 'Service Request'},
       {'icon': 'assets/image/icons8-swimmer-96.png', 'label': 'Amenities'},
-      {'icon': 'assets/image/megaphone.png', 'label': 'Deliveries'},
-      {'icon': 'assets/image/icons8-settings-96.png', 'label': 'Documents'},
+      {'icon': 'assets/image/megaphone.png', 'label': 'Notice'},
+      {'icon': 'assets/image/icons8-settings-96.png', 'label': 'More'},
     ];
 
     return GridView.builder(
@@ -287,40 +288,51 @@ class _DashboardHomePage extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = items[index];
 
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: const [
-              BoxShadow(
-                color: Color.fromRGBO(110, 136, 157, 0.15),
-                offset: Offset(0, 4),
-                blurRadius: 12,
-              )
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, // Centering vertically
-            crossAxisAlignment: CrossAxisAlignment.center, // Centering horizontally
-            children: [
-              Image.asset(
-                item['icon'],
-                width: 35,
-                height: 35,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(height: 10), // Space between image and text
-              Text(
-                item['label'],
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Mulish',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+        return GestureDetector(
+          onTap: () {
+            if (index == 0) {
+              Navigator.pushNamed(context, RouteName.manageUsersSocietyAdmin, arguments: 1);
+            } else if (index == 1) {
+              Navigator.pushNamed(context, RouteName.manageUsersSocietyAdmin, arguments: 2);
+            } else if (index == 2) {
+              Navigator.pushNamed(context, RouteName.ServiceRequestListScreen);
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color.fromRGBO(110, 136, 157, 0.15),
+                  offset: Offset(0, 4),
+                  blurRadius: 12,
+                )
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  item['icon'],
+                  width: 35,
+                  height: 35,
+                  fit: BoxFit.contain,
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+                Text(
+                  item['label'],
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Mulish',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -330,7 +342,7 @@ class _DashboardHomePage extends StatelessWidget {
   Widget _buildMaintenanceCard() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFFEF0E6),
+        color: AppColors.MaintenanceCardColor,
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
@@ -478,7 +490,7 @@ class _DashboardHomePage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFDF4EC),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -502,22 +514,22 @@ class _DashboardHomePage extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           _activityItem(
-            emoji: '✅',
-            bgColor: const Color(0xFFD6F5E3),
+            iconWidget: Image.asset(
+              "assets/image/tick-box.png"),
             title: "Complaint #245 Resolved",
             time: "2 hours ago",
           ),
           _buildDivider(),
           _activityItem(
-            emoji: '📦',
-            bgColor: const Color(0xFFFEEDD8),
+            iconWidget: Image.asset(
+              "assets/image/Parcel-img.png"),
             title: "Parcel Received at Gate",
             time: "Today, 11:30 AM",
           ),
           _buildDivider(),
           _activityItem(
-            emoji: '📅',
-            bgColor: const Color(0xFFEDE8FB),
+            iconWidget: Image.asset(
+              "assets/image/calendar-.png"),
             title: "Event: Society Meeting",
             time: "Sunday 22 Feb, 10:30 AM",
           ),
@@ -535,8 +547,7 @@ class _DashboardHomePage extends StatelessWidget {
   }
 
   Widget _activityItem({
-    required String emoji,
-    required Color bgColor,
+    required Widget iconWidget,
     required String title,
     required String time,
   }) {
@@ -545,15 +556,10 @@ class _DashboardHomePage extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 46,
-            height: 46,
-            decoration: BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Text(emoji, style: const TextStyle(fontSize: 22)),
-            ),
+            width: 32,
+            height: 32,
+
+            child: Center(child: iconWidget),
           ),
           const SizedBox(width: 10),
           Expanded(

@@ -96,7 +96,9 @@ class _OtpScreenState extends State<OtpScreen> {
               context,
               // RouteName.manageUsersSocietyAdmin,
               // arguments: 2,
-              RouteName.dashboardScreen,
+              RouteName.SocietyAdminDashboardScreen,
+             // RouteName.DeveloperAdminDashboardScreen,
+              // RouteName.dashboardScreen,
             );
           } else {
             if (verifyOtpResponse.message ==
@@ -193,7 +195,7 @@ class _OtpScreenState extends State<OtpScreen> {
           leading: IconButton(
             icon: const Icon(
               CupertinoIcons.back,
-              color: Colors.black, // change if needed
+              color: Colors.black,
             ),
             onPressed: () {
               Navigator.pop(context);

@@ -26,4 +26,5 @@ class RouteName {
   static const String ManageFloorsScreen = 'ManageFloorsScreen';
   static const String ManageAmanitiesScreen = 'ManageAmanitiesScreen';
   static const String ServiceRequestListScreen = 'ServiceRequestListScreen';
+  static const String DeveloperAdminDashboardScreen = 'DeveloperAdminDashboardScreen';
 }

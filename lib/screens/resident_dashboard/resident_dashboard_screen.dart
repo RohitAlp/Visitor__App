@@ -204,107 +204,53 @@ class _DashboardHomePage extends StatelessWidget {
 
     return GridView.builder(
       shrinkWrap: true,
-     // padding: const EdgeInsets.all(20),
-        padding: EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 20,
-        ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 15,
         mainAxisSpacing: 15,
-        childAspectRatio: 100 / 107,
+        childAspectRatio: 100 / 107, // Maintains your specific card shape
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
 
-        return SizedBox(
-          width: 100,
-          height: 107,
-          child: Stack(
-            children: <Widget>[
-              // Background Card
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow:   [
-                      BoxShadow(
-                        color: Color.fromRGBO(110, 136, 157, 0.25),
-                        offset: Offset(0, 0),
-                        blurRadius: 26,
-                      )
-                    ],
-                    color: Colors.white,
-                  ),
-                ),
+        return Container(
+          // The Container itself acts as the card background
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: const [
+              BoxShadow(
+                color: Color.fromRGBO(110, 136, 157, 0.25),
+                offset: Offset(0, 4),
+                blurRadius: 20,
+              )
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center, // Centers content vertically
+            children: [
+              // Icon Section
+              SvgPicture.asset(
+                item['icon'],
+                width: 30, // Adjusted for better visibility
+                height: 30,
+                colorFilter: item['color'] != null
+                    ? ColorFilter.mode(item['color'], BlendMode.srcIn)
+                    : null,
               ),
-
-              // // Circular Shadow/Background behind Icon
-              // Positioned(
-              //   top: 10,create design for custom header widget
-              // create design for custom bottom bar widget
-              // Dashboard desing for the User (Resedent)
-              //   left: 22,
-              //   child: Container(
-              //     width: 55.8,
-              //     height: 55.0,
-              //     decoration: const BoxDecoration(
-              //       boxShadow: [
-              //         BoxShadow(
-              //           color: Color.fromRGBO(138, 149, 158, 0.25),
-              //           offset: Offset(0, 10),
-              //           blurRadius: 40,
-              //         )
-              //       ],
-              //       color: Colors.white,
-              //       shape: BoxShape.circle,
-              //     ),
-              //   ),
-              // ),
-
-              // Label Text
-              Positioned(
-                top: 75,
-                left: 0,
-                right: 0,
-                child: Text(
-                  item['label'],
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Mulish',
-                    fontSize: 13,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-
-              // Icon Container
-              Positioned(
-                top: 15,
-                left: 35,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    item['icon'],
-                    width: 26,
-                    height: 26,
-                    colorFilter: item['color'] != null
-                        ? ColorFilter.mode(
-                      item['color'],
-                      BlendMode.srcIn,
-                    )
-                        : null,
-                  ),
+              const SizedBox(height: 12), // Consistent spacing instead of Positioned offsets
+              // Label Section
+              Text(
+                item['label'],
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Mulish',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500, // Medium weight looks better for dashboard labels
                 ),
               ),
             ],
