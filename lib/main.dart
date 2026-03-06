@@ -35,6 +35,11 @@ class MyApp extends StatelessWidget {
               textTheme: GoogleFonts.mulishTextTheme(),
               primaryTextTheme: GoogleFonts.mulishTextTheme(),
               scaffoldBackgroundColor: Colors.white,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              scrolledUnderElevation: 0, // prevents grey when scrolling
+            ),
           ),
             locale: locale,
             localizationsDelegates: const [
