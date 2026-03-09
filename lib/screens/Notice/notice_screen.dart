@@ -1,21 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:visitorapp/screens/Notice/edit_notice_screen.dart';
+import 'package:visitorapp/screens/Notice/notice_model.dart' as model;
 import '../../constants/app_colors.dart';
 import '../../widgets/swipenoticecard.dart';
 import 'add_notice_screen.dart';
 
-class Notice {
-  final String title;
-  final String date;
-  final String timeAgo;
-  final String description;
 
-  Notice({
-    required this.title,
-    required this.date,
-    required this.timeAgo,
-    required this.description,
-  });
-}
 
 class NoticeScreen extends StatefulWidget {
   const NoticeScreen({super.key});
@@ -29,29 +19,29 @@ class _NoticeScreenState extends State<NoticeScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = "";
 
-  final List<Notice> notices = [
-    Notice(
+  final List<model.Notice> notices = [
+    model.Notice(
       title: "Society Meeting - March 2026",
       date: "Mar 1, 2026",
       timeAgo: "6 days ago",
       description:
       "Annual general meeting scheduled for all residents to discuss upcoming maintenance plans and budget allocation for the year.",
     ),
-    Notice(
+    model.Notice(
       title: "Water Supply Maintenance",
       date: "Feb 28, 2026",
       timeAgo: "7 days ago",
       description:
       "Water supply will be temporarily disrupted on March 6th from 10 AM to 2 PM for maintenance work on overhead tanks.",
     ),
-    Notice(
+    model.Notice(
       title: "Holi Celebration Event",
       date: "Feb 25, 2026",
       timeAgo: "1 week ago",
       description:
       "Join us for Holi celebrations in the community hall on March 14th. All residents are welcome with their families.",
     ),
-    Notice(
+    model.Notice(
       title: "New Security Guidelines",
       date: "Feb 20, 2026",
       timeAgo: "2 weeks ago",
@@ -113,7 +103,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
       ),
     );
   }
-  List<Notice> get filteredNotices {
+  List<model.Notice> get filteredNotices {
     if (_searchQuery.isEmpty) return notices;
 
     return notices.where((notice) {
@@ -275,10 +265,16 @@ class _NoticeScreenState extends State<NoticeScreen> {
                 itemCount: filteredNotices.length,
                 itemBuilder: (context, index) {
                   final notice = filteredNotices[index];
-
                   return  SwipeNoticeCard(
                     onDelete: () => _deleteNotice(index),
-                    onEdit: () {},
+                    onEdit: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditNoticeScreen(notice: notice,),
+                        ),
+                      );
+                    },
 
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 14),
