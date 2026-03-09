@@ -1,8 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
 import '../../constants/app_colors.dart';
 import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice.dart';
