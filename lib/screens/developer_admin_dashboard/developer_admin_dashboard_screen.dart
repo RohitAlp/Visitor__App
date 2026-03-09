@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../model/LoginResponse.dart';
+import '../../model/VerifyOtpResponse.dart';
+import '../../secure storage/user_info.dart';
 import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
 import '../services/services.dart';
+import '../settings/settings_screen.dart';
 import '../society_admin_dashboard/service_requests/service_request_list/service_request_list_screen.dart';
 import 'society_list_screen/society_list_Screen.dart';
 
@@ -18,6 +21,21 @@ class DeveloperAdminDashboardScreen extends StatefulWidget {
 
 class _DeveloperAdminDashboardScreenState extends State<DeveloperAdminDashboardScreen> {
   int _selectedIndex = 0;
+  VerifyOtpResponse? userInfo;
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    final storedUser = await UserInfoSecureStorage.getUserInfo();
+    if (storedUser != null) {
+      setState(() {
+        userInfo = storedUser;
+      });
+    }
+  }
 
   final List<NavItemData> _navItems = [
     NavItemData(icon: Icons.home_outlined,    activeIcon: Icons.home,           label: 'Home'),
@@ -27,31 +45,26 @@ class _DeveloperAdminDashboardScreenState extends State<DeveloperAdminDashboardS
     NavItemData(icon: Icons.person_outline,   activeIcon: Icons.person,         label: 'Profile'),
   ];
 
-  LoginResponse? loginResponse;
-  late final List<Widget> _pages = <Widget>[
-    _DashboardHomePage(),
-    Payment(),
-    NoticeScreen(),
-    Services(),
-    // Profile(),
-    ServiceRequestListScreen(),
-    // const ManageUsersScreen(type: 2,),
-    //
-    // const ManageUsersScreen(type: 1,),
 
-  ];
 
 
   @override
   Widget build(BuildContext context)
   {
+    final pages = <Widget>[
+      _DashboardHomePage(userInfo: userInfo),
+      Payment(),
+      NoticeScreen(),
+      SettingsScreen(),
+      ServiceRequestListScreen(),
+    ];
     return SafeArea(
       top: false,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: IndexedStack(
           index: _selectedIndex,
-          children: _pages,
+          children: pages,
         ),
         bottomNavigationBar: CustomAnimatedNavBar(
           items: _navItems,
@@ -65,7 +78,10 @@ class _DeveloperAdminDashboardScreenState extends State<DeveloperAdminDashboardS
 
 
 class _DashboardHomePage extends StatelessWidget {
-  const _DashboardHomePage();
+
+  final VerifyOtpResponse? userInfo;
+
+  const _DashboardHomePage({this.userInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -136,16 +152,16 @@ class _DashboardHomePage extends StatelessWidget {
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Hi, Admin",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
+              children: [
+    Text(
+    "Hi, ${userInfo?.fullName ?? 'User'}",
+    style: const TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 18,
+    color: Colors.white,
+    ),
+    ),
+                const Text(
                   "Super Admin",
                   style: TextStyle(fontSize: 13, color: Colors.white70),
                 ),
@@ -191,79 +207,7 @@ class _DashboardHomePage extends StatelessWidget {
     );
   }
 
-  // Widget _buildQuickActionsGrid() {
-  //   final List<Map<String, dynamic>> items = [
-  //     {'emoji': '👥', 'label': 'Visitors',   'bg': const Color(0xFFFFF3E0)},
-  //     {'emoji': '🏢', 'label': 'Complaints', 'bg': const Color(0xFFFFEBEE)},
-  //     {'emoji': '🎧', 'label': 'Notice',     'bg': const Color(0xFFFFF8E1)},
-  //     {'emoji': '🏊', 'label': 'Deliveries', 'bg': const Color(0xFFE8F5E9)},
-  //     {'emoji': '📢', 'label': 'Amenities',  'bg': const Color(0xFFE3F2FD)},
-  //     {'emoji': '⚙️', 'label': 'Documents',  'bg': const Color(0xFFF3E5F5)},
-  //   ];
-  //
-  //   return GridView.builder(
-  //     shrinkWrap: true,
-  //     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-  //     physics: const NeverScrollableScrollPhysics(),
-  //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //       crossAxisCount: 3,
-  //       crossAxisSpacing: 15,
-  //       mainAxisSpacing: 15,
-  //       childAspectRatio: 100 / 107,
-  //     ),
-  //     itemCount: items.length,
-  //     itemBuilder: (context, index) {
-  //       final item = items[index];
-  //
-  //       return Container(
-  //         decoration: BoxDecoration(
-  //           color: Colors.white,
-  //           borderRadius: BorderRadius.circular(15),
-  //           boxShadow: const [
-  //             BoxShadow(
-  //               color: Color.fromRGBO(110, 136, 157, 0.20),
-  //               offset: Offset(0, 4),
-  //               blurRadius: 20,
-  //             ),
-  //           ],
-  //         ),
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             // Colored circular background with emoji
-  //             Container(
-  //               width: 52,
-  //               height: 52,
-  //               decoration: BoxDecoration(
-  //                 color: item['bg'],
-  //                 shape: BoxShape.circle,
-  //               ),
-  //               alignment: Alignment.center,
-  //               child: Text(
-  //                 item['emoji'],
-  //                 style: const TextStyle(fontSize: 30),
-  //               ),
-  //             ),
-  //
-  //             const SizedBox(height: 10),
-  //
-  //             // Label
-  //             Text(
-  //               item['label'],
-  //               textAlign: TextAlign.center,
-  //               style: const TextStyle(
-  //                 color: Colors.black87,
-  //                 fontFamily: 'Mulish',
-  //                 fontSize: 12,
-  //                 fontWeight: FontWeight.w500,
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+
   Widget _buildQuickActionsGrid() {
     final List<Map<String, dynamic>> items = [
       {'icon': 'assets/image/building.png', 'label': 'Society Creation'},

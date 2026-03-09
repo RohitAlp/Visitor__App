@@ -3,12 +3,14 @@ import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 
 import '../../config/Routes/RouteName.dart';
+import 'Manage Property/Manage Tower/Add_tower.dart';
 
 class ManageUsersScreen extends StatefulWidget {
   final int type;
+  final int? societyId;
   
 
-  const ManageUsersScreen({super.key,required this.type});
+  const ManageUsersScreen({super.key, required this.type, this.societyId});
 
   @override
   State<ManageUsersScreen> createState() => _ManageUsersScreenState();
@@ -100,7 +102,12 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
                   text: '🏢',
                   title: "Manage Tower",
                   onTap: () {
-                    Navigator.pushNamed(context, RouteName.ManageTowersScreen);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ManageTowersScreen(societyId: widget.societyId),
+                      ),
+                    );
                   },
                 ),
                 _UserCard(

@@ -5,8 +5,11 @@ class ApiEndpoints {
 
   // Building/Tower endpoints
   static const String addBuilding = '/AddBuilding';
-  static const String getBuildings = '/GetBuildingList';
+  static const String getSociety = '/GetSocietyList';
 
-  static  String login = 'http://103.118.17.144:8087/api';
+  static const String getBuildings = '/GetBuildingList';
+  static const String getWings = '/GetBuildingList';
+
+  // static  String login = 'http://103.118.17.144:8087/api';
 
 }

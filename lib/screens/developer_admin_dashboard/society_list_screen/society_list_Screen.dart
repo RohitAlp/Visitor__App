@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants/app_colors.dart';
+import '../../../controller/society_controller.dart';
+import '../../../model/getSocietyResponse.dart';
+import '../../../utils/enum.dart';
 import '../../society_admin_dashboard/manage_users_property_screen.dart';
 
 class Society {
@@ -14,6 +17,7 @@ class Society {
   final String contact;
   final String email;
   final String taxNumber;
+  final num? societyId;
 
   const Society({
     required this.societyName,
@@ -25,7 +29,23 @@ class Society {
     required this.contact,
     required this.email,
     required this.taxNumber,
+    this.societyId,
   });
+
+  factory Society.fromApiModel(SocietyList apiModel) {
+    return Society(
+      societyName: apiModel.societyName ?? '',
+      registrationNo: apiModel.registrationNo ?? '',
+      address: apiModel.address ?? '',
+      state: apiModel.state ?? '',
+      city: apiModel.city ?? '',
+      pinCode: apiModel.pinCode ?? '',
+      contact: apiModel.contact ?? '',
+      email: apiModel.email ?? '',
+      taxNumber: apiModel.taxNumber ?? '',
+      societyId: apiModel.societyId,
+    );
+  }
 }
 
 class SocietyCard extends StatefulWidget {
@@ -322,19 +342,10 @@ class SocietyListScreen extends StatefulWidget {
 }
 
 class _SocietyListScreenState extends State<SocietyListScreen> with TickerProviderStateMixin {
-  final List<Society> _allSocieties = [
-    Society(
-      societyName: 'Arihandt society',
-      registrationNo: 'Reg9008',
-      address: 'Kalwa',
-      state: 'Maharashtra',
-      city: 'Thane',
-      pinCode: '400006',
-      contact: '9881890989',
-      email: 'ari@gmail.com',
-      taxNumber: 'Tax9007',
-    ),
-  ];
+  final SocietyController _societyController = SocietyController();
+  List<Society> _allSocieties = [];
+  Status _fetchStatus = Status.initial;
+  String? _errorMessage;
 
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
@@ -353,6 +364,44 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
     }).toList();
   }
 
+  Future<void> _fetchSocieties() async {
+    setState(() {
+      _fetchStatus = Status.loading;
+      _errorMessage = null;
+    });
+
+    try {
+      final response = await _societyController.getSociety({});
+      
+      if (response?.statusCode == 200 && response?.data != null) {
+        final societyResponse = GetSocietyResponse.fromJson(response!.data);
+        
+        if (societyResponse.status == true) {
+          final societies = societyResponse.societyList?.map((apiModel) => Society.fromApiModel(apiModel)).toList() ?? [];
+          setState(() {
+            _allSocieties = societies;
+            _fetchStatus = Status.success;
+          });
+        } else {
+          setState(() {
+            _fetchStatus = Status.error;
+            _errorMessage = societyResponse.message ?? 'Failed to fetch societies';
+          });
+        }
+      } else {
+        setState(() {
+          _fetchStatus = Status.error;
+          _errorMessage = 'Failed to fetch societies';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _fetchStatus = Status.error;
+        _errorMessage = 'An error occurred while fetching societies';
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -365,6 +414,7 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
       curve: Curves.elasticOut,
     );
     _fabController.forward();
+    _fetchSocieties();
   }
 
   @override
@@ -615,65 +665,137 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
               const SizedBox(height: 8),
               // Scrollable List
               Expanded(
-                child: filtered.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: AppColors.primaryColor.withOpacity(0.08),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.apartment_rounded,
-                                size: 40,
-                                color: AppColors.primaryColor,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            const Text(
-                              'No Societies found',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.textDark,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              'Try adjusting your search',
-                              style: TextStyle(fontSize: 13, color: AppColors.textLight),
-                            ),
-                          ],
-                        ),
-                      )
-                    : ListView.builder(
-                        itemCount: filtered.length,
-                        itemBuilder: (context, index) {
-                          final society = filtered[index];
-                          return SocietyCard(
-                            society: society,
-                            onEdit: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ManageUsersScreen(type: 2),
-                                ),
-                              );
-                            },
-                            onDelete: () => _deleteSociety(society),
-                            index: index,
-                          );
-                        },
-                      ),
+                child: _buildContent(),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildContent() {
+    final filtered = _filteredSocieties;
+
+    switch (_fetchStatus) {
+      case Status.loading:
+        return const Center(
+          child: CircularProgressIndicator(
+            color: AppColors.primaryColor,
+          ),
+        );
+      
+      case Status.error:
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: Colors.red.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.error_outline_rounded,
+                  size: 40,
+                  color: Colors.red,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Error Loading Societies',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textDark,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                _errorMessage ?? 'An unknown error occurred',
+                style: const TextStyle(fontSize: 13, color: AppColors.textLight),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _fetchSocieties,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Retry',
+                  style: TextStyle(color: AppColors.white),
+                ),
+              ),
+            ],
+          ),
+        );
+      
+      case Status.success:
+        if (filtered.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColor.withOpacity(0.08),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.apartment_rounded,
+                    size: 40,
+                    color: AppColors.primaryColor,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'No Societies found',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textDark,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Try adjusting your search',
+                  style: TextStyle(fontSize: 13, color: AppColors.textLight),
+                ),
+              ],
+            ),
+          );
+        }
+        
+        return ListView.builder(
+          itemCount: filtered.length,
+          itemBuilder: (context, index) {
+            final society = filtered[index];
+            return SocietyCard(
+              society: society,
+              onEdit: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ManageUsersScreen(type: 2, societyId: society.societyId?.toInt()),
+                  ),
+                );
+              },
+              onDelete: () => _deleteSociety(society),
+              index: index,
+            );
+          },
+        );
+      
+      default:
+        return const SizedBox.shrink();
+    }
   }
 }

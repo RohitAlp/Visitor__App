@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visitorapp/config/Routes/RouteName.dart';
 import '../../l10n/app_localizations.dart';
+import '../../secure storage/user_info.dart';
+import '../../widgets/common_dialogue.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -369,10 +371,22 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         child: OutlinedButton(
-          onPressed: () {
-            // Add haptic feedback
-            // HapticFeedback.mediumImpact();
-            // Handle logout
+          onPressed: () async {
+            final confirmed = await DialogueHelper.showLogoutDialogue(
+              context: context,
+            );
+
+            if (confirmed == true) {
+              // Clear secure storage
+              await UserInfoSecureStorage.clearUserInfo();
+
+              // Navigate to login screen and clear stack
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                RouteName.loginScreen,
+                (route) => false,
+              );
+            }
           },
           style: OutlinedButton.styleFrom(
             side: const BorderSide(color: Colors.red),
