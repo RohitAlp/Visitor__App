@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:visitorapp/screens/Notice/edit_notice_screen.dart';
+import 'package:visitorapp/screens/Notice/notice_model.dart' as model;
 import '../../constants/app_colors.dart';
 import '../../widgets/swipenoticecard.dart';
+import 'add_notice_screen.dart';
 
-class Notice {
-  final String title;
-  final String date;
-  final String timeAgo;
-  final String description;
 
-  Notice({
-    required this.title,
-    required this.date,
-    required this.timeAgo,
-    required this.description,
-  });
-}
 
 class NoticeScreen extends StatefulWidget {
   const NoticeScreen({super.key});
@@ -28,29 +19,29 @@ class _NoticeScreenState extends State<NoticeScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = "";
 
-  final List<Notice> notices = [
-    Notice(
+  final List<model.Notice> notices = [
+    model.Notice(
       title: "Society Meeting - March 2026",
       date: "Mar 1, 2026",
       timeAgo: "6 days ago",
       description:
       "Annual general meeting scheduled for all residents to discuss upcoming maintenance plans and budget allocation for the year.",
     ),
-    Notice(
+    model.Notice(
       title: "Water Supply Maintenance",
       date: "Feb 28, 2026",
       timeAgo: "7 days ago",
       description:
       "Water supply will be temporarily disrupted on March 6th from 10 AM to 2 PM for maintenance work on overhead tanks.",
     ),
-    Notice(
+    model.Notice(
       title: "Holi Celebration Event",
       date: "Feb 25, 2026",
       timeAgo: "1 week ago",
       description:
       "Join us for Holi celebrations in the community hall on March 14th. All residents are welcome with their families.",
     ),
-    Notice(
+    model.Notice(
       title: "New Security Guidelines",
       date: "Feb 20, 2026",
       timeAgo: "2 weeks ago",
@@ -112,7 +103,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
       ),
     );
   }
-  List<Notice> get filteredNotices {
+  List<model.Notice> get filteredNotices {
     if (_searchQuery.isEmpty) return notices;
 
     return notices.where((notice) {
@@ -142,17 +133,34 @@ class _NoticeScreenState extends State<NoticeScreen> {
                 child: Row(
                   children: [
 
-                    /// BACK BUTTON
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: AppColors.cardBg,
-                        borderRadius: BorderRadius.circular(12),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: AppColors.cardBg,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey.withOpacity(0.15),
+                            width: 1,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 6,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_ios_rounded,
+                          size: 16,
+                        ),
                       ),
-                      child: const Icon(Icons.arrow_back_ios_rounded, size: 16),
                     ),
-
                     const SizedBox(width: 12),
 
                     /// TITLE + COUNT
@@ -175,19 +183,29 @@ class _NoticeScreenState extends State<NoticeScreen> {
                     const Spacer(),
 
                     /// ADD BUTTON
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            AppColors.primaryLight,
-                            AppColors.primaryColor
-                          ],
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddNoticeScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              AppColors.primaryLight,
+                              AppColors.primaryColor
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(14),
                         ),
-                        borderRadius: BorderRadius.circular(14),
+                        child: const Icon(Icons.add, color: Colors.white),
                       ),
-                      child: const Icon(Icons.add, color: Colors.white),
                     ),
                   ],
                 ),
@@ -247,10 +265,16 @@ class _NoticeScreenState extends State<NoticeScreen> {
                 itemCount: filteredNotices.length,
                 itemBuilder: (context, index) {
                   final notice = filteredNotices[index];
-
                   return  SwipeNoticeCard(
                     onDelete: () => _deleteNotice(index),
-                    onEdit: () {},
+                    onEdit: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditNoticeScreen(notice: notice,),
+                        ),
+                      );
+                    },
 
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 14),

@@ -222,8 +222,6 @@ class _OwnerCardState extends State<OwnerCard>
   late Animation<double> _slideAnimation;
   late Animation<double> _fadeAnimation;
 
-
-
   bool _pressed = false;
   bool _isRevealed = false;
 
@@ -292,7 +290,7 @@ class _OwnerCardState extends State<OwnerCard>
     if (match != null) {
       final occupied = int.tryParse(match.group(1) ?? '0') ?? 0;
       final total = int.tryParse(match.group(2) ?? '0') ?? 1;
-      
+
       final percentage = ((occupied / total) * 100).round();
       return percentage == 0 ? AppColors.errorRed : AppColors.successGreen;
     }
@@ -304,9 +302,9 @@ class _OwnerCardState extends State<OwnerCard>
     if (match != null) {
       final occupied = int.tryParse(match.group(1) ?? '0') ?? 0;
       final total = int.tryParse(match.group(2) ?? '0') ?? 1;
-      
+
       final percentage = ((occupied / total) * 100).round();
-      
+
       if (percentage == 0) {
         return 'Vacant';
       } else {
@@ -369,7 +367,8 @@ class _OwnerCardState extends State<OwnerCard>
   String _getWingTowerEmoji() {
     if (widget.owner.name.contains('Wing')) {
       return Constant.wingEmoji;
-    } else if (widget.owner.isTower || widget.owner.name.toLowerCase().contains('tower')) {
+    } else if (widget.owner.isTower ||
+        widget.owner.name.toLowerCase().contains('tower')) {
       return Constant.towerEmoji;
     }
     return '';
@@ -377,13 +376,16 @@ class _OwnerCardState extends State<OwnerCard>
 
   Color _getSpecificAmenityColor() {
     final name = widget.owner.name.toLowerCase();
-    
-    if (name.contains('swimming') || name.contains('pool') ||
-        name.contains('community') || name.contains('hall') ||
-        name.contains('children') || name.contains('play')) {
+
+    if (name.contains('swimming') ||
+        name.contains('pool') ||
+        name.contains('community') ||
+        name.contains('hall') ||
+        name.contains('children') ||
+        name.contains('play')) {
       return Color(0xFFE4F0FF);
     }
-    
+
     return Color(0xFFE7FCEE);
   }
 
@@ -420,35 +422,43 @@ class _OwnerCardState extends State<OwnerCard>
       }
       return '';
     } else if (widget.owner.isAmenity) {
-      if (widget.owner.name.toLowerCase().contains('swimming') || widget.owner.name.toLowerCase().contains('pool')) {
+      if (widget.owner.name.toLowerCase().contains('swimming') ||
+          widget.owner.name.toLowerCase().contains('pool')) {
         return 'assets/image/swimming_pool.png';
-      } else if (widget.owner.name.toLowerCase().contains('gym') || widget.owner.name.toLowerCase().contains('fitness')) {
+      } else if (widget.owner.name.toLowerCase().contains('gym') ||
+          widget.owner.name.toLowerCase().contains('fitness')) {
         return 'assets/image/gym.png';
-      } else if (widget.owner.name.toLowerCase().contains('community') || widget.owner.name.toLowerCase().contains('hall')) {
+      } else if (widget.owner.name.toLowerCase().contains('community') ||
+          widget.owner.name.toLowerCase().contains('hall')) {
         return 'assets/image/community_hall.png';
-      } else if (widget.owner.name.toLowerCase().contains('play') || widget.owner.name.toLowerCase().contains('children')) {
+      } else if (widget.owner.name.toLowerCase().contains('play') ||
+          widget.owner.name.toLowerCase().contains('children')) {
         return 'assets/image/play_area.png';
-      } else if (widget.owner.name.toLowerCase().contains('garden') || widget.owner.name.toLowerCase().contains('park')) {
+      } else if (widget.owner.name.toLowerCase().contains('garden') ||
+          widget.owner.name.toLowerCase().contains('park')) {
         return 'assets/image/garden.png';
       } else if (widget.owner.name.toLowerCase().contains('parking')) {
         return 'assets/image/parking.png';
-      } else if (widget.owner.name.toLowerCase().contains('security') || widget.owner.name.toLowerCase().contains('guard')) {
+      } else if (widget.owner.name.toLowerCase().contains('security') ||
+          widget.owner.name.toLowerCase().contains('guard')) {
         return 'assets/image/security.png';
-      } else if (widget.owner.name.toLowerCase().contains('elevator') || widget.owner.name.toLowerCase().contains('lift')) {
+      } else if (widget.owner.name.toLowerCase().contains('elevator') ||
+          widget.owner.name.toLowerCase().contains('lift')) {
         return 'assets/image/elevator.png';
-      } else if (widget.owner.name.toLowerCase().contains('water') || widget.owner.name.toLowerCase().contains('tank')) {
+      } else if (widget.owner.name.toLowerCase().contains('water') ||
+          widget.owner.name.toLowerCase().contains('tank')) {
         return 'assets/image/water_tank.png';
       } else {
         return 'assets/image/wifi.png';
-      } 
+      }
     } else {
-      return 'assets/image/profile.png'; 
+      return 'assets/image/profile.png';
     }
   }
 
   IconData _getProfileIcon() {
     if (widget.owner.isGuard) {
-      return Icons.person_rounded; 
+      return Icons.person_rounded;
     } else if (widget.owner.isVendor) {
       return Icons.home_repair_service_sharp;
     } else if (widget.owner.isFlat) {
@@ -459,23 +469,31 @@ class _OwnerCardState extends State<OwnerCard>
       }
       return Icons.domain_rounded;
     } else if (widget.owner.isAmenity) {
-      if (widget.owner.name.toLowerCase().contains('swimming') || widget.owner.name.toLowerCase().contains('pool')) {
+      if (widget.owner.name.toLowerCase().contains('swimming') ||
+          widget.owner.name.toLowerCase().contains('pool')) {
         return Icons.pool_rounded;
-      } else if (widget.owner.name.toLowerCase().contains('gym') || widget.owner.name.toLowerCase().contains('fitness')) {
+      } else if (widget.owner.name.toLowerCase().contains('gym') ||
+          widget.owner.name.toLowerCase().contains('fitness')) {
         return Icons.fitness_center_rounded;
-      } else if (widget.owner.name.toLowerCase().contains('community') || widget.owner.name.toLowerCase().contains('hall')) {
+      } else if (widget.owner.name.toLowerCase().contains('community') ||
+          widget.owner.name.toLowerCase().contains('hall')) {
         return Icons.meeting_room_rounded;
-      } else if (widget.owner.name.toLowerCase().contains('play') || widget.owner.name.toLowerCase().contains('children')) {
+      } else if (widget.owner.name.toLowerCase().contains('play') ||
+          widget.owner.name.toLowerCase().contains('children')) {
         return Icons.toys_rounded;
-      } else if (widget.owner.name.toLowerCase().contains('garden') || widget.owner.name.toLowerCase().contains('park')) {
+      } else if (widget.owner.name.toLowerCase().contains('garden') ||
+          widget.owner.name.toLowerCase().contains('park')) {
         return Icons.park_rounded;
       } else if (widget.owner.name.toLowerCase().contains('parking')) {
         return Icons.local_parking_rounded;
-      } else if (widget.owner.name.toLowerCase().contains('security') || widget.owner.name.toLowerCase().contains('guard')) {
+      } else if (widget.owner.name.toLowerCase().contains('security') ||
+          widget.owner.name.toLowerCase().contains('guard')) {
         return Icons.security_rounded;
-      } else if (widget.owner.name.toLowerCase().contains('elevator') || widget.owner.name.toLowerCase().contains('lift')) {
+      } else if (widget.owner.name.toLowerCase().contains('elevator') ||
+          widget.owner.name.toLowerCase().contains('lift')) {
         return Icons.elevator_rounded;
-      } else if (widget.owner.name.toLowerCase().contains('water') || widget.owner.name.toLowerCase().contains('tank')) {
+      } else if (widget.owner.name.toLowerCase().contains('water') ||
+          widget.owner.name.toLowerCase().contains('tank')) {
         return Icons.water_drop_rounded;
       } else {
         return Icons.wifi_rounded;
@@ -487,7 +505,7 @@ class _OwnerCardState extends State<OwnerCard>
 
   IconData _getAmenityCategoryIcon(String? category) {
     if (category == null) return Icons.category_rounded;
-    
+
     switch (category.toLowerCase()) {
       case 'fitness':
         return Icons.fitness_center_rounded;
@@ -545,7 +563,10 @@ class _OwnerCardState extends State<OwnerCard>
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       gradient: const LinearGradient(
-                        colors: [AppColors.primaryLight, AppColors.primaryColor],
+                        colors: [
+                          AppColors.primaryLight,
+                          AppColors.primaryColor,
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -630,15 +651,21 @@ class _OwnerCardState extends State<OwnerCard>
                       0,
                       0,
                     ),
-                    child: Card(
-                      elevation: 2,
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(
+                        border: Border.all(
                           color: Colors.grey.withOpacity(0.3),
                           width: 0.6,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -651,15 +678,21 @@ class _OwnerCardState extends State<OwnerCard>
                               width: 50,
                               height: 50,
                               decoration: BoxDecoration(
-                                color: widget.owner.isAmenity 
+                                color: widget.owner.isAmenity
                                     ? _getSpecificAmenityColor()
-                                    : (widget.owner.floor != null && widget.owner.name.toLowerCase().contains('floor'))
-                                        ? Color(0xFFE7FCEE)
-                                        : (widget.owner.name.contains('Wing'))
-                                            ? Color(0x80E4F0FF)  // 50% opacity for wings
-                                            : (widget.owner.isTower || widget.owner.isFlat)
-                                                ? Color(0x80E4F0FF)  // 50% opacity for towers and flats
-                                                : AppColors.purple100,
+                                    : (widget.owner.floor != null &&
+                                          widget.owner.name
+                                              .toLowerCase()
+                                              .contains('floor'))
+                                    ? Color(0xFFE7FCEE)
+                                    : (widget.owner.name.contains('Wing'))
+                                    ? Color(0x80E4F0FF) // 50% opacity for wings
+                                    : (widget.owner.isTower ||
+                                          widget.owner.isFlat)
+                                    ? Color(
+                                        0x80E4F0FF,
+                                      ) // 50% opacity for towers and flats
+                                    : AppColors.purple100,
                                 borderRadius: BorderRadius.circular(15),
                                 // border: Border.all(
                                 //   color: AppColors.purple200,
@@ -669,68 +702,68 @@ class _OwnerCardState extends State<OwnerCard>
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: widget.owner.isAmenity
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(14),
-                                    child: Image.asset(
-                                      _getAmenityImage(),
-                                      width: 28,
-                                      height: 28,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return Icon(
-                                          _getProfileIcon(),
-                                          color: AppColors.purple700,
-                                          size: 24,
-                                        );
-                                      },
-                                    ),
-                                  )
-                                : (widget.owner.name.contains('Wing') || widget.owner.isTower)
-                                ? Center(
-                                    child: Text(
-                                      _getWingTowerEmoji(),
-                                      style: const TextStyle(
-                                        fontSize: 28,
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(14),
+                                        child: Image.asset(
+                                          _getAmenityImage(),
+                                          width: 28,
+                                          height: 28,
+                                          fit: BoxFit.cover,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                                return Icon(
+                                                  _getProfileIcon(),
+                                                  color: AppColors.purple700,
+                                                  size: 24,
+                                                );
+                                              },
+                                        ),
+                                      )
+                                    : (widget.owner.name.contains('Wing') ||
+                                          widget.owner.isTower)
+                                    ? Center(
+                                        child: Text(
+                                          _getWingTowerEmoji(),
+                                          style: const TextStyle(fontSize: 28),
+                                        ),
+                                      )
+                                    : widget.owner.isFlat
+                                    ? Center(
+                                        child: Text(
+                                          (widget.owner.floor != null &&
+                                                  widget.owner.name
+                                                      .toLowerCase()
+                                                      .contains('floor'))
+                                              ? _getFloorEmoji()
+                                              : _getFlatEmoji(),
+                                          style: const TextStyle(fontSize: 28),
+                                        ),
+                                      )
+                                    : widget.owner.isVendor
+                                    ? Center(
+                                        child: Text(
+                                          Constant.defaultServiceEmoji,
+                                          style: const TextStyle(fontSize: 28),
+                                        ),
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(14),
+                                        child: Image.asset(
+                                          _getProfileImage(),
+                                          width: 24,
+                                          height: 24,
+                                          fit: BoxFit.cover,
+                                          color: AppColors.blue700,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                                return Icon(
+                                                  _getProfileIcon(),
+                                                  color: AppColors.purple700,
+                                                  size: 24,
+                                                );
+                                              },
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : widget.owner.isFlat
-                                ? Center(
-                                    child: Text(
-                                      (widget.owner.floor != null && widget.owner.name.toLowerCase().contains('floor')) 
-                                          ? _getFloorEmoji() 
-                                          : _getFlatEmoji(),
-                                      style: const TextStyle(
-                                        fontSize: 28,
-                                      ),
-                                    ),
-                                  )
-                                : widget.owner.isVendor
-                                ? Center(
-                                    child: Text(
-                                      Constant.defaultServiceEmoji,
-                                      style: const TextStyle(
-                                        fontSize: 28,
-                                      ),
-                                    ),
-                                  )
-                                : ClipRRect(
-                                    borderRadius: BorderRadius.circular(14),
-                                    child: Image.asset(
-                                      _getProfileImage(),
-                                      width: 24,
-                                      height: 24,
-                                      fit: BoxFit.cover,
-                                      color: AppColors.blue700,
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return Icon(
-                                          _getProfileIcon(),
-                                          color: AppColors.purple700,
-                                          size: 24,
-                                        );
-                                      },
-                                    ),
-                                  ),
                               ),
                             ),
                             const SizedBox(width: 14),
@@ -753,7 +786,12 @@ class _OwnerCardState extends State<OwnerCard>
                                         ),
                                       ),
                                       const SizedBox(width: 8),
-                                      if (widget.showStatus && !widget.owner.isGuard && !widget.owner.isVendor && !widget.owner.isFlat && !widget.owner.isTower && !widget.owner.isAmenity)
+                                      if (widget.showStatus &&
+                                          !widget.owner.isGuard &&
+                                          !widget.owner.isVendor &&
+                                          !widget.owner.isFlat &&
+                                          !widget.owner.isTower &&
+                                          !widget.owner.isAmenity)
                                         Container(
                                           width: 65,
                                           padding: const EdgeInsets.symmetric(
@@ -762,20 +800,26 @@ class _OwnerCardState extends State<OwnerCard>
                                           ),
                                           decoration: BoxDecoration(
                                             color: widget.owner.isActive
-                                                ? AppColors.green400.withOpacity(0.08)
-                                                : AppColors.orange600.withOpacity(0.08),
-                                            borderRadius: BorderRadius.circular(8),
+                                                ? AppColors.green400
+                                                      .withOpacity(0.08)
+                                                : AppColors.orange600
+                                                      .withOpacity(0.08),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
                                             border: Border.all(
                                               color: widget.owner.isActive
-                                                  ? AppColors.green400.withOpacity(0.35)
-                                                  : AppColors.orange600.withOpacity(0.35),
+                                                  ? AppColors.green400
+                                                        .withOpacity(0.35)
+                                                  : AppColors.orange600
+                                                        .withOpacity(0.35),
                                               width: 1,
                                             ),
                                           ),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
-
                                               Container(
                                                 width: 6,
                                                 height: 6,
@@ -790,7 +834,9 @@ class _OwnerCardState extends State<OwnerCard>
                                               const SizedBox(width: 6),
 
                                               Text(
-                                                widget.owner.isActive ? 'Active' : 'Inactive',
+                                                widget.owner.isActive
+                                                    ? 'Active'
+                                                    : 'Inactive',
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w700,
@@ -805,13 +851,21 @@ class _OwnerCardState extends State<OwnerCard>
                                         )
                                       else if (widget.owner.isGuard)
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 4,
+                                          ),
                                           decoration: BoxDecoration(
-                                            color: AppColors.primaryColor.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(8),
+                                            color: AppColors.primaryColor
+                                                .withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
                                           ),
                                           child: Text(
-                                            _getShiftType(widget.owner.shift ?? ''),
+                                            _getShiftType(
+                                              widget.owner.shift ?? '',
+                                            ),
                                             style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w800,
@@ -821,10 +875,17 @@ class _OwnerCardState extends State<OwnerCard>
                                         )
                                       else if (widget.owner.isVendor)
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 4,
+                                          ),
                                           decoration: BoxDecoration(
-                                            color: Colors.green.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(8),
+                                            color: Colors.green.withOpacity(
+                                              0.1,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
                                           ),
                                           child: Text(
                                             'Vendor',
@@ -835,56 +896,98 @@ class _OwnerCardState extends State<OwnerCard>
                                             ),
                                           ),
                                         )
-                                      else if (widget.owner.isFlat && widget.owner.occupancyInfo != null && widget.owner.occupancyInfo!.isNotEmpty)
+                                      else if (widget.owner.isFlat &&
+                                          widget.owner.occupancyInfo != null &&
+                                          widget
+                                              .owner
+                                              .occupancyInfo!
+                                              .isNotEmpty)
                                         Container()
                                       else if (widget.owner.isFlat)
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 4,
+                                          ),
                                           decoration: BoxDecoration(
-                                            color: widget.owner.isVacant ? AppColors.errorRed.withOpacity(0.1) : AppColors.successGreen.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(8),
+                                            color: widget.owner.isVacant
+                                                ? AppColors.errorRed
+                                                      .withOpacity(0.1)
+                                                : AppColors.successGreen
+                                                      .withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
                                           ),
                                           child: Text(
-                                            widget.owner.isVacant ? 'Vacant' : 'Occupied',
+                                            widget.owner.isVacant
+                                                ? 'Vacant'
+                                                : 'Occupied',
                                             style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w800,
-                                              color: widget.owner.isVacant ? AppColors.errorRed : AppColors.successGreen,
+                                              color: widget.owner.isVacant
+                                                  ? AppColors.errorRed
+                                                  : AppColors.successGreen,
                                             ),
                                           ),
                                         )
                                       else if (widget.owner.isTower)
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 4,
+                                          ),
                                           decoration: BoxDecoration(
-                                            color: widget.owner.isActive ? AppColors.successGreen.withOpacity(0.1) : AppColors.warningOrange.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(8),
+                                            color: widget.owner.isActive
+                                                ? AppColors.successGreen
+                                                      .withOpacity(0.1)
+                                                : AppColors.warningOrange
+                                                      .withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
                                           ),
                                           child: Text(
-                                            widget.owner.isActive ? 'Active' : 'Inactive',
+                                            widget.owner.isActive
+                                                ? 'Active'
+                                                : 'Inactive',
                                             style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w800,
-                                              color: widget.owner.isActive ? AppColors.successGreen : AppColors.warningOrange,
+                                              color: widget.owner.isActive
+                                                  ? AppColors.successGreen
+                                                  : AppColors.warningOrange,
                                             ),
                                           ),
                                         )
                                       else if (widget.owner.isAmenity)
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 4,
+                                          ),
                                           decoration: BoxDecoration(
-                                            color: _getAmenityStatusColor(widget.owner.status).withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(8),
+                                            color: _getAmenityStatusColor(
+                                              widget.owner.status,
+                                            ).withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
                                           ),
                                           child: Text(
-                                            _getAmenityStatusText(widget.owner.status),
+                                            _getAmenityStatusText(
+                                              widget.owner.status,
+                                            ),
                                             style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w800,
-                                              color: _getAmenityStatusColor(widget.owner.status),
+                                              color: _getAmenityStatusColor(
+                                                widget.owner.status,
+                                              ),
                                             ),
                                           ),
-                                        )
+                                        ),
                                     ],
                                   ),
                                   const SizedBox(height: 5),
@@ -892,55 +995,64 @@ class _OwnerCardState extends State<OwnerCard>
                                   Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      if (!widget.owner.isFlat && !widget.owner.isAmenity)
-                                      widget.owner.isGuard 
-                                          ? Text(
-                                              '☀️',
-                                              style: TextStyle(fontSize: 14),
-                                            )
-                                          : widget.owner.isVendor
-                                              ? Text(
-                                                  _getServiceEmoji(widget.owner.services ?? ''),
-                                                  style: TextStyle(fontSize: 14),
-                                                )
-                                              : widget.owner.isTower
-                                                  ? Text(
-                                                      '🏢',
-                                                      style: TextStyle(fontSize: 14),
-                                                    )
-                                                  : widget.owner.isFlat
-                                                      ? Text(
-                                                          (widget.owner.floor != null && widget.owner.name.toLowerCase().contains('floor')) 
-                                                              ? '🏗️'
-                                                              : '🏠',
+                                      if (!widget.owner.isFlat &&
+                                          !widget.owner.isAmenity)
+                                        widget.owner.isGuard
+                                            ? Text(
+                                                '☀️',
+                                                style: TextStyle(fontSize: 14),
+                                              )
+                                            : widget.owner.isVendor
+                                            ? Text(
+                                                _getServiceEmoji(
+                                                  widget.owner.services ?? '',
+                                                ),
+                                                style: TextStyle(fontSize: 14),
+                                              )
+                                            : widget.owner.isTower
+                                            ? Text(
+                                                '🏢',
+                                                style: TextStyle(fontSize: 14),
+                                              )
+                                            : widget.owner.isFlat
+                                            ? Text(
+                                                (widget.owner.floor != null &&
+                                                        widget.owner.name
+                                                            .toLowerCase()
+                                                            .contains('floor'))
+                                                    ? '🏗️'
+                                                    : '🏠',
 
-                                                          style: TextStyle(fontSize: 14),
-                                                        )
-                                                      :
-                                                        Text("🏠"),
+                                                style: TextStyle(fontSize: 14),
+                                              )
+                                            : Text("🏠"),
                                       // const SizedBox(width: 4),
                                       if (widget.owner.isFlat)
                                         Row(
                                           children: [
-                                            if (widget.owner.tower != null && widget.owner.tower!.isNotEmpty)
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  '🏢',
-                                                  style: TextStyle(fontSize: 12),
-                                                ),
-                                                const SizedBox(width: 4),
-                                                Text(
-                                                  '${widget.owner.tower} • ',
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: AppColors.grey800,
-                                                    fontWeight: FontWeight.w600,
-                                                    letterSpacing: 0.2,
+                                            if (widget.owner.tower != null &&
+                                                widget.owner.tower!.isNotEmpty)
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    '🏢',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
+                                                  const SizedBox(width: 4),
+                                                  Text(
+                                                    '${widget.owner.tower} • ',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: AppColors.grey800,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      letterSpacing: 0.2,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             Text(
                                               '🏛️',
                                               style: TextStyle(fontSize: 12),
@@ -955,91 +1067,39 @@ class _OwnerCardState extends State<OwnerCard>
                                                 letterSpacing: 0.2,
                                               ),
                                             ),
-                                            if (widget.owner.floor != null && widget.owner.floor!.isNotEmpty)
-                                            Row(
-                                              children: [
-                                                const Text(' • '),
-                                                Text(
-                                                  '🏗️',
-                                                  style: TextStyle(fontSize: 12),
-                                                ),
-                                                const SizedBox(width: 4),
-                                                Text(
-                                                  widget.owner.floor!,
-
-                                                  style: TextStyle(
-
-                                                    fontSize: 12,
-                                                    color: AppColors.grey800,
-                                                    fontWeight: FontWeight.w600,
-                                                    letterSpacing: 0.2,
+                                            if (widget.owner.floor != null &&
+                                                widget.owner.floor!.isNotEmpty)
+                                              Row(
+                                                children: [
+                                                  const Text(' • '),
+                                                  Text(
+                                                    '🏗️',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
+                                                  const SizedBox(width: 4),
+                                                  Text(
+                                                    widget.owner.floor!,
+
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: AppColors.grey800,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      letterSpacing: 0.2,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                           ],
                                         )
-                                      else
-                                        if (widget.owner.isTower)
-                                          Row(
-                                            children: [
-                                              SizedBox(width: 6,),
-                                              Text(
-                                                '${widget.owner.towerCode ?? ''} • ',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: AppColors.grey800,
-                                                  fontWeight: FontWeight.w600,
-                                                  letterSpacing: 0.2,
-                                                ),
-                                              ),
-                                              Text(
-                                                  '🏛️',
-                                                  style: TextStyle(fontSize: 12),
-                                                ),
-                                              const SizedBox(width: 4),
-                                              Text(
-                                                ' ${widget.owner.wings ?? 0} Wings',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: AppColors.grey800,
-                                                  fontWeight: FontWeight.w600,
-                                                  letterSpacing: 0.2,
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        else
-                                          if (widget.owner.isAmenity && widget.owner.category != null && widget.owner.category!.isNotEmpty)
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                // Icon(
-                                                //   _getAmenityCategoryIcon(widget.owner.category),
-                                                //   size: 14,
-                                                //   color: AppColors.primaryColor,
-                                                // ),
-                                                // const SizedBox(width: 6),
-                                                Text(
-                                                  widget.owner.category!,
-                                                  style: TextStyle(
-                                                    fontSize: 12.5,
-                                                    color: AppColors.grey800,
-                                                    fontWeight: FontWeight.w600,
-                                                    letterSpacing: 0.2,
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          else
+                                      else if (widget.owner.isTower)
+                                        Row(
+                                          children: [
+                                            SizedBox(width: 6),
                                             Text(
-                                              widget.owner.isGuard 
-                                                  ? (widget.owner.shift ?? '')
-                                                  : widget.owner.isVendor
-                                                      ? (widget.owner.services ?? '')
-                                                      : widget.owner.isAmenity
-                                                          ? (widget.owner.category ?? '')
-                                                          : widget.owner.flat,
+                                              '${widget.owner.towerCode ?? ''} • ',
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: AppColors.grey800,
@@ -1047,6 +1107,61 @@ class _OwnerCardState extends State<OwnerCard>
                                                 letterSpacing: 0.2,
                                               ),
                                             ),
+                                            Text(
+                                              '🏛️',
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              ' ${widget.owner.wings ?? 0} Wings',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: AppColors.grey800,
+                                                fontWeight: FontWeight.w600,
+                                                letterSpacing: 0.2,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      else if (widget.owner.isAmenity &&
+                                          widget.owner.category != null &&
+                                          widget.owner.category!.isNotEmpty)
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            // Icon(
+                                            //   _getAmenityCategoryIcon(widget.owner.category),
+                                            //   size: 14,
+                                            //   color: AppColors.primaryColor,
+                                            // ),
+                                            // const SizedBox(width: 6),
+                                            Text(
+                                              widget.owner.category!,
+                                              style: TextStyle(
+                                                fontSize: 12.5,
+                                                color: AppColors.grey800,
+                                                fontWeight: FontWeight.w600,
+                                                letterSpacing: 0.2,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      else
+                                        Text(
+                                          widget.owner.isGuard
+                                              ? (widget.owner.shift ?? '')
+                                              : widget.owner.isVendor
+                                              ? (widget.owner.services ?? '')
+                                              : widget.owner.isAmenity
+                                              ? (widget.owner.category ?? '')
+                                              : widget.owner.flat,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: AppColors.grey800,
+                                            fontWeight: FontWeight.w600,
+                                            letterSpacing: 0.2,
+                                          ),
+                                        ),
                                     ],
                                   ),
                                   const SizedBox(height: 5),
@@ -1055,12 +1170,14 @@ class _OwnerCardState extends State<OwnerCard>
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        if (!widget.owner.flat.contains('🏠') && !widget.owner.flat.contains('🏗️'))
+                                        if (!widget.owner.flat.contains('🏠') &&
+                                            !widget.owner.flat.contains('🏗️'))
                                           Text(
                                             '🏠',
                                             style: TextStyle(fontSize: 14),
                                           ),
-                                        if (!widget.owner.flat.contains('🏠') && !widget.owner.flat.contains('🏗️'))
+                                        if (!widget.owner.flat.contains('🏠') &&
+                                            !widget.owner.flat.contains('🏗️'))
                                           const SizedBox(width: 6),
                                         Text(
                                           widget.owner.flat,
@@ -1074,7 +1191,10 @@ class _OwnerCardState extends State<OwnerCard>
                                       ],
                                     ),
 
-                                  if (widget.owner.isFlat && widget.owner.isOccupied && widget.owner.ownerName != null && widget.owner.ownerName!.isNotEmpty)
+                                  if (widget.owner.isFlat &&
+                                      widget.owner.isOccupied &&
+                                      widget.owner.ownerName != null &&
+                                      widget.owner.ownerName!.isNotEmpty)
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -1092,7 +1212,8 @@ class _OwnerCardState extends State<OwnerCard>
                                       ],
                                     ),
 
-                                  if (widget.owner.isFlat && widget.owner.isVacant)
+                                  if (widget.owner.isFlat &&
+                                      widget.owner.isVacant)
                                     Padding(
                                       padding: const EdgeInsets.only(left: 6.0),
                                       child: Row(
@@ -1103,13 +1224,14 @@ class _OwnerCardState extends State<OwnerCard>
                                             width: 14,
                                             height: 14,
                                             color: AppColors.textMid,
-                                            errorBuilder: (context, error, stackTrace) {
-                                              return const Icon(
-                                                Icons.person_off_rounded,
-                                                size: 14,
-                                                color: AppColors.textMid,
-                                              );
-                                            },
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                                  return const Icon(
+                                                    Icons.person_off_rounded,
+                                                    size: 14,
+                                                    color: AppColors.textMid,
+                                                  );
+                                                },
                                           ),
                                           const SizedBox(width: 6),
                                           Text(
@@ -1126,10 +1248,19 @@ class _OwnerCardState extends State<OwnerCard>
                                       ),
                                     ),
 
-                                  if (widget.owner.isFlat && (widget.owner.isOccupied && widget.owner.ownerName != null && widget.owner.ownerName!.isNotEmpty) || widget.owner.isVacant)
+                                  if (widget.owner.isFlat &&
+                                          (widget.owner.isOccupied &&
+                                              widget.owner.ownerName != null &&
+                                              widget
+                                                  .owner
+                                                  .ownerName!
+                                                  .isNotEmpty) ||
+                                      widget.owner.isVacant)
                                     const SizedBox(height: 5),
 
-                                  if (widget.owner.isAmenity && widget.owner.location != null && widget.owner.location!.isNotEmpty)
+                                  if (widget.owner.isAmenity &&
+                                      widget.owner.location != null &&
+                                      widget.owner.location!.isNotEmpty)
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -1147,10 +1278,14 @@ class _OwnerCardState extends State<OwnerCard>
                                       ],
                                     ),
 
-                                  if (widget.owner.isAmenity && widget.owner.location != null && widget.owner.location!.isNotEmpty)
+                                  if (widget.owner.isAmenity &&
+                                      widget.owner.location != null &&
+                                      widget.owner.location!.isNotEmpty)
                                     const SizedBox(height: 5),
 
-                                  if (widget.owner.isAmenity && widget.owner.timing != null && widget.owner.timing!.isNotEmpty)
+                                  if (widget.owner.isAmenity &&
+                                      widget.owner.timing != null &&
+                                      widget.owner.timing!.isNotEmpty)
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -1168,7 +1303,9 @@ class _OwnerCardState extends State<OwnerCard>
                                       ],
                                     ),
 
-                                  if (widget.owner.isAmenity && widget.owner.timing != null && widget.owner.timing!.isNotEmpty)
+                                  if (widget.owner.isAmenity &&
+                                      widget.owner.timing != null &&
+                                      widget.owner.timing!.isNotEmpty)
                                     const SizedBox(height: 5),
 
                                   if (widget.owner.phone.isNotEmpty)
@@ -1180,13 +1317,14 @@ class _OwnerCardState extends State<OwnerCard>
                                           width: 14,
                                           height: 14,
                                           color: AppColors.textMid,
-                                          errorBuilder: (context, error, stackTrace) {
-                                            return const Icon(
-                                              Icons.phone_rounded,
-                                              size: 14,
-                                              color: AppColors.textMid,
-                                            );
-                                          },
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                                return const Icon(
+                                                  Icons.phone_rounded,
+                                                  size: 14,
+                                                  color: AppColors.textMid,
+                                                );
+                                              },
                                         ),
                                         const SizedBox(width: 6),
                                         Text(
@@ -1201,29 +1339,46 @@ class _OwnerCardState extends State<OwnerCard>
                                       ],
                                     ),
 
-                                  if (widget.owner.isFlat && widget.owner.occupancyInfo != null && widget.owner.occupancyInfo!.isNotEmpty)
+                                  if (widget.owner.isFlat &&
+                                      widget.owner.occupancyInfo != null &&
+                                      widget.owner.occupancyInfo!.isNotEmpty)
                                     const SizedBox(height: 5),
 
-                                  if (widget.owner.isFlat && widget.owner.occupancyInfo != null && widget.owner.occupancyInfo!.isNotEmpty)
+                                  if (widget.owner.isFlat &&
+                                      widget.owner.occupancyInfo != null &&
+                                      widget.owner.occupancyInfo!.isNotEmpty)
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 2,
+                                          ),
                                           decoration: BoxDecoration(
-                                            color: _getOccupancyColor(widget.owner.occupancyInfo!).withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(6),
+                                            color: _getOccupancyColor(
+                                              widget.owner.occupancyInfo!,
+                                            ).withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(
+                                              6,
+                                            ),
                                             border: Border.all(
-                                              color: _getOccupancyColor(widget.owner.occupancyInfo!).withOpacity(0.3),
+                                              color: _getOccupancyColor(
+                                                widget.owner.occupancyInfo!,
+                                              ).withOpacity(0.3),
                                               width: 1,
                                             ),
                                           ),
                                           child: Text(
-                                            _getOccupancyText(widget.owner.occupancyInfo!),
+                                            _getOccupancyText(
+                                              widget.owner.occupancyInfo!,
+                                            ),
                                             style: TextStyle(
                                               fontSize: 11,
                                               fontWeight: FontWeight.w700,
-                                              color: _getOccupancyColor(widget.owner.occupancyInfo!),
+                                              color: _getOccupancyColor(
+                                                widget.owner.occupancyInfo!,
+                                              ),
                                               letterSpacing: 0.3,
                                             ),
                                           ),
@@ -1247,4 +1402,3 @@ class _OwnerCardState extends State<OwnerCard>
     );
   }
 }
-

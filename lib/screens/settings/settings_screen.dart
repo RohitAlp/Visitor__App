@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visitorapp/config/Routes/RouteName.dart';
-import '../../app_localization/language/language_bloc.dart';
 import '../../l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -289,24 +288,24 @@ class _SettingsScreenState extends State<SettingsScreen>
                   },
                 ),
                 _buildDivider(),
-                BlocBuilder<LanguageBloc, LanguageState>(
-                  builder: (context, state) {
-                    if (state is LanguageLoaded) {
-                      return _buildListTile(
-                        icon: Icons.language_outlined,
-                        title: 'Language',
-                        subtitle: _getLanguageName(state.locale.languageCode),
-                        onTap: () => _showLanguageDialog(context, state.locale),
-                      );
-                    }
-                    return _buildListTile(
-                      icon: Icons.language_outlined,
-                      title: 'Language',
-                      subtitle: 'English',
-                      onTap: () {},
-                    );
-                  },
-                ),
+                // BlocBuilder<LanguageBloc, LanguageState>(
+                //   builder: (context, state) {
+                //     if (state is LanguageLoaded) {
+                //       return _buildListTile(
+                //         icon: Icons.language_outlined,
+                //         title: 'Language',
+                //         subtitle: _getLanguageName(state.locale.languageCode),
+                //         onTap: () => _showLanguageDialog(context, state.locale),
+                //       );
+                //     }
+                //     return _buildListTile(
+                //       icon: Icons.language_outlined,
+                //       title: 'Language',
+                //       subtitle: 'English',
+                //       onTap: () {},
+                //     );
+                //   },
+                // ),
               ],
             ),
           ),
@@ -519,34 +518,34 @@ class _SettingsScreenState extends State<SettingsScreen>
                       const SizedBox(height: 20),
 
                       /// English
-                      _languageTile(
-                        context,
-                        title: AppLocalizations.of(context)!.english,
-                        icon: Icons.language,
-                        selected: currentLocale.languageCode == 'en',
-                        onTap: () {
-                          context.read<LanguageBloc>().add(
-                            LanguageChanged(const Locale('en')),
-                          );
-                          Navigator.pop(context);
-                        },
-                      ),
+                      // _languageTile(
+                      //   context,
+                      //   title: AppLocalizations.of(context)!.english,
+                      //   icon: Icons.language,
+                      //   selected: currentLocale.languageCode == 'en',
+                      //   onTap: () {
+                      //     context.read<LanguageBloc>().add(
+                      //       LanguageChanged(const Locale('en')),
+                      //     );
+                      //     Navigator.pop(context);
+                      //   },
+                      // ),
 
                       const SizedBox(height: 12),
 
-                      /// Hindi
-                      _languageTile(
-                        context,
-                        title: AppLocalizations.of(context)!.hindi,
-                        icon: Icons.translate,
-                        selected: currentLocale.languageCode == 'hi',
-                        onTap: () {
-                          context.read<LanguageBloc>().add(
-                            LanguageChanged(const Locale('hi')),
-                          );
-                          Navigator.pop(context);
-                        },
-                      ),
+                      // /// Hindi
+                      // _languageTile(
+                      //   context,
+                      //   title: AppLocalizations.of(context)!.hindi,
+                      //   icon: Icons.translate,
+                      //   selected: currentLocale.languageCode == 'hi',
+                      //   onTap: () {
+                      //     context.read<LanguageBloc>().add(
+                      //       LanguageChanged(const Locale('hi')),
+                      //     );
+                      //     Navigator.pop(context);
+                      //   },
+                      // ),
                     ],
                   ),
                 ),

@@ -7,6 +7,7 @@ import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
 import '../services/services.dart';
 import '../society_admin_dashboard/service_requests/service_request_list/service_request_list_screen.dart';
+import 'society_list_screen/society_list_Screen.dart';
 
 class DeveloperAdminDashboardScreen extends StatefulWidget {
   const DeveloperAdminDashboardScreen({super.key});
@@ -287,40 +288,52 @@ class _DashboardHomePage extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = items[index];
 
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: const [
-              BoxShadow(
-                color: Color.fromRGBO(110, 136, 157, 0.15),
-                offset: Offset(0, 4),
-                blurRadius: 12,
-              )
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, // Centering vertically
-            crossAxisAlignment: CrossAxisAlignment.center, // Centering horizontally
-            children: [
-              Image.asset(
-                item['icon'],
-                width: 35,
-                height: 35,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(height: 10), // Space between image and text
-              Text(
-                item['label'],
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Mulish',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+        return GestureDetector(
+          onTap: () {
+            if (item['label'] == 'Manage Property') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SocietyListScreen(),
                 ),
-              ),
-            ],
+              );
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color.fromRGBO(110, 136, 157, 0.15),
+                  offset: Offset(0, 4),
+                  blurRadius: 12,
+                )
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center, // Centering vertically
+              crossAxisAlignment: CrossAxisAlignment.center, // Centering horizontally
+              children: [
+                Image.asset(
+                  item['icon'],
+                  width: 35,
+                  height: 35,
+                  fit: BoxFit.contain,
+                ),
+                const SizedBox(height: 10), // Space between image and text
+                Text(
+                  item['label'],
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Mulish',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
