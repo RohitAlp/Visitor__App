@@ -36,14 +36,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   LoginResponse? loginResponse;
   late final List<Widget> _pages = <Widget>[
-    const _DashboardHomePage(),
-    const Payment(),
-    const NoticeScreen(),
-    // const Services(),
-    // const Profile(),
-    const SettingsScreen(),
-    const ServiceRequestListScreen(),
-    const ManageUsersScreen(type: 2,),
+    _DashboardHomePage(),
+    Payment(),
+    NoticeScreen(),
+    // Services(),
+    // Profile(),
+    SettingsScreen(),
+    ServiceRequestListScreen(),
+   // ManageUsersScreen(type: 2,),
     // const ManageUsersScreen(type: 1,),
 
   ];
@@ -211,7 +211,7 @@ class _DashboardHomePage extends StatelessWidget {
         crossAxisCount: 3,
         crossAxisSpacing: 15,
         mainAxisSpacing: 15,
-        childAspectRatio: 100 / 107, // Maintains your specific card shape
+        childAspectRatio: 100 / 107,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {

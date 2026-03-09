@@ -1,12 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../constants/app_colors.dart';
 import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
+import '../profile/bloc/profile_bloc.dart';
 import '../profile/profile.dart';
 import '../../config/Routes/RouteName.dart';
 import '../services/services.dart';
@@ -19,34 +18,29 @@ class SocietyAdminDashboardScreen extends StatefulWidget {
 }
 
 class _SocietyAdminDashboardScreenState extends State<SocietyAdminDashboardScreen> {
-  @override
   int _selectedIndex = 0;
 
   final List<NavItemData> _navItems = [
-    NavItemData(icon: Icons.home_outlined,    activeIcon: Icons.home,           label: 'Home'),
-    NavItemData(icon: Icons.currency_rupee,   activeIcon: Icons.currency_rupee, label: 'Payment'),
-    NavItemData(icon: Icons.volume_up_outlined, activeIcon: Icons.volume_up,    label: 'Notice'),
-    NavItemData(icon: Icons.people_outline,   activeIcon: Icons.people,         label: 'Services'),
-    NavItemData(icon: Icons.person_outline,   activeIcon: Icons.person,         label: 'Profile'),
+    NavItemData(icon: Icons.home_outlined,      activeIcon: Icons.home,           label: 'Home'),
+    NavItemData(icon: Icons.currency_rupee,     activeIcon: Icons.currency_rupee, label: 'Payment'),
+    NavItemData(icon: Icons.volume_up_outlined, activeIcon: Icons.volume_up,      label: 'Notice'),
+    NavItemData(icon: Icons.people_outline,     activeIcon: Icons.people,         label: 'Services'),
+    NavItemData(icon: Icons.person_outline,     activeIcon: Icons.person,         label: 'Profile'),
   ];
 
-
-  final List<Widget> _pages = [
+  late final List<Widget> _pages = <Widget>[
     const _DashboardHomePage(),
     const Payment(),
     const NoticeScreen(),
-    const Profile(),
-    const Services(),
-    // const Profile(),
-    // const ManageUsersScreen(type: 2,),
-
-    // const ManageUsersScreen(type: 1,),
-
+    const Services(),   // index 3 → Services
+    BlocProvider(
+      create: (context) => ProfileBloc(),
+      child: const Profile(),
+    ),   // index 4 → Profile
   ];
 
   @override
-  Widget build(BuildContext context)
-  {
+  Widget build(BuildContext context) {
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -66,8 +60,78 @@ class _SocietyAdminDashboardScreenState extends State<SocietyAdminDashboardScree
 }
 
 
-class _DashboardHomePage extends StatelessWidget {
+// ─── Dashboard Home ───────────────────────────────────────────────────────────
+
+class _DashboardHomePage extends StatefulWidget {
   const _DashboardHomePage();
+
+  @override
+  State<_DashboardHomePage> createState() => _DashboardHomePageState();
+}
+
+class _DashboardHomePageState extends State<_DashboardHomePage> {
+
+  late final PageController _pageController;
+  late final ValueNotifier<int> _currentIndex;
+  Timer? _timer;
+
+  final List<Map<String, String>> _notices = [
+    {
+      'tag': '📢 Notice',
+      'image': 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800',
+      'title': 'New Security Guidelines',
+      'description': 'Updated security protocols have been implemented for all residents.',
+      'date': 'Feb 20',
+    },
+    {
+      'tag': '📢 Notice',
+      'image': 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800',
+      'title': 'Maintenance Scheduled',
+      'description': 'Water supply will be suspended on March 10th from 9 AM to 1 PM.',
+      'date': 'Mar 5',
+    },
+    {
+      'tag': '📢 Notice',
+      'image': 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800',
+      'title': 'Society Annual Meeting',
+      'description': 'All residents are invited to attend the annual general meeting in the clubhouse.',
+      'date': 'Mar 12',
+    },
+    {
+      'tag': '📢 Notice',
+      'image': 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800',
+      'title': 'Parking Rules Updated',
+      'description': 'New parking allocation rules are effective from April 1st for all wings.',
+      'date': 'Mar 18',
+    },
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _currentIndex   = ValueNotifier<int>(0);
+
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (!mounted || !_pageController.hasClients) return;
+      final next = (_currentIndex.value + 1) % _notices.length;
+      _pageController.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    _currentIndex.dispose();
+    super.dispose();
+  }
+
+  // ── Build ──────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -78,19 +142,17 @@ class _DashboardHomePage extends StatelessWidget {
           SafeArea(
             child: Column(
               children: [
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: _buildHeader(),
                 ),
-
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Expanded(
                   child: Container(
                     decoration: const BoxDecoration(
                       color: Color(0xFFFDF8F5),
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(36),
+                        topLeft:  Radius.circular(36),
                         topRight: Radius.circular(36),
                       ),
                     ),
@@ -102,7 +164,7 @@ class _DashboardHomePage extends StatelessWidget {
                           const SizedBox(height: 20),
                           _buildMaintenanceCard(),
                           const SizedBox(height: 5),
-                          _buildQuickActionsGrid(),
+                          _buildQuickActionsGrid(context),
                           const SizedBox(height: 5),
                           _buildNoticeSlider(),
                           const SizedBox(height: 15),
@@ -121,24 +183,23 @@ class _DashboardHomePage extends StatelessWidget {
     );
   }
 
+  // ── Header ─────────────────────────────────────────────────────────────────
+
   Widget _buildHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // Profile photo + greeting
         Row(
           children: [
             CircleAvatar(
               radius: 24,
               backgroundColor: Colors.white24,
-              // child: const Icon(Icons.person, color: Colors.white, size: 28),
-
-              backgroundImage: AssetImage('assets/image/user-profile-pic.jpg'),
+              backgroundImage: const AssetImage('assets/image/user-profile-pic.jpg'),
             ),
             const SizedBox(width: 12),
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   "Hi, Admin",
                   style: TextStyle(
@@ -159,11 +220,7 @@ class _DashboardHomePage extends StatelessWidget {
         // Notification bell
         Stack(
           children: [
-            const Icon(
-              Icons.notifications,
-              color: Colors.white,
-              size: 35,
-            ),
+            const Icon(Icons.notifications, color: Colors.white, size: 35),
             Positioned(
               right: 6,
               top: 6,
@@ -193,87 +250,16 @@ class _DashboardHomePage extends StatelessWidget {
     );
   }
 
-  // Widget _buildQuickActionsGrid() {
-  //   final List<Map<String, dynamic>> items = [
-  //     {'emoji': '👥', 'label': 'Visitors',   'bg': const Color(0xFFFFF3E0)},
-  //     {'emoji': '🏢', 'label': 'Complaints', 'bg': const Color(0xFFFFEBEE)},
-  //     {'emoji': '🎧', 'label': 'Notice',     'bg': const Color(0xFFFFF8E1)},
-  //     {'emoji': '🏊', 'label': 'Deliveries', 'bg': const Color(0xFFE8F5E9)},
-  //     {'emoji': '📢', 'label': 'Amenities',  'bg': const Color(0xFFE3F2FD)},
-  //     {'emoji': '⚙️', 'label': 'Documents',  'bg': const Color(0xFFF3E5F5)},
-  //   ];
-  //
-  //   return GridView.builder(
-  //     shrinkWrap: true,
-  //     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-  //     physics: const NeverScrollableScrollPhysics(),
-  //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //       crossAxisCount: 3,
-  //       crossAxisSpacing: 15,
-  //       mainAxisSpacing: 15,
-  //       childAspectRatio: 100 / 107,
-  //     ),
-  //     itemCount: items.length,
-  //     itemBuilder: (context, index) {
-  //       final item = items[index];
-  //
-  //       return Container(
-  //         decoration: BoxDecoration(
-  //           color: Colors.white,
-  //           borderRadius: BorderRadius.circular(15),
-  //           boxShadow: const [
-  //             BoxShadow(
-  //               color: Color.fromRGBO(110, 136, 157, 0.20),
-  //               offset: Offset(0, 4),
-  //               blurRadius: 20,
-  //             ),
-  //           ],
-  //         ),
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             // Colored circular background with emoji
-  //             Container(
-  //               width: 52,
-  //               height: 52,
-  //               decoration: BoxDecoration(
-  //                 color: item['bg'],
-  //                 shape: BoxShape.circle,
-  //               ),
-  //               alignment: Alignment.center,
-  //               child: Text(
-  //                 item['emoji'],
-  //                 style: const TextStyle(fontSize: 30),
-  //               ),
-  //             ),
-  //
-  //             const SizedBox(height: 10),
-  //
-  //             // Label
-  //             Text(
-  //               item['label'],
-  //               textAlign: TextAlign.center,
-  //               style: const TextStyle(
-  //                 color: Colors.black87,
-  //                 fontFamily: 'Mulish',
-  //                 fontSize: 12,
-  //                 fontWeight: FontWeight.w500,
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-  Widget _buildQuickActionsGrid() {
+  // ── Quick Actions Grid ─────────────────────────────────────────────────────
+
+  Widget _buildQuickActionsGrid(BuildContext context) {
     final List<Map<String, dynamic>> items = [
       {'icon': 'assets/image/icons8-google-groups-96.png', 'label': 'Manage User'},
-      {'icon': 'assets/image/icons8-building-96.png', 'label': 'Manage Property'},
-      {'icon': 'assets/image/icons8-headset-96.png', 'label': 'Service Request'},
-      {'icon': 'assets/image/icons8-swimmer-96.png', 'label': 'Amenities'},
-      {'icon': 'assets/image/megaphone.png', 'label': 'Notice'},
-      {'icon': 'assets/image/icons8-settings-96.png', 'label': 'More'},
+      {'icon': 'assets/image/icons8-building-96.png',      'label': 'Manage Property'},
+      {'icon': 'assets/image/icons8-headset-96.png',       'label': 'Service Request'},
+      {'icon': 'assets/image/icons8-swimmer-96.png',       'label': 'Amenities'},
+      {'icon': 'assets/image/megaphone.png',               'label': 'Notice'},
+      {'icon': 'assets/image/icons8-settings-96.png',      'label': 'More'},
     ];
 
     return GridView.builder(
@@ -284,12 +270,11 @@ class _DashboardHomePage extends StatelessWidget {
         crossAxisCount: 3,
         crossAxisSpacing: 15,
         mainAxisSpacing: 15,
-        childAspectRatio: 1, // Square tiles usually look cleaner for 3x3 grids
+        childAspectRatio: 1,
       ),
       itemCount: items.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (_, index) {
         final item = items[index];
-
         return GestureDetector(
           onTap: () {
             if (index == 0) {
@@ -309,7 +294,7 @@ class _DashboardHomePage extends StatelessWidget {
                   color: Color.fromRGBO(110, 136, 157, 0.15),
                   offset: Offset(0, 4),
                   blurRadius: 12,
-                )
+                ),
               ],
             ),
             child: Column(
@@ -317,14 +302,14 @@ class _DashboardHomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
-                  item['icon'],
+                  item['icon'] as String,
                   width: 35,
                   height: 35,
                   fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  item['label'],
+                  item['label'] as String,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.black,
@@ -340,6 +325,8 @@ class _DashboardHomePage extends StatelessWidget {
       },
     );
   }
+
+  // ── Maintenance Card ───────────────────────────────────────────────────────
 
   Widget _buildMaintenanceCard() {
     return Container(
@@ -366,7 +353,7 @@ class _DashboardHomePage extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.hardEdge,
           children: [
-            // Darker OVAL — TOP-RIGHT corner
+            // Darker oval — top-right
             Positioned(
               top: -25,
               right: -25,
@@ -380,21 +367,21 @@ class _DashboardHomePage extends StatelessWidget {
               ),
             ),
 
-            // Faint OVAL — BOTTOM-LEFT corner
+            // Faint oval — bottom-left
             Positioned(
               bottom: -50,
               left: -60,
               child: Container(
                 width: 300,
                 height: 220,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF5D5B8),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF5D5B8),
                   borderRadius: BorderRadius.all(Radius.elliptical(300, 220)),
                 ),
               ),
             ),
 
-            // Main content
+            // Content
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
               child: Column(
@@ -488,163 +475,20 @@ class _DashboardHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentActivity() {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.brown.withOpacity(0.10),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "Recent Activity",
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF2D2D2D),
-            ),
-          ),
-          const SizedBox(height: 6),
-          _activityItem(
-            iconWidget: Image.asset(
-              "assets/image/tick-box.png"),
-            title: "Complaint #245 Resolved",
-            time: "2 hours ago",
-          ),
-          _buildDivider(),
-          _activityItem(
-            iconWidget: Image.asset(
-              "assets/image/Parcel-img.png"),
-            title: "Parcel Received at Gate",
-            time: "Today, 11:30 AM",
-          ),
-          _buildDivider(),
-          _activityItem(
-            iconWidget: Image.asset(
-              "assets/image/calendar-.png"),
-            title: "Event: Society Meeting",
-            time: "Sunday 22 Feb, 10:30 AM",
-          ),
-        ],
-      ),
-    );
-  }
+  // ── Notice Slider ──────────────────────────────────────────────────────────
 
-  Widget _buildDivider() {
-    return Divider(
-      color: Colors.grey.withOpacity(0.18),
-      thickness: 1,
-      height: 1,
-    );
-  }
-
-  Widget _activityItem({
-    required Widget iconWidget,
-    required String title,
-    required String time,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 7),
-      child: Row(
-        children: [
-          Container(
-            width: 32,
-            height: 32,
-
-            child: Center(child: iconWidget),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: Color(0xEC2D2D2D),
-              ),
-            ),
-          ),
-          Text(
-            time,
-            style: const TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFFBF5B1E),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
   Widget _buildNoticeSlider() {
-    final PageController pageController = PageController();
-    final ValueNotifier<int> currentIndex = ValueNotifier<int>(0);
-
-    final List<Map<String, String>> notices = [
-      {
-        'tag': '📢 Notice',
-        'image': 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800',
-        'title': 'New Security Guidelines',
-        'description': 'Updated security protocols have been implemented for all residents.',
-        'date': 'Feb 20',
-      },
-      {
-        'tag': '📢 Notice',
-        'image': 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800',
-        'title': 'Maintenance Scheduled',
-        'description': 'Water supply will be suspended on March 10th from 9 AM to 1 PM.',
-        'date': 'Mar 5',
-      },
-      {
-        'tag': '📢 Notice',
-        'image': 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800',
-        'title': 'Society Annual Meeting',
-        'description': 'All residents are invited to attend the annual general meeting in the clubhouse.',
-        'date': 'Mar 12',
-      },
-      {
-        'tag': '📢 Notice',
-        'image': 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800',
-        'title': 'Parking Rules Updated',
-        'description': 'New parking allocation rules are effective from April 1st for all wings.',
-        'date': 'Mar 18',
-      },
-    ];
-
-    Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (!pageController.hasClients) {
-        timer.cancel();
-        return;
-      }
-      final next = ((currentIndex.value + 1) % notices.length);
-      pageController.animateToPage(
-        next,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    });
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         AspectRatio(
           aspectRatio: 16 / 13,
           child: PageView.builder(
-            controller: pageController,
-            itemCount: notices.length,
-            onPageChanged: (index) => currentIndex.value = index,
+            controller: _pageController,
+            itemCount: _notices.length,
+            onPageChanged: (index) => _currentIndex.value = index,
             itemBuilder: (context, index) {
-              final notice = notices[index];
+              final notice = _notices[index];
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
@@ -673,7 +517,8 @@ class _DashboardHomePage extends StatelessWidget {
                               errorBuilder: (_, __, ___) => Container(
                                 color: const Color(0xFFF0E8DF),
                                 child: const Center(
-                                  child: Icon(Icons.image_outlined, size: 40, color: Colors.grey),
+                                  child: Icon(Icons.image_outlined,
+                                      size: 40, color: Colors.grey),
                                 ),
                               ),
                             ),
@@ -681,7 +526,8 @@ class _DashboardHomePage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(12),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20),
@@ -767,12 +613,12 @@ class _DashboardHomePage extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         ValueListenableBuilder<int>(
-          valueListenable: currentIndex,
+          valueListenable: _currentIndex,
           builder: (context, value, _) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                notices.length,
+                _notices.length,
                     (index) => AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -790,6 +636,99 @@ class _DashboardHomePage extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+
+  // ── Recent Activity ────────────────────────────────────────────────────────
+
+  Widget _buildRecentActivity() {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.brown.withOpacity(0.10),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Recent Activity",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF2D2D2D),
+            ),
+          ),
+          const SizedBox(height: 6),
+          _activityItem(
+            iconWidget: Image.asset("assets/image/tick-box.png"),
+            title: "Complaint #245 Resolved",
+            time: "2 hours ago",
+          ),
+          _buildDivider(),
+          _activityItem(
+            iconWidget: Image.asset("assets/image/Parcel-img.png"),
+            title: "Parcel Received at Gate",
+            time: "Today, 11:30 AM",
+          ),
+          _buildDivider(),
+          _activityItem(
+            iconWidget: Image.asset("assets/image/calendar-.png"),
+            title: "Event: Society Meeting",
+            time: "Sunday 22 Feb, 10:30 AM",
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Divider(
+      color: Colors.grey.withOpacity(0.18),
+      thickness: 1,
+      height: 1,
+    );
+  }
+
+  Widget _activityItem({
+    required Widget iconWidget,
+    required String title,
+    required String time,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7),
+      child: Row(
+        children: [
+          SizedBox(width: 32, height: 32, child: Center(child: iconWidget)),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Color(0xEC2D2D2D),
+              ),
+            ),
+          ),
+          Text(
+            time,
+            style: const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFFBF5B1E),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

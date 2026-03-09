@@ -91,29 +91,33 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: AppColors.cardBg,
-                        borderRadius: BorderRadius.circular(12),
-
-                        // Soft Grey Border
-                        border: Border.all(
-                          color: Colors.grey.withOpacity(0.15),
-                          width: 1,
-                        ),
-
-                        // Light Shadow
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: AppColors.cardBg,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.grey.withOpacity(0.15),
+                            width: 1,
                           ),
-                        ],
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 6,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_ios_rounded,
+                          size: 16,
+                        ),
                       ),
-                      child: const Icon(Icons.arrow_back_ios_rounded, size: 16),
                     ),
 
                     const SizedBox(width: 12),
