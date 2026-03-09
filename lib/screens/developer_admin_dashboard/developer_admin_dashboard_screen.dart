@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../model/LoginResponse.dart';
+import '../../model/VerifyOtpResponse.dart';
+import '../../secure storage/user_info.dart';
 import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
 import '../services/services.dart';
+import '../settings/settings_screen.dart';
 import '../society_admin_dashboard/service_requests/service_request_list/service_request_list_screen.dart';
 import 'society_list_screen/society_list_Screen.dart';
 
@@ -13,63 +16,56 @@ class DeveloperAdminDashboardScreen extends StatefulWidget {
   const DeveloperAdminDashboardScreen({super.key});
 
   @override
-  State<DeveloperAdminDashboardScreen> createState() =>
-      _DeveloperAdminDashboardScreenState();
+  State<DeveloperAdminDashboardScreen> createState() => _DeveloperAdminDashboardScreenState();
 }
 
-class _DeveloperAdminDashboardScreenState
-    extends State<DeveloperAdminDashboardScreen> {
+class _DeveloperAdminDashboardScreenState extends State<DeveloperAdminDashboardScreen> {
   int _selectedIndex = 0;
+  VerifyOtpResponse? userInfo;
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    final storedUser = await UserInfoSecureStorage.getUserInfo();
+    if (storedUser != null) {
+      setState(() {
+        userInfo = storedUser;
+      });
+    }
+  }
 
   final List<NavItemData> _navItems = [
-    NavItemData(
-      icon: Icons.home_outlined,
-      activeIcon: Icons.home,
-      label: 'Home',
-    ),
-    NavItemData(
-      icon: Icons.currency_rupee,
-      activeIcon: Icons.currency_rupee,
-      label: 'Payment',
-    ),
-    NavItemData(
-      icon: Icons.volume_up_outlined,
-      activeIcon: Icons.volume_up,
-      label: 'Notice',
-    ),
-    NavItemData(
-      icon: Icons.people_outline,
-      activeIcon: Icons.people,
-      label: 'Services',
-    ),
-    NavItemData(
-      icon: Icons.person_outline,
-      activeIcon: Icons.person,
-      label: 'Profile',
-    ),
+    NavItemData(icon: Icons.home_outlined,    activeIcon: Icons.home,           label: 'Home'),
+    NavItemData(icon: Icons.currency_rupee,   activeIcon: Icons.currency_rupee, label: 'Payment'),
+    NavItemData(icon: Icons.volume_up_outlined, activeIcon: Icons.volume_up,    label: 'Notice'),
+    NavItemData(icon: Icons.people_outline,   activeIcon: Icons.people,         label: 'Services'),
+    NavItemData(icon: Icons.person_outline,   activeIcon: Icons.person,         label: 'Profile'),
   ];
 
-  LoginResponse? loginResponse;
-  late final List<Widget> _pages = <Widget>[
-    _DashboardHomePage(),
-    Payment(),
-    NoticeScreen(),
-    Services(),
-    // Profile(),
-    ServiceRequestListScreen(),
 
-    // const ManageUsersScreen(type: 2,),
-    //
-    // const ManageUsersScreen(type: 1,),
-  ];
+
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
+    final pages = <Widget>[
+      _DashboardHomePage(userInfo: userInfo),
+      Payment(),
+      NoticeScreen(),
+      SettingsScreen(),
+      ServiceRequestListScreen(),
+    ];
     return SafeArea(
       top: false,
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: IndexedStack(index: _selectedIndex, children: _pages),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: pages,
+        ),
         bottomNavigationBar: CustomAnimatedNavBar(
           items: _navItems,
           selectedIndex: _selectedIndex,
@@ -80,8 +76,12 @@ class _DeveloperAdminDashboardScreenState
   }
 }
 
+
 class _DashboardHomePage extends StatelessWidget {
-  const _DashboardHomePage();
+
+  final VerifyOtpResponse? userInfo;
+
+  const _DashboardHomePage({this.userInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +92,9 @@ class _DashboardHomePage extends StatelessWidget {
           SafeArea(
             child: Column(
               children: [
+
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: _buildHeader(),
                 ),
 
@@ -147,23 +145,23 @@ class _DashboardHomePage extends StatelessWidget {
             CircleAvatar(
               radius: 24,
               backgroundColor: Colors.white24,
-
               // child: const Icon(Icons.person, color: Colors.white, size: 28),
+
               backgroundImage: AssetImage('assets/image/user-profile-pic.jpg'),
             ),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Hi, Admin",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
+              children: [
+    Text(
+    "Hi, ${userInfo?.fullName ?? 'User'}",
+    style: const TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 18,
+    color: Colors.white,
+    ),
+    ),
+                const Text(
                   "Super Admin",
                   style: TextStyle(fontSize: 13, color: Colors.white70),
                 ),
@@ -175,7 +173,11 @@ class _DashboardHomePage extends StatelessWidget {
         // Notification bell
         Stack(
           children: [
-            const Icon(Icons.notifications, color: Colors.white, size: 35),
+            const Icon(
+              Icons.notifications,
+              color: Colors.white,
+              size: 35,
+            ),
             Positioned(
               right: 6,
               top: 6,
@@ -205,90 +207,12 @@ class _DashboardHomePage extends StatelessWidget {
     );
   }
 
-  // Widget _buildQuickActionsGrid() {
-  //   final List<Map<String, dynamic>> items = [
-  //     {'emoji': '👥', 'label': 'Visitors',   'bg': const Color(0xFFFFF3E0)},
-  //     {'emoji': '🏢', 'label': 'Complaints', 'bg': const Color(0xFFFFEBEE)},
-  //     {'emoji': '🎧', 'label': 'Notice',     'bg': const Color(0xFFFFF8E1)},
-  //     {'emoji': '🏊', 'label': 'Deliveries', 'bg': const Color(0xFFE8F5E9)},
-  //     {'emoji': '📢', 'label': 'Amenities',  'bg': const Color(0xFFE3F2FD)},
-  //     {'emoji': '⚙️', 'label': 'Documents',  'bg': const Color(0xFFF3E5F5)},
-  //   ];
-  //
-  //   return GridView.builder(
-  //     shrinkWrap: true,
-  //     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-  //     physics: const NeverScrollableScrollPhysics(),
-  //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //       crossAxisCount: 3,
-  //       crossAxisSpacing: 15,
-  //       mainAxisSpacing: 15,
-  //       childAspectRatio: 100 / 107,
-  //     ),
-  //     itemCount: items.length,
-  //     itemBuilder: (context, index) {
-  //       final item = items[index];
-  //
-  //       return Container(
-  //         decoration: BoxDecoration(
-  //           color: Colors.white,
-  //           borderRadius: BorderRadius.circular(15),
-  //           boxShadow: const [
-  //             BoxShadow(
-  //               color: Color.fromRGBO(110, 136, 157, 0.20),
-  //               offset: Offset(0, 4),
-  //               blurRadius: 20,
-  //             ),
-  //           ],
-  //         ),
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             // Colored circular background with emoji
-  //             Container(
-  //               width: 52,
-  //               height: 52,
-  //               decoration: BoxDecoration(
-  //                 color: item['bg'],
-  //                 shape: BoxShape.circle,
-  //               ),
-  //               alignment: Alignment.center,
-  //               child: Text(
-  //                 item['emoji'],
-  //                 style: const TextStyle(fontSize: 30),
-  //               ),
-  //             ),
-  //
-  //             const SizedBox(height: 10),
-  //
-  //             // Label
-  //             Text(
-  //               item['label'],
-  //               textAlign: TextAlign.center,
-  //               style: const TextStyle(
-  //                 color: Colors.black87,
-  //                 fontFamily: 'Mulish',
-  //                 fontSize: 12,
-  //                 fontWeight: FontWeight.w500,
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+
   Widget _buildQuickActionsGrid() {
     final List<Map<String, dynamic>> items = [
       {'icon': 'assets/image/building.png', 'label': 'Society Creation'},
-      {
-        'icon': 'assets/image/icons8-google-groups-96.png',
-        'label': 'Manage User',
-      },
-      {
-        'icon': 'assets/image/icons8-building-96.png',
-        'label': 'Manage Property',
-      },
+      {'icon': 'assets/image/icons8-google-groups-96.png', 'label': 'Manage User'},
+      {'icon': 'assets/image/icons8-building-96.png', 'label': 'Manage Property'},
       {'icon': 'assets/image/report.png', 'label': 'MIS & Report'},
       {'icon': 'assets/image/megaphone.png', 'label': 'Notice'},
       {'icon': 'assets/image/icons8-settings-96.png', 'label': 'More'},
@@ -328,14 +252,12 @@ class _DashboardHomePage extends StatelessWidget {
                   color: Color.fromRGBO(110, 136, 157, 0.15),
                   offset: Offset(0, 4),
                   blurRadius: 12,
-                ),
+                )
               ],
             ),
             child: Column(
-              mainAxisAlignment:
-                  MainAxisAlignment.center, // Centering vertically
-              crossAxisAlignment:
-                  CrossAxisAlignment.center, // Centering horizontally
+              mainAxisAlignment: MainAxisAlignment.center, // Centering vertically
+              crossAxisAlignment: CrossAxisAlignment.center, // Centering horizontally
               children: [
                 Image.asset(
                   item['icon'],
@@ -537,19 +459,22 @@ class _DashboardHomePage extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           _activityItem(
-            iconWidget: Image.asset("assets/image/tick-box.png"),
+            iconWidget: Image.asset(
+                "assets/image/tick-box.png"),
             title: "Complaint #245 Resolved",
             time: "2 hours ago",
           ),
           _buildDivider(),
           _activityItem(
-            iconWidget: Image.asset("assets/image/Parcel-img.png"),
+            iconWidget: Image.asset(
+                "assets/image/Parcel-img.png"),
             title: "Parcel Received at Gate",
             time: "Today, 11:30 AM",
           ),
           _buildDivider(),
           _activityItem(
-            iconWidget: Image.asset("assets/image/calendar-.png"),
+            iconWidget: Image.asset(
+                "assets/image/calendar-.png"),
             title: "Event: Society Meeting",
             time: "Sunday 22 Feb, 10:30 AM",
           ),
@@ -575,7 +500,12 @@ class _DashboardHomePage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 7),
       child: Row(
         children: [
-          Container(width: 32, height: 32, child: Center(child: iconWidget)),
+          Container(
+            width: 32,
+            height: 32,
+
+            child: Center(child: iconWidget),
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -599,7 +529,6 @@ class _DashboardHomePage extends StatelessWidget {
       ),
     );
   }
-
   Widget _buildNoticeSlider() {
     final PageController pageController = PageController();
     final ValueNotifier<int> currentIndex = ValueNotifier<int>(0);
@@ -607,38 +536,30 @@ class _DashboardHomePage extends StatelessWidget {
     final List<Map<String, String>> notices = [
       {
         'tag': '📢 Notice',
-        'image':
-            'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800',
+        'image': 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800',
         'title': 'New Security Guidelines',
-        'description':
-            'Updated security protocols have been implemented for all residents.',
+        'description': 'Updated security protocols have been implemented for all residents.',
         'date': 'Feb 20',
       },
       {
         'tag': '📢 Notice',
-        'image':
-            'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800',
+        'image': 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800',
         'title': 'Maintenance Scheduled',
-        'description':
-            'Water supply will be suspended on March 10th from 9 AM to 1 PM.',
+        'description': 'Water supply will be suspended on March 10th from 9 AM to 1 PM.',
         'date': 'Mar 5',
       },
       {
         'tag': '📢 Notice',
-        'image':
-            'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800',
+        'image': 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800',
         'title': 'Society Annual Meeting',
-        'description':
-            'All residents are invited to attend the annual general meeting in the clubhouse.',
+        'description': 'All residents are invited to attend the annual general meeting in the clubhouse.',
         'date': 'Mar 12',
       },
       {
         'tag': '📢 Notice',
-        'image':
-            'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800',
+        'image': 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800',
         'title': 'Parking Rules Updated',
-        'description':
-            'New parking allocation rules are effective from April 1st for all wings.',
+        'description': 'New parking allocation rules are effective from April 1st for all wings.',
         'date': 'Mar 18',
       },
     ];
@@ -684,9 +605,7 @@ class _DashboardHomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(20),
-                      ),
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                       child: Stack(
                         children: [
                           AspectRatio(
@@ -697,11 +616,7 @@ class _DashboardHomePage extends StatelessWidget {
                               errorBuilder: (_, __, ___) => Container(
                                 color: const Color(0xFFF0E8DF),
                                 child: const Center(
-                                  child: Icon(
-                                    Icons.image_outlined,
-                                    size: 40,
-                                    color: Colors.grey,
-                                  ),
+                                  child: Icon(Icons.image_outlined, size: 40, color: Colors.grey),
                                 ),
                               ),
                             ),
@@ -709,10 +624,7 @@ class _DashboardHomePage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(12),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20),
@@ -764,11 +676,8 @@ class _DashboardHomePage extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    const Icon(
-                                      Icons.calendar_today_outlined,
-                                      size: 14,
-                                      color: Color(0xFF9E9E9E),
-                                    ),
+                                    const Icon(Icons.calendar_today_outlined,
+                                        size: 14, color: Color(0xFF9E9E9E)),
                                     const SizedBox(width: 6),
                                     Text(
                                       notice['date']!,
@@ -807,7 +716,7 @@ class _DashboardHomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 notices.length,
-                (index) => AnimatedContainer(
+                    (index) => AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   width: value == index ? 20 : 8,

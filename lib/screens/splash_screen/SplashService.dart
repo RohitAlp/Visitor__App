@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import '../../config/Routes/RouteName.dart';
 import '../../secure storage/user_info.dart';
 import '../../model/VerifyOtpResponse.dart';

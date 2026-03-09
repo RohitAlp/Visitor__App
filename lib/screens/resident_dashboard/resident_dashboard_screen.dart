@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/model/LoginResponse.dart';
+import 'package:visitorapp/model/VerifyOtpResponse.dart';
 import 'package:visitorapp/screens/settings/settings_screen.dart';
 import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
 import '../society_admin_dashboard/service_requests/service_request_list/service_request_list_screen.dart';
-
-
+import '../../secure storage/user_info.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -19,6 +19,22 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
+  VerifyOtpResponse? userInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    final storedUser = await UserInfoSecureStorage.getUserInfo();
+    if (storedUser != null) {
+      setState(() {
+        userInfo = storedUser;
+      });
+    }
+  }
 
   final List<NavItemData> _navItems = [
     NavItemData(icon: Icons.home_outlined,    activeIcon: Icons.home,           label: 'Home'),
@@ -29,18 +45,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ];
 
   LoginResponse? loginResponse;
-  late final List<Widget> _pages = <Widget>[
-    _DashboardHomePage(),
-    Payment(),
-    NoticeScreen(),
-    // Services(),
-    // Profile(),
-    SettingsScreen(),
-    ServiceRequestListScreen(),
-   // ManageUsersScreen(type: 2,),
-    // const ManageUsersScreen(type: 1,),
-
-  ];
+  List<Widget> _pages() {
+    return [
+      _DashboardHomePage(userInfo: userInfo),
+      Payment(),
+      NoticeScreen(),
+      SettingsScreen(),
+      ServiceRequestListScreen(),
+    ];
+  }
 
 
   @override
@@ -52,7 +65,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         backgroundColor: Colors.white,
         body: IndexedStack(
           index: _selectedIndex,
-          children: _pages,
+          children: _pages(),
         ),
         bottomNavigationBar: CustomAnimatedNavBar(
           items: _navItems,
@@ -65,7 +78,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 }
 
 class _DashboardHomePage extends StatelessWidget {
-  const _DashboardHomePage();
+
+  final VerifyOtpResponse? userInfo;
+
+  const _DashboardHomePage({this.userInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -133,16 +149,16 @@ class _DashboardHomePage extends StatelessWidget {
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  "Hi, Runal",
-                  style: TextStyle(
+                  "Hi, ${userInfo?.fullName ?? 'User'}",
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                     color: Colors.white,
                   ),
                 ),
-                Text(
+                const Text(
                   "Wing A - Flat 912",
                   style: TextStyle(fontSize: 13, color: Colors.white70),
                 ),
