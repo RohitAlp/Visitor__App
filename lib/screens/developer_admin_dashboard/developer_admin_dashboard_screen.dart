@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import '../../constants/app_colors.dart';
 import '../../model/LoginResponse.dart';
 import '../../widgets/custom_bottom_bar.dart';

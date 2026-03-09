@@ -9,6 +9,7 @@ import '../profile/bloc/profile_bloc.dart';
 import '../profile/profile.dart';
 import '../../config/Routes/RouteName.dart';
 import '../services/services.dart';
+import '../settings/settings_screen.dart';
 
 class SocietyAdminDashboardScreen extends StatefulWidget {
   const SocietyAdminDashboardScreen({super.key});
@@ -32,11 +33,9 @@ class _SocietyAdminDashboardScreenState extends State<SocietyAdminDashboardScree
     const _DashboardHomePage(),
     const Payment(),
     const NoticeScreen(),
-    const Services(),   // index 3 → Services
-    BlocProvider(
-      create: (context) => ProfileBloc(),
-      child: const Profile(),
-    ),   // index 4 → Profile
+    const SettingsScreen(),
+    const SettingsScreen(),
+       // index 4 → Profile
   ];
 
   @override
@@ -77,21 +76,21 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
 
   final List<Map<String, String>> _notices = [
     {
-      'tag': '📢 Notice',
+      'tag': 'Notice',
       'image': 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800',
       'title': 'New Security Guidelines',
       'description': 'Updated security protocols have been implemented for all residents.',
       'date': 'Feb 20',
     },
     {
-      'tag': '📢 Notice',
+      'tag': ' Notice',
       'image': 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800',
       'title': 'Maintenance Scheduled',
       'description': 'Water supply will be suspended on March 10th from 9 AM to 1 PM.',
       'date': 'Mar 5',
     },
     {
-      'tag': '📢 Notice',
+      'tag': 'Notice',
       'image': 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800',
       'title': 'Society Annual Meeting',
       'description': 'All residents are invited to attend the annual general meeting in the clubhouse.',
