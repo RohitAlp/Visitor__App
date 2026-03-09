@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:visitorapp/constants/app_colors.dart';
+import 'package:visitorapp/controller/tower_controller.dart';
+import 'package:visitorapp/model/AddTowerResponse.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 import 'package:visitorapp/widgets/custom_dropdown.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
+import '../../../../config/Routes/RouteName.dart';
+import '../../../../constants/constant.dart';
+import '../../../../constants/utils.dart';
 import '../../../../widgets/owner_card.dart';
 import 'Add_tower.dart';
 
@@ -25,6 +30,50 @@ class _AddTowerFormState extends State<AddTowerForm> {
 
   bool _didInitFromArgs = false;
   bool _isEdit = false;
+
+  Future<void> _addTower(BuildContext context) async {
+    if (await Utils.isConnected()) {
+      bool _isLoading = true;
+      Utils.onLoading(context);
+
+      Map<String, dynamic> data = {
+        "buildingName": _towerNameController.text ?? "",
+        "numberOfFloors": 9,
+        "societyId": 3,
+      };
+
+      TowerController loginUserController = TowerController();
+      try {
+        final response = await loginUserController.addTower(data);
+
+        if (response != null) {
+          AddTowerResponse res = AddTowerResponse.fromJson(response.data);
+
+          if (res.status == true && res.statusCode==200) {
+            Utils.showToast(context, message: '${res.message}');
+
+            Navigator.pop(context);
+            _isLoading = false;
+            Navigator.pushReplacementNamed(context, RouteName.ManageTowersScreen);
+          } else {
+            Utils.showToast(context, message: '${res.message}');
+          }
+        } else {
+          Utils.showToast(context, message: 'Something went wrong!');
+          print(response);
+        }
+      } catch (e) {
+        Utils.showToast(context, message: 'Something went wrong!');
+        print(e);
+      } finally {
+        if (_isLoading) {
+          Navigator.pop(context);
+        }
+      }
+    } else {
+      Utils.showToast(context, message: Constant.internetConMsg);
+    }
+  }
 
   @override
   void dispose() {
@@ -164,14 +213,20 @@ class _AddTowerFormState extends State<AddTowerForm> {
                     onPressed: () {
                       final valid = _formKey.currentState!.validate();
                       if (valid) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content:
-                                Text(_isEdit ? 'Tower updated' : 'Tower added'),
-                            backgroundColor: AppColors.successGreen,
-                          ),
-                        );
-                        Navigator.pop(context);
+                        if(_isEdit)
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                _isEdit ? 'Tower updated' : 'Tower added',
+                              ),
+                              backgroundColor: AppColors.successGreen,
+                            ),
+                          );
+                          Navigator.pop(context);
+                        }else{
+                          _addTower(context);
+                        }
                       }
                     },
                     child: Text(
@@ -206,10 +261,9 @@ Widget _buildLabel(String text, {bool isRequired = true}) {
               TextSpan(
                 text: ' *',
                 style: TextStyle(color: AppColors.errorRed),
-              )
+              ),
             ]
           : [],
     ),
   );
 }
-
