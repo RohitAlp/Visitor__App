@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../constants/app_colors.dart';
 import '../../widgets/custom_bottom_bar.dart';
+import '../../widgets/common_dialogue.dart';
 import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
@@ -45,18 +46,28 @@ class _SocietyAdminDashboardScreenState extends State<SocietyAdminDashboardScree
   @override
   Widget build(BuildContext context)
   {
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: _pages,
-        ),
-        bottomNavigationBar: CustomAnimatedNavBar(
-          items: _navItems,
-          selectedIndex: _selectedIndex,
-          onTap: (index) => setState(() => _selectedIndex = index),
+    return WillPopScope(
+      onWillPop: () async {
+        final result = await DialogueHelper.showCloseAppDialogue(
+          context: context,
+          title: 'Close App',
+          message: 'Are you sure you want to close the app?',
+        );
+        return result ?? false;
+      },
+      child: SafeArea(
+        top: false,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: IndexedStack(
+            index: _selectedIndex,
+            children: _pages,
+          ),
+          bottomNavigationBar: CustomAnimatedNavBar(
+            items: _navItems,
+            selectedIndex: _selectedIndex,
+            onTap: (index) => setState(() => _selectedIndex = index),
+          ),
         ),
       ),
     );

@@ -92,10 +92,10 @@ class _OtpScreenState extends State<OtpScreen> {
             Utils.showToast(context, message: '${verifyOtpResponse.message}');
             Navigator.pop(context);
             _isLoading = false;
-            Navigator.pushNamed(
+            Navigator.pushReplacementNamed(
               context,
               RouteName.manageUsersSocietyAdmin,
-              arguments: 1,
+              arguments: 2,
               // RouteName.SocietyAdminDashboardScreen,
              // RouteName.DeveloperAdminDashboardScreen,
               // RouteName.dashboardScreen,
