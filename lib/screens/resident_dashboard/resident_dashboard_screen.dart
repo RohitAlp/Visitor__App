@@ -7,7 +7,7 @@ import 'package:visitorapp/model/LoginResponse.dart';
 import 'package:visitorapp/screens/settings/settings_screen.dart';
 import '../../constants/constant.dart';
 import '../../widgets/custom_bottom_bar.dart';
-import '../Notice/notice.dart';
+import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
 import '../services/services.dart';
@@ -38,7 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   late final List<Widget> _pages = <Widget>[
     const _DashboardHomePage(),
     const Payment(),
-    const Notice(),
+    const NoticeScreen(),
     // const Services(),
     // const Profile(),
     const SettingsScreen(),

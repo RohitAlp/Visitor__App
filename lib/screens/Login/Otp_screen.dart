@@ -94,9 +94,9 @@ class _OtpScreenState extends State<OtpScreen> {
             _isLoading = false;
             Navigator.pushNamed(
               context,
-              // RouteName.manageUsersSocietyAdmin,
-              // arguments: 2,
-              RouteName.SocietyAdminDashboardScreen,
+              RouteName.manageUsersSocietyAdmin,
+              arguments: 1,
+              // RouteName.SocietyAdminDashboardScreen,
              // RouteName.DeveloperAdminDashboardScreen,
               // RouteName.dashboardScreen,
             );

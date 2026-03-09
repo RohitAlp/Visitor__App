@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 
@@ -23,6 +24,9 @@ class EditSecurityGuardsForm extends StatefulWidget {
 class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _imagePicker = ImagePicker();
+  List<PlatformFile> uploadedFiles = [];
+  File? selectedFile;
+  String? fileName;
 
   @override
   Widget build(BuildContext context) {
@@ -147,36 +151,129 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
 
                         BlocBuilder<EditguardsBloc, EditguardsState>(
                           builder: (context, state) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Upload Photo",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14
+                            return Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: Colors.grey.shade200),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade100,
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 2),
                                   ),
-                                ),
-                                const SizedBox(height: 8),
-                                GestureDetector(
-                                  onTap: _pickImage,
-                                  child: Container(
-                                    height: 100,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: AppColors.grey300,
-                                        style: BorderStyle.solid,
-                                      ),
-                                      color: AppColors.grey50,
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Upload Photo/Video (Optional)",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                    child: state.guardPhotoBase64 != null
-                                        ? _buildDocumentPreview(state.guardPhotoBase64!)
-                                        : _buildUploadPlaceholder(),
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 10),
+
+                                  /// Upload Box
+                                  GestureDetector(
+                                    onTap: pickFile,
+                                    child: DottedBorder(
+                                      dashPattern: const [6, 4],
+                                      borderType: BorderType.RRect,
+                                      radius: const Radius.circular(12),
+                                      color: AppColors.primaryColor,
+                                      strokeWidth: 1.5,
+                                      child: Container(
+                                        height: 120,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primaryColor.withOpacity(0.08),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              'assets/image/upload.png',
+                                              width: 28,
+                                              height: 28,
+                                              color: Colors.grey,
+                                            ),
+                                            const SizedBox(height: 8),
+                                            const Text(
+                                              "Click to upload files",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            const Text(
+                                              "Image or Video (Max 10MB)",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+
+                                  /// Show uploaded files
+                                  if (uploadedFiles.isNotEmpty)
+                                    Column(
+                                      children: uploadedFiles.map((file) {
+                                        return Container(
+                                          margin: const EdgeInsets.symmetric(vertical: 6),
+                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.primaryColor.withOpacity(0.08),
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(
+                                              color: AppColors.primaryColor.withOpacity(0.4),
+                                            ),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Image.asset(
+                                                'assets/image/upload.png',
+                                                width: 20,
+                                                height: 20,
+                                                color: AppColors.primaryColor,
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: Text(
+                                                  "${file.name} (${(file.size / 1024).toStringAsFixed(1)} KB)",
+                                                  style: const TextStyle(fontSize: 13),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    uploadedFiles.remove(file);
+                                                  });
+                                                },
+                                                child: Icon(
+                                                  Icons.close,
+                                                  color: AppColors.primaryColor,
+                                                  size: 18,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                ],
+                              ),
                             );
                           },
                         ),
@@ -235,216 +332,23 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
     );
   }
 
-  Future<void> _pickImage() async {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text('Take Photo'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _captureImage();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Choose from Gallery'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _pickFromGallery();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.picture_as_pdf),
-                title: const Text('Choose PDF'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _pickPDF();
-                },
-              ),
-            ],
-          ),
-        );
-      },
+  Future<void> pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4'],
+      allowMultiple: true,
     );
-  }
 
-  Future<void> _captureImage() async {
-    try {
-      final XFile? pickedFile = await _imagePicker.pickImage(
-        source: ImageSource.camera,
-        maxWidth: 1920,
-        maxHeight: 1080,
-        imageQuality: 85,
-      );
-
-      if (pickedFile != null) {
-        final File imageFile = File(pickedFile.path);
-        final bytes = await imageFile.readAsBytes();
-        final base64String = base64Encode(bytes);
-
-        final extension = pickedFile.path.split('.').last.toLowerCase();
-        final formattedBase64 = 'data:image/$extension;base64,$base64String';
-
-        context.read<EditguardsBloc>().add(EditGuardPhotoEvent(formattedBase64));
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error capturing image: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
+    if (result != null) {
+      setState(() {
+        uploadedFiles.addAll(result.files);
+      });
     }
   }
 
-  Future<void> _pickFromGallery() async {
-    try {
-      final XFile? pickedFile = await _imagePicker.pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 1920,
-        maxHeight: 1080,
-        imageQuality: 85,
-      );
-
-      if (pickedFile != null) {
-        final File imageFile = File(pickedFile.path);
-        final bytes = await imageFile.readAsBytes();
-        final base64String = base64Encode(bytes);
-
-        final extension = pickedFile.path.split('.').last.toLowerCase();
-        final formattedBase64 = 'data:image/$extension;base64,$base64String';
-
-        context.read<EditguardsBloc>().add(EditGuardPhotoEvent(formattedBase64));
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error picking image: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  Future<void> _pickPDF() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf'],
-        allowMultiple: false,
-      );
-
-      if (result != null && result.files.single.path != null) {
-        final File pdfFile = File(result.files.single.path!);
-        final bytes = await pdfFile.readAsBytes();
-        final base64String = base64Encode(bytes);
-        final formattedBase64 = 'data:application/pdf;base64,$base64String';
-
-        context.read<EditguardsBloc>().add(EditGuardPhotoEvent(formattedBase64));
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('PDF uploaded successfully'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error picking PDF: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
 
 }
 
-Widget _buildDocumentPreview(String base64String){
-  try {
-
-    if (base64String.startsWith('data:application/pdf')) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: Colors.grey[100],
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.picture_as_pdf,
-                size: 40,
-                color: AppColors.deleteRed,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'PDF Document',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-    else {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Image.memory(
-          base64Decode(base64String.split(',').last),
-          fit: BoxFit.contain,
-          width: double.infinity,
-          height: double.infinity,
-          errorBuilder: (context, error, stackTrace) {
-            return _buildUploadPlaceholder();
-          },
-        ),
-      );
-    }
-  } catch (e) {
-    return _buildUploadPlaceholder();
-  }
-}
-
-Widget _buildUploadPlaceholder() {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      const Icon(
-        Icons.upload_file,
-        size: 30,
-        color: Colors.grey,
-      ),
-      const SizedBox(height: 8),
-      const Text(
-        "Tap to upload or drag and drop",
-        style: TextStyle(
-          fontSize: 12,
-          color: AppColors.grey,
-        ),
-      ),
-      const SizedBox(height: 4),
-      const Text(
-        "PNG, JPG, PDF (max. 5MB)",
-        style: TextStyle(
-          fontSize: 11,
-          color: AppColors.grey,
-        ),
-      ),
-    ],
-  );
-}
 
 Widget _buildLabel(String text, {bool isRequired = true}) {
   return RichText(

@@ -76,16 +76,6 @@ class Routes {
         return MaterialPageRoute(builder: (context) => const ManageAmanitiesScreen());
       case RouteName.DeveloperAdminDashboardScreen:
         return MaterialPageRoute(builder: (context) => const DeveloperAdminDashboardScreen());
-
-
-        case RouteName.AddFlatOwnerForm:
-      case RouteName.Profile:
-        return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => ProfileBloc(),
-            child: const Profile(),
-          ),
-        );
       case RouteName.AddFlatOwnerForm:
         final args = setting.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
@@ -95,6 +85,15 @@ class Routes {
             initialFlatNumber: args?['flatNumber'] as String?,
           ),
         );
+
+      case RouteName.Profile:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => ProfileBloc(),
+            child: const Profile(),
+          ),
+        );
+
 
       default:
         return MaterialPageRoute(

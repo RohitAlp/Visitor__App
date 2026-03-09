@@ -1,12 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:dotted_border/dotted_border.dart';
 
 import '../../../../widgets/custom_dropdown.dart';
 
@@ -44,12 +39,6 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
   String? _selectedFloor;
   final List<_VehicleData> _vehicles = [_VehicleData()];
 
-  // File upload variables
-  List<PlatformFile> uploadedFiles = [];
-  File? selectedFile;
-  final ImagePicker picker = ImagePicker();
-  String? fileName;
-
   @override
   void initState() {
     super.initState();
@@ -71,21 +60,6 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
     _emailController.dispose();
     _flatNumberController.dispose();
     super.dispose();
-  }
-
-  // File picker function
-  Future<void> pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4'],
-      allowMultiple: true, // ✅ allow multiple files
-    );
- 
-    if (result != null) {
-      setState(() {
-        uploadedFiles.addAll(result.files); // add new files to the list
-      });
-    }
   }
 
   @override
@@ -208,133 +182,6 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                             return null;
                           },
                           onChanged: (_) {},
-                        ),
-                        const SizedBox(height: 24),
-                        
-                        // File Upload Section
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: Colors.grey.shade200),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade100,
-                                blurRadius: 6,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Upload Photo/Video (Optional)",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
- 
-                              /// Upload Box
-                              GestureDetector(
-                                onTap: pickFile, // function to pick multiple files
-                                child: DottedBorder(
-                                  dashPattern: const [6, 4],
-                                  borderType: BorderType.RRect,
-                                  radius: const Radius.circular(12),
-                                  color: AppColors.primaryColor,
-                                  strokeWidth: 1.5,
-                                  child: Container(
-                                    height: 120,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primaryColor.withOpacity(0.08),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          'assets/image/upload.png',
-                                          width: 28,
-                                          height: 28,
-                                          color: Colors.grey,
-                                        ),
-                                        const SizedBox(height: 8),
-                                        const Text(
-                                          "Click to upload files",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        const Text(
-                                          "Image or Video (Max 10MB)",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 12),
- 
-                              /// Show uploaded files
-                              if (uploadedFiles.isNotEmpty)
-                                Column(
-                                  children: uploadedFiles.map((file) {
-                                    return Container(
-                                      margin: const EdgeInsets.symmetric(vertical: 6),
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.primaryColor.withOpacity(0.08),
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                          color: AppColors.primaryColor.withOpacity(0.4),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Image.asset(
-                                            'assets/image/upload.png',
-                                            width: 20,
-                                            height: 20,
-                                            color: AppColors.primaryColor,
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              "${file.name} (${(file.size / 1024).toStringAsFixed(1)} KB)", // show size in KB
-                                              style: const TextStyle(fontSize: 13),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                uploadedFiles.remove(file);
-                                              });
-                                            },
-                                            child: Icon(
-                                              Icons.close,
-                                              color: AppColors.primaryColor,
-                                              size: 18,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                            ],
-                          ),
                         ),
                         const SizedBox(height: 24),
                         const Text(
