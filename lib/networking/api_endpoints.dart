@@ -7,5 +7,7 @@ class ApiEndpoints {
   static const String addBuilding = '/AddBuilding';
   static const String getSociety = '/GetSocietyList';
 
+  static const String getBuildings = '/GetBuildingList';
+
 
 }
