@@ -630,15 +630,21 @@ class _OwnerCardState extends State<OwnerCard>
                       0,
                       0,
                     ),
-                    child: Card(
-                      elevation: 2,
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(
+                        border: Border.all(
                           color: Colors.grey.withOpacity(0.3),
                           width: 0.6,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
