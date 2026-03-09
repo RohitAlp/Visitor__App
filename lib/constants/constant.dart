@@ -1,3 +1,5 @@
+import '../model/VerifyOtpResponse.dart';
+
 class Constant {
 
   static var tokenMobile ='';
@@ -5,6 +7,7 @@ class Constant {
   static final String roleId="";
   static final String loginResponse="";
   static final String internetConMsg = 'Please check your internet connection!';
+  static  VerifyOtpResponse verifyOtpResponse=VerifyOtpResponse();
 
 
   // Service Emojis

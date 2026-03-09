@@ -88,6 +88,7 @@ class _OtpScreenState extends State<OtpScreen> {
             box.write(Constant.userId, verifyOtpResponse.userId);
             box.write(Constant.roleId, verifyOtpResponse.roleId);
             box.write(Constant.tokenMobile, verifyOtpResponse.token);
+            Constant.verifyOtpResponse=verifyOtpResponse;
 
             Utils.showToast(context, message: '${verifyOtpResponse.message}');
             Navigator.pop(context);
@@ -98,6 +99,8 @@ class _OtpScreenState extends State<OtpScreen> {
               // arguments: 2,
             // RouteName.SocietyAdminDashboardScreen,
               RouteName.SocietyAdminDashboardScreen,
+              // RouteName.DeveloperAdminDashboardScreen,
+              // RouteName.dashboardScreen,
            //  RouteName.DeveloperAdminDashboardScreen,
              //RouteName.dashboardScreen,
             );
@@ -151,8 +154,7 @@ class _OtpScreenState extends State<OtpScreen> {
         if (response != null) {
           LoginResponse loginUser = LoginResponse.fromJson(response.data);
 
-          if (loginUser.status == true &&
-              loginUser.message == "OTP sent successfully") {
+          if (loginUser.status == true) {
             // Utils.showToast(context, message: '${loginUser.message}');
 
             Navigator.pop(context);
@@ -195,10 +197,7 @@ class _OtpScreenState extends State<OtpScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(
-              CupertinoIcons.back,
-              color: Colors.black,
-            ),
+            icon: const Icon(CupertinoIcons.back, color: Colors.black),
             onPressed: () {
               Navigator.pop(context);
             },
