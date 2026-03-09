@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visitorapp/config/Routes/RouteName.dart';
 import '../../l10n/app_localizations.dart';
+import '../../model/VerifyOtpResponse.dart';
 import '../../secure storage/user_info.dart';
 import '../../widgets/common_dialogue.dart';
 
@@ -23,9 +24,12 @@ class _SettingsScreenState extends State<SettingsScreen>
   late AnimationController _aboutController;
   late AnimationController _logoutController;
 
+  VerifyOtpResponse? userInfo;
+
   @override
   void initState() {
     super.initState();
+    _loadUserInfo();
     _slideController = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
@@ -86,6 +90,15 @@ class _SettingsScreenState extends State<SettingsScreen>
         });
       }
     });
+  }
+
+  Future<void> _loadUserInfo() async {
+    final storedUser = await UserInfoSecureStorage.getUserInfo();
+    if (storedUser != null) {
+      setState(() {
+        userInfo = storedUser;
+      });
+    }
   }
 
   @override
@@ -223,22 +236,24 @@ class _SettingsScreenState extends State<SettingsScreen>
               backgroundImage: const AssetImage('assets/image/user-profile-pic.jpg'),
             ),
             const SizedBox(width: 16),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Pratik Patil',
-                    style: TextStyle(
+                    userInfo?.fullName ?? 'User',
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
-                    '+91 98765 43210',
-                    style: TextStyle(
+                    userInfo?.mobileNumber != null
+                        ? '+91 ${userInfo!.mobileNumber}'
+                        : '+91 00000 00000',
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
                     ),

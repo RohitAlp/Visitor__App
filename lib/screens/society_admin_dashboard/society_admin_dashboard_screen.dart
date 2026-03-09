@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:visitorapp/screens/society_admin_dashboard/service_requests/service_request_list/service_request_list_screen.dart';
 import '../../constants/app_colors.dart';
+import '../../model/VerifyOtpResponse.dart';
+import '../../secure storage/user_info.dart';
 import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
@@ -20,7 +23,21 @@ class SocietyAdminDashboardScreen extends StatefulWidget {
 
 class _SocietyAdminDashboardScreenState extends State<SocietyAdminDashboardScreen> {
   int _selectedIndex = 0;
+  VerifyOtpResponse? userInfo;
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
 
+  Future<void> _loadUserInfo() async {
+    final storedUser = await UserInfoSecureStorage.getUserInfo();
+    if (storedUser != null) {
+      setState(() {
+        userInfo = storedUser;
+      });
+    }
+  }
   final List<NavItemData> _navItems = [
     NavItemData(icon: Icons.home_outlined,      activeIcon: Icons.home,           label: 'Home'),
     NavItemData(icon: Icons.currency_rupee,     activeIcon: Icons.currency_rupee, label: 'Payment'),
@@ -29,24 +46,25 @@ class _SocietyAdminDashboardScreenState extends State<SocietyAdminDashboardScree
     NavItemData(icon: Icons.person_outline,     activeIcon: Icons.person,         label: 'Profile'),
   ];
 
-  late final List<Widget> _pages = <Widget>[
-    const _DashboardHomePage(),
-    const Payment(),
-    const NoticeScreen(),
-    const SettingsScreen(),
-    const SettingsScreen(),
-       // index 4 → Profile
-  ];
+
 
   @override
   Widget build(BuildContext context) {
+    final pages = <Widget>[
+      _DashboardHomePage(userInfo: userInfo),
+      Payment(),
+      NoticeScreen(),
+
+      ServiceRequestListScreen(),
+      SettingsScreen(),
+    ];
     return SafeArea(
       top: false,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: IndexedStack(
           index: _selectedIndex,
-          children: _pages,
+          children: pages,
         ),
         bottomNavigationBar: CustomAnimatedNavBar(
           items: _navItems,
@@ -62,7 +80,9 @@ class _SocietyAdminDashboardScreenState extends State<SocietyAdminDashboardScree
 // ─── Dashboard Home ───────────────────────────────────────────────────────────
 
 class _DashboardHomePage extends StatefulWidget {
-  const _DashboardHomePage();
+  final VerifyOtpResponse? userInfo;
+
+  const _DashboardHomePage({super.key, this.userInfo});
 
   @override
   State<_DashboardHomePage> createState() => _DashboardHomePageState();
@@ -97,7 +117,7 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
       'date': 'Mar 12',
     },
     {
-      'tag': '📢 Notice',
+      'tag': 'Notice',
       'image': 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800',
       'title': 'Parking Rules Updated',
       'description': 'New parking allocation rules are effective from April 1st for all wings.',
@@ -182,7 +202,7 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
     );
   }
 
-  // ── Header ─────────────────────────────────────────────────────────────────
+
 
   Widget _buildHeader() {
     return Row(
@@ -196,18 +216,18 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
               backgroundImage: const AssetImage('assets/image/user-profile-pic.jpg'),
             ),
             const SizedBox(width: 12),
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Hi, Admin",
-                  style: TextStyle(
+                  "Hi, ${widget.userInfo?.fullName ?? 'User'}",
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                     color: Colors.white,
                   ),
                 ),
-                Text(
+                const Text(
                   "Society Manager",
                   style: TextStyle(fontSize: 13, color: Colors.white70),
                 ),
@@ -248,8 +268,6 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
       ],
     );
   }
-
-  // ── Quick Actions Grid ─────────────────────────────────────────────────────
 
   Widget _buildQuickActionsGrid(BuildContext context) {
     final List<Map<String, dynamic>> items = [
@@ -325,7 +343,6 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
     );
   }
 
-  // ── Maintenance Card ───────────────────────────────────────────────────────
 
   Widget _buildMaintenanceCard() {
     return Container(
@@ -474,8 +491,6 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
     );
   }
 
-  // ── Notice Slider ──────────────────────────────────────────────────────────
-
   Widget _buildNoticeSlider() {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -488,6 +503,10 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
             onPageChanged: (index) => _currentIndex.value = index,
             itemBuilder: (context, index) {
               final notice = _notices[index];
+
+
+              final cleanTag = notice['tag']!.replaceAll('📢', '').trim();
+
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
@@ -522,25 +541,39 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
                               ),
                             ),
                           ),
+                          // --- UPDATED TAG SECTION ---
                           Padding(
                             padding: const EdgeInsets.all(12),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
+                                  horizontal: 10, vertical: 6),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: Text(
-                                notice['tag']!,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF6B2D0E),
-                                ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Image.asset(
+                                    'assets/image/megaphone.png',
+                                    width: 16, // Adjusted size to match text scale
+                                    height: 16,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    cleanTag,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF6B2D0E),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
+                          // ---------------------------
                         ],
                       ),
                     ),
@@ -637,8 +670,6 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
       ],
     );
   }
-
-  // ── Recent Activity ────────────────────────────────────────────────────────
 
   Widget _buildRecentActivity() {
     return Container(
