@@ -63,4 +63,52 @@ class ApiService {
       return e.response;
     }
   }
+
+  Future<Response?> requestDELETE({
+    required String path,
+    Map<String, dynamic>? queryParameters,
+    dynamic data,
+    String? token,
+  }) async {
+    try {
+      final response = await _dio.delete(
+        path,
+        queryParameters: queryParameters,
+        data: data,
+        options: Options(
+          headers: {
+            if (token != null) "Authorization": "Bearer $token",
+          },
+        ),
+      );
+
+      return response;
+    } on DioException catch (e) {
+      print("DELETE ERROR: ${e.response?.data ?? e.message}");
+      return e.response;
+    }
+  }
+
+  Future<Response?> requestPUT({
+    required String path,
+    required dynamic data,
+    String? token,
+  }) async {
+    try {
+      final response = await _dio.put(
+        path,
+        data: data,
+        options: Options(
+          headers: {
+            if (token != null) "Authorization": "Bearer $token",
+          },
+        ),
+      );
+
+      return response;
+    } on DioException catch (e) {
+      print("PUT ERROR: ${e.response?.data ?? e.message}");
+      return e.response;
+    }
+  }
 }

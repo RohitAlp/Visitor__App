@@ -14,4 +14,12 @@ class SocietyController extends ApiService {
     );
   }
 
+  Future<Response?> deleteSociety(Map<String, dynamic>? query) async {
+    return await requestDELETE(
+      path: ApiEndpoints.deleteSociety,
+      queryParameters: query,
+      token: '',
+    );
+  }
+
 }

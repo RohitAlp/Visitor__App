@@ -17,4 +17,14 @@ class TowerController extends ApiService {
     );
   }
 
+  Future<Response?> deleteTower(Map<String, dynamic>? query) async {
+    return await requestDELETE(
+      path: ApiEndpoints.deleteTower,
+      queryParameters: query,
+      token: '',
+    );
+  }
+
+
+
 }

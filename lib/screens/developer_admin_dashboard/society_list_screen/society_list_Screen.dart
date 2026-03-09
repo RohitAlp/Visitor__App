@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:visitorapp/model/DeleteSocietyResponse.dart';
 
+import '../../../config/Routes/RouteName.dart';
 import '../../../constants/app_colors.dart';
+import '../../../constants/constant.dart';
+import '../../../constants/utils.dart';
 import '../../../controller/society_controller.dart';
 import '../../../model/getSocietyResponse.dart';
 import '../../../utils/enum.dart';
@@ -125,7 +129,10 @@ class _SocietyCardState extends State<SocietyCard>
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       gradient: const LinearGradient(
-                        colors: [AppColors.primaryLight, AppColors.primaryColor],
+                        colors: [
+                          AppColors.primaryLight,
+                          AppColors.primaryColor,
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -148,7 +155,9 @@ class _SocietyCardState extends State<SocietyCard>
                             widget.onDelete();
                           },
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0,
+                            ),
                             child: Image.asset(
                               'assets/image/delete_3405244.png',
                               width: 20,
@@ -165,7 +174,9 @@ class _SocietyCardState extends State<SocietyCard>
                             widget.onEdit();
                           },
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0,
+                            ),
                             child: Image.asset(
                               'assets/image/edit_5973027.png',
                               width: 18,
@@ -207,7 +218,6 @@ class _SocietyCardState extends State<SocietyCard>
                       0,
                     ),
                     child: Container(
-
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -313,11 +323,7 @@ class _SocietyCardState extends State<SocietyCard>
   Widget _buildInfoRow(IconData icon, String text) {
     return Row(
       children: [
-        Icon(
-          icon,
-          size: 16,
-          color: AppColors.textLight,
-        ),
+        Icon(icon, size: 16, color: AppColors.textLight),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
@@ -341,7 +347,8 @@ class SocietyListScreen extends StatefulWidget {
   State<SocietyListScreen> createState() => _SocietyListScreenState();
 }
 
-class _SocietyListScreenState extends State<SocietyListScreen> with TickerProviderStateMixin {
+class _SocietyListScreenState extends State<SocietyListScreen>
+    with TickerProviderStateMixin {
   final SocietyController _societyController = SocietyController();
   List<Society> _allSocieties = [];
   Status _fetchStatus = Status.initial;
@@ -356,10 +363,14 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
     return _allSocieties.where((society) {
       final matchesSearch =
           _searchQuery.isEmpty ||
-              society.societyName.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              society.address.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              society.city.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              society.registrationNo.toLowerCase().contains(_searchQuery.toLowerCase());
+          society.societyName.toLowerCase().contains(
+            _searchQuery.toLowerCase(),
+          ) ||
+          society.address.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          society.city.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          society.registrationNo.toLowerCase().contains(
+            _searchQuery.toLowerCase(),
+          );
       return matchesSearch;
     }).toList();
   }
@@ -372,12 +383,16 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
 
     try {
       final response = await _societyController.getSociety({});
-      
+
       if (response?.statusCode == 200 && response?.data != null) {
         final societyResponse = GetSocietyResponse.fromJson(response!.data);
-        
+
         if (societyResponse.status == true) {
-          final societies = societyResponse.societyList?.map((apiModel) => Society.fromApiModel(apiModel)).toList() ?? [];
+          final societies =
+              societyResponse.societyList
+                  ?.map((apiModel) => Society.fromApiModel(apiModel))
+                  .toList() ??
+              [];
           setState(() {
             _allSocieties = societies;
             _fetchStatus = Status.success;
@@ -385,7 +400,8 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
         } else {
           setState(() {
             _fetchStatus = Status.error;
-            _errorMessage = societyResponse.message ?? 'Failed to fetch societies';
+            _errorMessage =
+                societyResponse.message ?? 'Failed to fetch societies';
           });
         }
       } else {
@@ -424,7 +440,55 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
     super.dispose();
   }
 
-  void _deleteSociety(Society society) {
+  Future<void> deleteSociety(BuildContext context, Society society) async {
+    if (await Utils.isConnected()) {
+      bool _isLoading = true;
+      Utils.onLoading(context);
+
+      Map<String, dynamic> data = {"societyId": society.societyId ?? 0};
+
+      SocietyController controller = SocietyController();
+      try {
+        final response = await controller.deleteSociety(data);
+
+        if (response != null) {
+          DeleteSocietyResponse res = DeleteSocietyResponse.fromJson(
+            response.data,
+          );
+
+          if (res.status == true && res.statusCode == 200) {
+            Utils.showToast(context, message: '${res.message}');
+
+            Navigator.pop(context);
+            _isLoading = false;
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SocietyListScreen(),
+              ),
+            );
+          } else {
+            Utils.showToast(context, message: '${res.message}');
+          }
+        } else {
+          Utils.showToast(context, message: 'Something went wrong!');
+          print(response);
+        }
+      } catch (e) {
+        Utils.showToast(context, message: 'Something went wrong!');
+        print(e);
+      } finally {
+        if (_isLoading) {
+          Navigator.pop(context);
+        }
+      }
+    } else {
+      Utils.showToast(context, message: Constant.internetConMsg);
+    }
+  }
+
+  void _deleteSociety(BuildContext context, Society society) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -455,11 +519,12 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: () {
+            onPressed: () async {
+              Navigator.pop(context);
 
+              await deleteSociety(context, society);
 
-
-              Navigator.pop(ctx);
+              /*Navigator.pop(ctx);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('${society.societyName} removed'),
@@ -469,9 +534,12 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-              );
+              );*/
             },
-            child: const Text('Delete', style: TextStyle(color: AppColors.white)),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: AppColors.white),
+            ),
           ),
         ],
       ),
@@ -553,9 +621,7 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
                             borderRadius: BorderRadius.circular(14),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primaryColor.withOpacity(
-                                  0.45,
-                                ),
+                                color: AppColors.primaryColor.withOpacity(0.45),
                                 blurRadius: 16,
                                 offset: const Offset(0, 6),
                               ),
@@ -573,11 +639,7 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
                 ),
               ),
               const SizedBox(height: 10),
-              const Divider(
-                thickness: 1,
-                height: 1,
-                color: Color(0xFFE5E5E5),
-              ),
+              const Divider(thickness: 1, height: 1, color: Color(0xFFE5E5E5)),
             ],
           ),
         ),
@@ -602,18 +664,33 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
                 child: TextField(
                   controller: _searchController,
                   onChanged: (val) => setState(() => _searchQuery = val),
-                  style: const TextStyle(fontSize: 14, color: AppColors.textDark, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textDark,
+                    fontWeight: FontWeight.w500,
+                  ),
                   decoration: InputDecoration(
                     hintText: 'Search by society name...',
-                    hintStyle: const TextStyle(color: AppColors.textLight, fontSize: 14),
-                    prefixIcon: const Icon(Icons.search_rounded, color: AppColors.primaryColor, size: 22),
+                    hintStyle: const TextStyle(
+                      color: AppColors.textLight,
+                      fontSize: 14,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.search_rounded,
+                      color: AppColors.primaryColor,
+                      size: 22,
+                    ),
                     suffixIcon: _searchQuery.isNotEmpty
                         ? GestureDetector(
                             onTap: () {
                               _searchController.clear();
                               setState(() => _searchQuery = '');
                             },
-                            child: const Icon(Icons.close_rounded, color: AppColors.textLight, size: 18),
+                            child: const Icon(
+                              Icons.close_rounded,
+                              color: AppColors.textLight,
+                              size: 18,
+                            ),
                           )
                         : null,
                     border: InputBorder.none,
@@ -667,9 +744,7 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
               ),
               const SizedBox(height: 8),
               // Scrollable List
-              Expanded(
-                child: _buildContent(),
-              ),
+              Expanded(child: _buildContent()),
             ],
           ),
         ),
@@ -683,11 +758,9 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
     switch (_fetchStatus) {
       case Status.loading:
         return const Center(
-          child: CircularProgressIndicator(
-            color: AppColors.primaryColor,
-          ),
+          child: CircularProgressIndicator(color: AppColors.primaryColor),
         );
-      
+
       case Status.error:
         return Center(
           child: Column(
@@ -718,7 +791,10 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
               const SizedBox(height: 6),
               Text(
                 _errorMessage ?? 'An unknown error occurred',
-                style: const TextStyle(fontSize: 13, color: AppColors.textLight),
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.textLight,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -738,7 +814,7 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
             ],
           ),
         );
-      
+
       case Status.success:
         if (filtered.isEmpty) {
           return Center(
@@ -776,7 +852,7 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
             ),
           );
         }
-        
+
         return ListView.builder(
           itemCount: filtered.length,
           itemBuilder: (context, index) {
@@ -787,16 +863,19 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ManageUsersScreen(type: 2),
+                    builder: (context) => ManageUsersScreen(
+                      type: 2,
+                      societyId: society.societyId?.toInt(),
+                    ),
                   ),
                 );
               },
-              onDelete: () => _deleteSociety(society),
+              onDelete: () => _deleteSociety(context, society),
               index: index,
             );
           },
         );
-      
+
       default:
         return const SizedBox.shrink();
     }

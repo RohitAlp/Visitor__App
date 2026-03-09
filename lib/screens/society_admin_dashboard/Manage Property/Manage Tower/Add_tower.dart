@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:visitorapp/constants/constant.dart';
 import 'package:visitorapp/controller/tower_controller.dart';
 import 'package:visitorapp/model/GetTowerListResponse.dart';
+import 'package:visitorapp/model/gettower_Response.dart';
 import 'package:visitorapp/model/VerifyOtpResponse.dart';
 import '../../../../config/Routes/RouteName.dart';
 import '../../../../constants/app_colors.dart';
@@ -12,7 +13,8 @@ import '../../../../constants/utils.dart';
 import '../../../../widgets/owner_card.dart';
 
 class ManageTowersScreen extends StatefulWidget {
-  const ManageTowersScreen({super.key});
+  final int? societyId;
+  const ManageTowersScreen({super.key, this.societyId});
 
   @override
   State<ManageTowersScreen> createState() => _ManageTowersScreenState();
@@ -20,38 +22,9 @@ class ManageTowersScreen extends StatefulWidget {
 
 class _ManageTowersScreenState extends State<ManageTowersScreen>
     with TickerProviderStateMixin {
-  final List<Owner> _allTowers = [
-    Owner.tower(
-      name: 'Tower A',
-      towerCode: 'TWR-A-001',
-      wings: 4,
-      isActive: true,
-    ),
-    Owner.tower(
-      name: 'Tower B',
-      towerCode: 'TWR-B-002',
-      wings: 3,
-      isActive: true,
-    ),
-    Owner.tower(
-      name: 'Tower C',
-      towerCode: 'TWR-C-003',
-      wings: 2,
-      isActive: false,
-    ),
-    Owner.tower(
-      name: 'Tower D',
-      towerCode: 'TWR-D-004',
-      wings: 3,
-      isActive: true,
-    ),
-    Owner.tower(
-      name: 'Tower E',
-      towerCode: 'TWR-E-005',
-      wings: 5,
-      isActive: true,
-    ),
-  ];
+  List<Owner> _allTowers = [];
+  bool _isLoading = false;
+  String? _errorMessage;
 
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
@@ -80,35 +53,108 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
       curve: Curves.elasticOut,
     );
     _fabController.forward();
+    _getTowers();
   }
 
   Future<void> _getTowers() async {
     if (await Utils.isConnected()) {
-      final box = GetStorage();
-
-      bool _isLoading = true;
-      Utils.onLoading(context);
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
 
       TowerController towerController = TowerController();
       try {
         final societyId =
-            Constant.verifyOtpResponse.societyId.toString() ?? "0";
+            widget.societyId?.toString() ??
+            Constant.verifyOtpResponse.societyId?.toString() ??
+            "0";
 
         final response = await towerController.getTowers(societyId);
-        if (response != null) {
-          GetTowerListResponse res = GetTowerListResponse.fromJson(
+        if (response != null && response.statusCode == 200) {
+          GettowerController towerResponse = GettowerController.fromJson(
             response.data,
           );
 
-          setState(() {
-            // _allTowers =res.data ?? [];
-          });
+          if (towerResponse.status == true && towerResponse.data != null) {
+            List<Owner> towers = towerResponse.data!.map((buildingData) {
+              return Owner.tower(
+                name: buildingData.buildingName ?? 'Unknown Tower',
+                towerCode: 'TWR-${buildingData.buildingId ?? '000'}',
+                wings: buildingData.numberOfFloors?.toInt() ?? 0,
+                isActive: true,
+              );
+            }).toList();
 
-          print(response);
+            setState(() {
+              _allTowers = towers;
+              _isLoading = false;
+            });
+          } else {
+            setState(() {
+              _errorMessage = towerResponse.message ?? 'Failed to fetch towers';
+              _isLoading = false;
+            });
+          }
         } else {
-          //  Utils.showToast(context, message: 'Something went wrong!');
-          print(response);
+          setState(() {
+            _errorMessage = 'Failed to fetch towers';
+            _isLoading = false;
+          });
         }
+      } catch (e) {
+        setState(() {
+          _errorMessage = 'Something went wrong!';
+          _isLoading = false;
+        });
+        print(e);
+      }
+    } else {
+      setState(() {
+        _errorMessage = Constant.internetConMsg;
+      });
+      Utils.showToast(context, message: Constant.internetConMsg);
+    }
+  }
+
+  @override
+  void dispose() {
+    _fabController.dispose();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> deleteTower(BuildContext context, Owner society) async {
+    if (await Utils.isConnected()) {
+      bool _isLoading = true;
+      Utils.onLoading(context);
+
+      Map<String, dynamic> data = {"societyId": society ?? 0};
+
+      TowerController controller = TowerController();
+      try {
+        final response = await controller.deleteTower(data);
+
+        /*if (response != null) {
+          DeleteSocietyResponse res = DeleteSocietyResponse.fromJson(
+            response.data,
+          );
+
+          if (res.status == true && res.statusCode == 200) {
+            Utils.showToast(context, message: '${res.message}');
+
+            Navigator.pop(context);
+            _isLoading = false;
+
+            Navigator.pushReplacementNamed(context, RouteName.ManageTowersScreen);
+
+          } else {
+            Utils.showToast(context, message: '${res.message}');
+          }
+        } else {
+          Utils.showToast(context, message: 'Something went wrong!');
+          print(response);
+        }*/
       } catch (e) {
         Utils.showToast(context, message: 'Something went wrong!');
         print(e);
@@ -122,12 +168,6 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
     }
   }
 
-  @override
-  void dispose() {
-    _fabController.dispose();
-    _searchController.dispose();
-    super.dispose();
-  }
 
   void _deleteTower(Owner tower) {
     showDialog(
@@ -160,9 +200,10 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: () {
+            onPressed: () async{
               Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
+              await deleteTower(ctx,tower);
+              /*ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('${tower.name} removed'),
                   backgroundColor: AppColors.primaryColor,
@@ -171,7 +212,7 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-              );
+              );*/
             },
             child: const Text('Delete', style: TextStyle(color: Colors.white)),
           ),
@@ -440,7 +481,66 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
 
             // Scrollable List
             Expanded(
-              child: filtered.isEmpty
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ),
+                    )
+                  : _errorMessage != null
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: Colors.red.withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.error_outline_rounded,
+                              size: 40,
+                              color: Colors.red,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Error Loading Towers',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textDark,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            _errorMessage!,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: AppColors.textLight,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: _getTowers,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: const Text(
+                              'Retry',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : filtered.isEmpty
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
