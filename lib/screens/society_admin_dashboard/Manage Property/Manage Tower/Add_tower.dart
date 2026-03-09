@@ -96,12 +96,12 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
 
         final response = await towerController.getTowers(societyId);
         if (response != null) {
-          GetTowerListResponse res =
-              GetTowerListResponse.fromJson(response.data);
+          GetTowerListResponse res = GetTowerListResponse.fromJson(
+            response.data,
+          );
 
           setState(() {
-           // _allTowers =res.data ?? [];
-
+            // _allTowers =res.data ?? [];
           });
 
           print(response);
