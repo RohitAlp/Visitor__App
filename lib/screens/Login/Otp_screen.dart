@@ -96,9 +96,9 @@ class _OtpScreenState extends State<OtpScreen> {
               context,
               // RouteName.manageUsersSocietyAdmin,
               // arguments: 2,
-              RouteName.SocietyAdminDashboardScreen,
+              // RouteName.SocietyAdminDashboardScreen,
              // RouteName.DeveloperAdminDashboardScreen,
-              // RouteName.dashboardScreen,
+              RouteName.dashboardScreen,
             );
           } else {
             if (verifyOtpResponse.message ==

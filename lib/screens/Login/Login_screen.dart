@@ -25,15 +25,15 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   final mobileController = TextEditingController();
-  late AnimationController _rotationController;
   bool _otpSent = false;
 
   bool _showStartButton = true;
   @override
   void initState() {
     super.initState();
-
     _imageTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (!mounted) return;
+
       setState(() {
         _currentImageIndex = (_currentImageIndex + 1) % _images.length;
       });
@@ -51,7 +51,6 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void dispose() {
     _imageTimer?.cancel();
-    _rotationController.dispose();
     mobileController.dispose();
     super.dispose();
   }

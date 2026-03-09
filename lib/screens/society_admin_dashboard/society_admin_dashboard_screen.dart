@@ -9,6 +9,7 @@ import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
 import '../../config/Routes/RouteName.dart';
+import '../services/services.dart';
 
 class SocietyAdminDashboardScreen extends StatefulWidget {
   const SocietyAdminDashboardScreen({super.key});
@@ -29,13 +30,14 @@ class _SocietyAdminDashboardScreenState extends State<SocietyAdminDashboardScree
     NavItemData(icon: Icons.person_outline,   activeIcon: Icons.person,         label: 'Profile'),
   ];
 
-  late final List<Widget> _pages = <Widget>[
+
+  final List<Widget> _pages = [
     const _DashboardHomePage(),
     const Payment(),
     const NoticeScreen(),
     const Profile(),
-    // const Services(),
-    const Profile(),
+    const Services(),
+    // const Profile(),
     // const ManageUsersScreen(type: 2,),
 
     // const ManageUsersScreen(type: 1,),

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'app_localization/language/language_bloc.dart';
 import 'config/Routes/Route.dart';
 import 'config/Routes/RouteName.dart';
-import 'database/DatabaseHelper.dart';
 import 'l10n/app_localizations.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
@@ -19,46 +16,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LanguageBloc()..add(LanguageLoadStarted()),
-      child: BlocBuilder<LanguageBloc, LanguageState>(
-        builder: (context, state) {
-          Locale locale = const Locale('en');
-          if (state is LanguageLoaded) {
-            locale = state.locale;
-          }
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Visitor App',
-            theme: ThemeData(
-              colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-              textTheme: GoogleFonts.mulishTextTheme(),
-              primaryTextTheme: GoogleFonts.mulishTextTheme(),
-              scaffoldBackgroundColor: Colors.white,
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              scrolledUnderElevation: 0, // prevents grey when scrolling
-            ),
-          ),
-            locale: locale,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('en'),
-              Locale('hi'),
-            ],
-            initialRoute: RouteName.splashScreen,
-            onGenerateRoute: Routes.generateRoute,
-          );
-        },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Visitor App',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        textTheme: GoogleFonts.mulishTextTheme(),
+        primaryTextTheme: GoogleFonts.mulishTextTheme(),
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+        ),
       ),
+      // locale: removed → now uses device/system locale automatically
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('hi'),
+      ],
+      initialRoute: RouteName.splashScreen,
+      onGenerateRoute: Routes.generateRoute,
     );
   }
 }
-
-
