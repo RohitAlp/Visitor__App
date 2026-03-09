@@ -489,7 +489,6 @@ class _AddServiceRequestScreenState extends State<AddServiceRequestScreen> {
                           ),
                         ),
                         const SizedBox(height: 12),
-
                         /// Show uploaded files
                         if (uploadedFiles.isNotEmpty)
                           Column(

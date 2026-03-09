@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../model/LoginResponse.dart';
 import '../../widgets/custom_bottom_bar.dart';
-import '../Notice/notice.dart';
+import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
 import '../services/services.dart';
 import '../society_admin_dashboard/service_requests/service_request_list/service_request_list_screen.dart';
@@ -30,12 +30,12 @@ class _DeveloperAdminDashboardScreenState extends State<DeveloperAdminDashboardS
 
   LoginResponse? loginResponse;
   late final List<Widget> _pages = <Widget>[
-    const _DashboardHomePage(),
-    const Payment(),
-    const Notice(),
-    const Services(),
-    // const Profile(),
-    const ServiceRequestListScreen(),
+    _DashboardHomePage(),
+    Payment(),
+    NoticeScreen(),
+    Services(),
+    // Profile(),
+    ServiceRequestListScreen(),
     // const ManageUsersScreen(type: 2,),
     //
     // const ManageUsersScreen(type: 1,),

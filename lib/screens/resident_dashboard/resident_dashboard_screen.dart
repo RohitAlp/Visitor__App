@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/model/LoginResponse.dart';
+import 'package:visitorapp/screens/settings/settings_screen.dart';
 import '../../constants/constant.dart';
 import '../../widgets/custom_bottom_bar.dart';
-import '../Notice/notice.dart';
+import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
 import '../profile/profile.dart';
 import '../services/services.dart';
@@ -35,14 +36,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   LoginResponse? loginResponse;
   late final List<Widget> _pages = <Widget>[
-    const _DashboardHomePage(),
-    const Payment(),
-    const Notice(),
-    // const Services(),
-    // const Profile(),
-    const ServiceRequestListScreen(),
-    const ManageUsersScreen(type: 2,),
-    //
+    _DashboardHomePage(),
+    Payment(),
+    NoticeScreen(),
+    // Services(),
+    // Profile(),
+    SettingsScreen(),
+    ServiceRequestListScreen(),
+   // ManageUsersScreen(type: 2,),
     // const ManageUsersScreen(type: 1,),
 
   ];
@@ -210,7 +211,7 @@ class _DashboardHomePage extends StatelessWidget {
         crossAxisCount: 3,
         crossAxisSpacing: 15,
         mainAxisSpacing: 15,
-        childAspectRatio: 100 / 107, // Maintains your specific card shape
+        childAspectRatio: 100 / 107,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
