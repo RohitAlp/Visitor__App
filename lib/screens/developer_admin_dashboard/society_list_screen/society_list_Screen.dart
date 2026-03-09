@@ -784,7 +784,7 @@ class _SocietyListScreenState extends State<SocietyListScreen> with TickerProvid
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ManageUsersScreen(type: 2),
+                    builder: (context) => ManageUsersScreen(type: 2, societyId: society.societyId?.toInt()),
                   ),
                 );
               },

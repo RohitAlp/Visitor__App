@@ -3,11 +3,11 @@ import 'package:dio/dio.dart';
 import 'package:visitorapp/networking/api_endpoints.dart';
 import 'package:visitorapp/networking/dio_client.dart';
 
-class TowerController extends ApiService {
-  Future<Response?> addTower(jsonData) async =>
-      await requestPOST(path: ApiEndpoints.addBuilding, data: jsonData, token: '');
+class WingController extends ApiService {
+  // Future<Response?> addWing(jsonData) async =>
+  //     await requestPOST(path: ApiEndpoints.addBuilding, data: jsonData, token: '');
 
-  Future<Response?> getTowers(id) async {
+  Future<Response?> getWings(id) async {
     return await requestGET(
       path: ApiEndpoints.getBuildings,
       token: '',
