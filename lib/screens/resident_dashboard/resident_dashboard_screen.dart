@@ -1,17 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:visitorapp/constants/app_colors.dart';
 import 'package:visitorapp/model/LoginResponse.dart';
 import 'package:visitorapp/screens/settings/settings_screen.dart';
-import '../../constants/constant.dart';
 import '../../widgets/custom_bottom_bar.dart';
 import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
-import '../profile/profile.dart';
-import '../services/services.dart';
-import '../society_admin_dashboard/manage_users_property_screen.dart';
 import '../society_admin_dashboard/service_requests/service_request_list/service_request_list_screen.dart';
 
 
@@ -242,7 +236,7 @@ class _DashboardHomePage extends StatelessWidget {
                     ? ColorFilter.mode(item['color'], BlendMode.srcIn)
                     : null,
               ),
-              const SizedBox(height: 12), // Consistent spacing instead of Positioned offsets
+              const SizedBox(height: 12),
               // Label Section
               Text(
                 item['label'],
@@ -251,7 +245,7 @@ class _DashboardHomePage extends StatelessWidget {
                   color: Colors.black,
                   fontFamily: 'Mulish',
                   fontSize: 13,
-                  fontWeight: FontWeight.w500, // Medium weight looks better for dashboard labels
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],

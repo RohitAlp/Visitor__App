@@ -11,6 +11,7 @@ import '../../controller/login_controller.dart';
 import '../../model/LoginResponse.dart';
 import '../../model/VerifyOtpResponse.dart';
 import '../../widgets/common_otp_field.dart';
+import '../../secure storage/user_info.dart';
 
 class OtpScreen extends StatefulWidget {
   final String mobileNumber;
@@ -89,17 +90,28 @@ class _OtpScreenState extends State<OtpScreen> {
             box.write(Constant.roleId, verifyOtpResponse.roleId);
             box.write(Constant.tokenMobile, verifyOtpResponse.token);
 
+            // Save to Secure Storage
+            await UserInfoSecureStorage.saveUserInfo(verifyOtpResponse);
+
             Utils.showToast(context, message: '${verifyOtpResponse.message}');
             Navigator.pop(context);
             _isLoading = false;
-            Navigator.pushNamed(
+
+            String targetRoute;
+            if (verifyOtpResponse.roleId == 1) {
+              targetRoute = RouteName.DeveloperAdminDashboardScreen;
+            } else if (verifyOtpResponse.roleId == 2) {
+              targetRoute = RouteName.SocietyAdminDashboardScreen;
+            } else if (verifyOtpResponse.roleId == 3) {
+              targetRoute = RouteName.dashboardScreen;
+            } else {
+              targetRoute = RouteName.loginScreen; // Default fallback
+            }
+
+            Navigator.pushNamedAndRemoveUntil(
               context,
-              // RouteName.manageUsersSocietyAdmin,
-              // arguments: 2,
-            // RouteName.SocietyAdminDashboardScreen,
-              RouteName.SocietyAdminDashboardScreen,
-           //  RouteName.DeveloperAdminDashboardScreen,
-             //RouteName.dashboardScreen,
+              targetRoute,
+              (route) => false,
             );
           } else {
             if (verifyOtpResponse.message ==
