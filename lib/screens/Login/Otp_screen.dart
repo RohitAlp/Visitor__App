@@ -93,17 +93,19 @@ class _OtpScreenState extends State<OtpScreen> {
             Utils.showToast(context, message: '${verifyOtpResponse.message}');
             Navigator.pop(context);
             _isLoading = false;
-            Navigator.pushNamed(
-              context,
-              // RouteName.manageUsersSocietyAdmin,
-              // arguments: 2,
-            // RouteName.SocietyAdminDashboardScreen,
-            //   RouteName.SocietyAdminDashboardScreen,
-              RouteName.DeveloperAdminDashboardScreen,
-              // RouteName.dashboardScreen,
-           //  RouteName.DeveloperAdminDashboardScreen,
-             //RouteName.dashboardScreen,
-            );
+
+              Navigator.pushNamed(
+                context,
+                // RouteName.manageUsersSocietyAdmin,
+                // arguments: 2,
+                // RouteName.SocietyAdminDashboardScreen,
+                //   RouteName.SocietyAdminDashboardScreen,
+                RouteName.DeveloperAdminDashboardScreen,
+                // RouteName.dashboardScreen,
+                //  RouteName.DeveloperAdminDashboardScreen,
+                //RouteName.dashboardScreen,
+              );
+
           } else {
             if (verifyOtpResponse.message ==
                 "Too many attempts. Account locked for 30 minutes.") {
