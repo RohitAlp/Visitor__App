@@ -226,8 +226,8 @@ class _LoginScreenState extends State<LoginScreen>
                     ),
 
                     const SizedBox(height: 20),
-
                     Center(
+
                       child: InkWell(
                         onTap: () {
                           if (mobileController.text.length < 10) {
@@ -244,19 +244,24 @@ class _LoginScreenState extends State<LoginScreen>
                             _userLogin(context);
                           }
                         },
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: AppColors.appPrimaryColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Continue',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+
+
+
+                        child: SafeArea(
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: AppColors.appPrimaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Continue',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
