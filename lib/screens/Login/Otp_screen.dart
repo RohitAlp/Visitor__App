@@ -105,7 +105,7 @@ class _OtpScreenState extends State<OtpScreen> {
             } else if (verifyOtpResponse.roleId == 3) {
               targetRoute = RouteName.dashboardScreen;
             } else {
-              targetRoute = RouteName.loginScreen; // Default fallback
+              targetRoute = RouteName.loginScreen; 
             }
 
             Navigator.pushNamedAndRemoveUntil(
