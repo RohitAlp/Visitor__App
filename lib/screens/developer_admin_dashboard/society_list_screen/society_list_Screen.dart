@@ -341,7 +341,9 @@ class _SocietyCardState extends State<SocietyCard>
 }
 
 class SocietyListScreen extends StatefulWidget {
-  const SocietyListScreen({super.key});
+  final int flag;
+  
+  const SocietyListScreen({super.key, required this.flag});
 
   @override
   State<SocietyListScreen> createState() => _SocietyListScreenState();
@@ -462,12 +464,12 @@ class _SocietyListScreenState extends State<SocietyListScreen>
             Navigator.pop(context);
             _isLoading = false;
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SocietyListScreen(),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const SocietyListScreen(),
+            //   ),
+            // );
           } else {
             Utils.showToast(context, message: '${res.message}');
           }
@@ -550,110 +552,109 @@ class _SocietyListScreenState extends State<SocietyListScreen>
   Widget build(BuildContext context) {
     final filtered = _filteredSocieties;
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          surfaceTintColor: Colors.transparent,
-          toolbarHeight: 80,
-          titleSpacing: 0,
-          automaticallyImplyLeading: false,
-          title: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    //
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     Navigator.pop(context);
-                    //   },
-                    //   child: Container(
-                    //     width: 36,
-                    //     height: 36,
-                    //     decoration: BoxDecoration(
-                    //       color: AppColors.cardBg,
-                    //       borderRadius: BorderRadius.circular(12),
-                    //       border: Border.all(
-                    //         color: Colors.grey.withOpacity(0.15),
-                    //         width: 1,
-                    //       ),
-                    //       boxShadow: [
-                    //         BoxShadow(
-                    //           color: Colors.black.withOpacity(0.05),
-                    //           blurRadius: 6,
-                    //           offset: const Offset(0, 2),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //     child: const Icon(
-                    //       Icons.arrow_back_ios_rounded,
-                    //       size: 16,
-                    //     ),
-                    //   ),
-                    // ),
-                    const SizedBox(width: 20),
-
-                    /// TITLE + COUNT
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Manage Societies',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w800),
-                        ),
-                        Text(
-                          "${_filteredSocieties.length} Societies",
-                          style: const TextStyle(
-                              fontSize: 12, color: Colors.grey),
-                        ),
-                      ],
-                    ),
-
-                    const Spacer(),
-
-                    /// ADD BUTTON
-                    GestureDetector(
-                      onTap: (){
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => AddNoticeScreen(),
-                        //   ),
-                        // );
-                      },
-                      child: Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              AppColors.primaryLight,
-                              AppColors.primaryColor
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: const Icon(Icons.add, color: Colors.white),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        toolbarHeight: 80,
+        titleSpacing: 0,
+        automaticallyImplyLeading: false,
+        title: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  //
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //   },
+                  //   child: Container(
+                  //     width: 36,
+                  //     height: 36,
+                  //     decoration: BoxDecoration(
+                  //       color: AppColors.cardBg,
+                  //       borderRadius: BorderRadius.circular(12),
+                  //       border: Border.all(
+                  //         color: Colors.grey.withOpacity(0.15),
+                  //         width: 1,
+                  //       ),
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //           color: Colors.black.withOpacity(0.05),
+                  //           blurRadius: 6,
+                  //           offset: const Offset(0, 2),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     child: const Icon(
+                  //       Icons.arrow_back_ios_rounded,
+                  //       size: 16,
+                  //     ),
+                  //   ),
+                  // ),
+                  const SizedBox(width: 20),
+    
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Societies',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w800),
                       ),
-                    ),
-                  ],
-                ),
+                      Text(
+                        "${_filteredSocieties.length} Societies",
+                        style: const TextStyle(
+                            fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+    
+                  const Spacer(),
+    
+                  // /// ADD BUTTON
+                  // GestureDetector(
+                  //   onTap: (){
+                  //     // Navigator.push(
+                  //     //   context,
+                  //     //   MaterialPageRoute(
+                  //     //     builder: (context) => AddNoticeScreen(),
+                  //     //   ),
+                  //     // );
+                  //   },
+                  //   child: Container(
+                  //     width: 36,
+                  //     height: 36,
+                  //     decoration: BoxDecoration(
+                  //       gradient: const LinearGradient(
+                  //         colors: [
+                  //           AppColors.primaryLight,
+                  //           AppColors.primaryColor
+                  //         ],
+                  //       ),
+                  //       borderRadius: BorderRadius.circular(14),
+                  //     ),
+                  //     child: const Icon(Icons.add, color: Colors.white),
+                  //   ),
+                  // ),
+                ],
               ),
-
-              const SizedBox(height: 10),
-
-              const Divider(
-                thickness: 1,
-                height: 1,
-                color: Color(0xFFE5E5E5),
-              ),
-            ],
-          ),
+            ),
+    
+            const SizedBox(height: 10),
+    
+            const Divider(
+              thickness: 1,
+              height: 1,
+              color: Color(0xFFE5E5E5),
+            ),
+          ],
         ),
-        body: Padding(
+      ),
+      body: SafeArea(
+        child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
@@ -874,7 +875,7 @@ class _SocietyListScreenState extends State<SocietyListScreen>
                   context,
                   MaterialPageRoute(
                     builder: (context) => ManageUsersScreen(
-                      type: 2,
+                      type: widget.flag,
                       societyId: society.societyId?.toInt(),
                     ),
                   ),
