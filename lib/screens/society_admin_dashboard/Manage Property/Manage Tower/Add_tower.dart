@@ -65,12 +65,16 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
 
       TowerController towerController = TowerController();
       try {
-        final societyId = widget.societyId?.toString() ?? 
-            Constant.verifyOtpResponse.societyId?.toString() ?? "0";
+        final societyId =
+            widget.societyId?.toString() ??
+            Constant.verifyOtpResponse.societyId?.toString() ??
+            "0";
 
         final response = await towerController.getTowers(societyId);
         if (response != null && response.statusCode == 200) {
-          GettowerController towerResponse = GettowerController.fromJson(response.data);
+          GettowerController towerResponse = GettowerController.fromJson(
+            response.data,
+          );
 
           if (towerResponse.status == true && towerResponse.data != null) {
             List<Owner> towers = towerResponse.data!.map((buildingData) {
@@ -120,6 +124,51 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
     super.dispose();
   }
 
+  Future<void> deleteTower(BuildContext context, Owner society) async {
+    if (await Utils.isConnected()) {
+      bool _isLoading = true;
+      Utils.onLoading(context);
+
+      Map<String, dynamic> data = {"societyId": society ?? 0};
+
+      TowerController controller = TowerController();
+      try {
+        final response = await controller.deleteTower(data);
+
+        /*if (response != null) {
+          DeleteSocietyResponse res = DeleteSocietyResponse.fromJson(
+            response.data,
+          );
+
+          if (res.status == true && res.statusCode == 200) {
+            Utils.showToast(context, message: '${res.message}');
+
+            Navigator.pop(context);
+            _isLoading = false;
+
+            Navigator.pushReplacementNamed(context, RouteName.ManageTowersScreen);
+
+          } else {
+            Utils.showToast(context, message: '${res.message}');
+          }
+        } else {
+          Utils.showToast(context, message: 'Something went wrong!');
+          print(response);
+        }*/
+      } catch (e) {
+        Utils.showToast(context, message: 'Something went wrong!');
+        print(e);
+      } finally {
+        if (_isLoading) {
+          Navigator.pop(context);
+        }
+      }
+    } else {
+      Utils.showToast(context, message: Constant.internetConMsg);
+    }
+  }
+
+
   void _deleteTower(Owner tower) {
     showDialog(
       context: context,
@@ -151,9 +200,10 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: () {
+            onPressed: () async{
               Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
+              await deleteTower(ctx,tower);
+              /*ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('${tower.name} removed'),
                   backgroundColor: AppColors.primaryColor,
@@ -162,7 +212,7 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-              );
+              );*/
             },
             child: const Text('Delete', style: TextStyle(color: Colors.white)),
           ),
@@ -438,110 +488,110 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                       ),
                     )
                   : _errorMessage != null
-                      ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  color: Colors.red.withOpacity(0.1),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.error_outline_rounded,
-                                  size: 40,
-                                  color: Colors.red,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              const Text(
-                                'Error Loading Towers',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.textDark,
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                _errorMessage!,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  color: AppColors.textLight,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 16),
-                              ElevatedButton(
-                                onPressed: _getTowers,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primaryColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Retry',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : filtered.isEmpty
-                          ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primaryColor.withOpacity(0.08),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.domain_rounded,
-                                      size: 40,
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const Text(
-                                    'No towers found',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w700,
-                                      color: AppColors.textDark,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  const Text(
-                                    'Try adjusting your search',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: AppColors.textLight,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : ListView.builder(
-                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-                              itemCount: filtered.length,
-                              itemBuilder: (context, index) {
-                                final tower = filtered[index];
-                                return OwnerCard(
-                                  owner: tower,
-                                  onEdit: () => _editTower(tower),
-                                  onDelete: () => _deleteTower(tower),
-                                  index: index,
-                                  showStatus: true,
-                                );
-                              },
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: Colors.red.withOpacity(0.1),
+                              shape: BoxShape.circle,
                             ),
+                            child: const Icon(
+                              Icons.error_outline_rounded,
+                              size: 40,
+                              color: Colors.red,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Error Loading Towers',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textDark,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            _errorMessage!,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: AppColors.textLight,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: _getTowers,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: const Text(
+                              'Retry',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : filtered.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColor.withOpacity(0.08),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.domain_rounded,
+                              size: 40,
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'No towers found',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textDark,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          const Text(
+                            'Try adjusting your search',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: AppColors.textLight,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                      itemCount: filtered.length,
+                      itemBuilder: (context, index) {
+                        final tower = filtered[index];
+                        return OwnerCard(
+                          owner: tower,
+                          onEdit: () => _editTower(tower),
+                          onDelete: () => _deleteTower(tower),
+                          index: index,
+                          showStatus: true,
+                        );
+                      },
+                    ),
             ),
           ],
         ),
