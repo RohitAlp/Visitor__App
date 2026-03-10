@@ -91,3 +91,7 @@ class OpenDaysChangedEvent extends AminityEvent {
 class UpdateAmenityEvent extends AminityEvent {
   const UpdateAmenityEvent();
 }
+
+class AddAmenityEvent extends AminityEvent {
+  const AddAmenityEvent();
+}

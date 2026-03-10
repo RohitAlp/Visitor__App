@@ -137,6 +137,7 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
     final filtered = _filteredOwners;
     return SafeArea(
       child: Scaffold(
+
         body: Column(
           children: [
             Padding(

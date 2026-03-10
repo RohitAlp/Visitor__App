@@ -9,7 +9,9 @@ import '../../../../../utils/enum.dart';
 import 'bloc/editwing_bloc.dart';
 
 class EditWingForm extends StatefulWidget {
-  const EditWingForm({super.key});
+  final bool isAddingWing;
+  
+  const EditWingForm({super.key, this.isAddingWing = false});
 
   @override
   State<EditWingForm> createState() => _EditWingFormState();
@@ -24,15 +26,15 @@ class _EditWingFormState extends State<EditWingForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Edit Wing'),
+      appBar: CustomAppBar(title: widget.isAddingWing ? 'Add Wing' : 'Edit Wing'),
       
       body: BlocListener<EditwingBloc, EditwingState>(
         listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           if (state.status == Status.success) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Wing updated successfully'),
+              SnackBar(
+                content: Text(widget.isAddingWing ? 'Wing added successfully' : 'Wing updated successfully'),
                 backgroundColor: AppColors.successGreen,
               ),
             );
@@ -66,9 +68,9 @@ class _EditWingFormState extends State<EditWingForm> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Edit Wing',
-                          style: TextStyle(
+                        Text(
+                          widget.isAddingWing ? 'Add Wing' : 'Edit Wing',
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                           ),
@@ -175,7 +177,11 @@ class _EditWingFormState extends State<EditWingForm> {
                             state.selectedTower.isNotEmpty &&
                             state.wingName.isNotEmpty &&
                             state.wingStatus.isNotEmpty) {
-                          context.read<EditwingBloc>().add(const UpdateWingEvent());
+                          if (widget.isAddingWing) {
+                            context.read<EditwingBloc>().add(const AddWingEvent());
+                          } else {
+                            context.read<EditwingBloc>().add(const UpdateWingEvent());
+                          }
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -194,9 +200,9 @@ class _EditWingFormState extends State<EditWingForm> {
                           strokeWidth: 2,
                         ),
                       )
-                          : const Text(
-                        'Update Wing',
-                        style: TextStyle(
+                          : Text(
+                        widget.isAddingWing ? 'Add Wing' : 'Update Wing',
+                        style: const TextStyle(
                           color: AppColors.white,
                           fontWeight: FontWeight.w600,
                         ),

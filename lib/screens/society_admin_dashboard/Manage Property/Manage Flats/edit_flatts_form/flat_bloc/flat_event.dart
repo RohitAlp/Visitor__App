@@ -50,3 +50,7 @@ class FlatNumberChangedEvent extends FlatEvent {
 class UpdateFlatEvent extends FlatEvent {
   const UpdateFlatEvent();
 }
+
+class AddFlatEvent extends FlatEvent {
+  const AddFlatEvent();
+}

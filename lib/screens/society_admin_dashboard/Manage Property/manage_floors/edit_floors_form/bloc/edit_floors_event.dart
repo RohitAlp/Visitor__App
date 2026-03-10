@@ -41,3 +41,7 @@ class UpdateWingEvent extends EditFloorsEvent{
   const UpdateWingEvent();
 }
 
+class AddFloorEvent extends EditFloorsEvent{
+  const AddFloorEvent();
+}
+
