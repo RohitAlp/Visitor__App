@@ -6,6 +6,7 @@ import '../../screens/developer_admin_dashboard/developer_admin_dashboard_screen
 import '../../screens/profile/profile.dart';
 import '../../screens/profile/bloc/profile_bloc.dart';
 import '../../screens/resident_dashboard/resident_dashboard_screen.dart';
+import '../../screens/security_dashboard/security_dashboard_screen.dart';
 import '../../screens/society_admin_dashboard/Manage Property/Manage Flats/flat_list.dart';
 import '../../screens/society_admin_dashboard/Manage Property/Manage Tower/Add_tower.dart';
 import '../../screens/society_admin_dashboard/Manage Property/Manage Tower/add_tower_form.dart';
@@ -57,6 +58,8 @@ class Routes {
         return MaterialPageRoute(builder: (context) => const ManageFlatsScreen());
       case RouteName.SocietyAdminDashboardScreen:
         return MaterialPageRoute(builder: (context) =>   const SocietyAdminDashboardScreen());
+      case RouteName.SecurityDashboardScreen:
+        return MaterialPageRoute(builder: (context) =>   const SecurityDashboardScreen());
 
       case RouteName.notificationScreen:
         return MaterialPageRoute(builder: (context) => const NotificationScreen());

@@ -104,6 +104,8 @@ class _OtpScreenState extends State<OtpScreen> {
               targetRoute = RouteName.SocietyAdminDashboardScreen;
             } else if (verifyOtpResponse.roleId == 3) {
               targetRoute = RouteName.dashboardScreen;
+            } else if (verifyOtpResponse.roleId == 4) {
+              targetRoute = RouteName.SecurityDashboardScreen;
             } else {
               targetRoute = RouteName.loginScreen; 
             }

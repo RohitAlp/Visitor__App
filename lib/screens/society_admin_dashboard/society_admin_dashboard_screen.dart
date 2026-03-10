@@ -275,7 +275,7 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
       {'icon': 'assets/image/icons8-building-96.png',      'label': 'Manage Property'},
       {'icon': 'assets/image/icons8-headset-96.png',       'label': 'Service Request'},
       {'icon': 'assets/image/icons8-swimmer-96.png',       'label': 'Amenities'},
-      {'icon': 'assets/image/megaphone.png',               'label': 'Notice'},
+      {'icon': 'assets/image/megaphone.png',               'label': 'SOS Alert'},
       {'icon': 'assets/image/icons8-settings-96.png',      'label': 'More'},
     ];
 
@@ -300,6 +300,8 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
               Navigator.pushNamed(context, RouteName.manageUsersSocietyAdmin, arguments: 2);
             } else if (index == 2) {
               Navigator.pushNamed(context, RouteName.ServiceRequestListScreen);
+            }else if (index == 3) {
+              Navigator.pushNamed(context, RouteName.ManageAmanitiesScreen);
             }
           },
           child: Container(
