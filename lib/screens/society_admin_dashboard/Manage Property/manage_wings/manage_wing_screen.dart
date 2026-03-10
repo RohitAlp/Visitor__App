@@ -283,7 +283,6 @@ class _ManageWingScreenState extends State<ManageWingScreen>
       body: SafeArea(
         child: Column(
           children: [
-            // Fixed Header
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
               child: Column(

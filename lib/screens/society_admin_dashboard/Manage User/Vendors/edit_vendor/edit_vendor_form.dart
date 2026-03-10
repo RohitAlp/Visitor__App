@@ -16,7 +16,9 @@ import '../../security_guards/edit_guards_details_form/bloc/editguards_bloc.dart
 import 'bloc/edit_vendor_bloc.dart';
 
 class EditVendorsForm extends StatefulWidget {
-  const EditVendorsForm({super.key});
+  final bool isAddingVendor;
+  
+  const EditVendorsForm({super.key, this.isAddingVendor = true});
 
   @override
   State<EditVendorsForm> createState() => _EditVendorsFormState();
@@ -32,7 +34,7 @@ class _EditVendorsFormState extends State<EditVendorsForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Edit Vendor'),
+      appBar: CustomAppBar(title: widget.isAddingVendor ? 'Add Vendor' : 'Edit Vendor Details'),
 
       body: BlocListener<EditVendorBloc, EditVendorState>(
         listenWhen: (previous, current) =>
@@ -41,8 +43,8 @@ class _EditVendorsFormState extends State<EditVendorsForm> {
 
           if (state.status == Status.success) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Guard updated successfully'),
+              SnackBar(
+                content: Text(widget.isAddingVendor ? 'Vendor added successfully' : 'Vendor updated successfully'),
                 backgroundColor: AppColors.successGreen,
               ),
             );
@@ -78,9 +80,9 @@ class _EditVendorsFormState extends State<EditVendorsForm> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
 
-                        const Text(
-                          'Vendor Information',
-                          style: TextStyle(
+                        Text(
+                          widget.isAddingVendor ? 'Vendor Information' : 'Edit Vendor Information',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -322,13 +324,13 @@ class _EditVendorsFormState extends State<EditVendorsForm> {
                       ? const CircularProgressIndicator(
                     color: Colors.white,
                   )
-                      : const Text(
-                    'Update Security Guard',
-                    style: TextStyle(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                      : Text(
+                        widget.isAddingVendor ? 'Add Vendor' : 'Update Vendor',
+                        style: const TextStyle(
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                 ),
               ),
             ),

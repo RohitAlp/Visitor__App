@@ -15,7 +15,9 @@ import '../../../../../widgets/text_form_field.dart';
 import 'bloc/editguards_bloc.dart';
 
 class EditSecurityGuardsForm extends StatefulWidget {
-  const EditSecurityGuardsForm({super.key});
+  final bool isAddingGuard;
+  
+  const EditSecurityGuardsForm({super.key, this.isAddingGuard = true});
 
   @override
   State<EditSecurityGuardsForm> createState() => _EditSecurityGuardsFormState();
@@ -31,7 +33,7 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Edit Guards Details'),
+      appBar: CustomAppBar(title: widget.isAddingGuard ? 'Add Guard' : 'Edit Guard Details'),
 
       body: BlocListener<EditguardsBloc, EditguardsState>(
         listenWhen: (previous, current) =>
@@ -40,8 +42,8 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
 
           if (state.status == Status.success) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Guard updated successfully'),
+              SnackBar(
+                content: Text(widget.isAddingGuard ? 'Guard added successfully' : 'Guard updated successfully'),
                 backgroundColor: AppColors.successGreen,
               ),
             );
@@ -77,9 +79,9 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
 
-                        const Text(
-                          'Guard Information',
-                          style: TextStyle(
+                        Text(
+                          widget.isAddingGuard ? 'Guard Information' : 'Edit Guard Information',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -316,13 +318,13 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
                       ? const CircularProgressIndicator(
                     color: Colors.white,
                   )
-                      : const Text(
-                    'Update Security Guard',
-                    style: TextStyle(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                      : Text(
+                        widget.isAddingGuard ? 'Add Guard' : 'Update Security Guard',
+                        style: const TextStyle(
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                 ),
               ),
             ),

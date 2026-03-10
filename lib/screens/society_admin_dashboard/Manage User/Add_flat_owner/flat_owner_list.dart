@@ -201,12 +201,11 @@ class _FlatOwnersScreenState extends State<FlatOwnersScreen>
                   /// ADD BUTTON
                   GestureDetector(
                     onTap: (){
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => AddNoticeScreen(),
-                      //   ),
-                      // );
+                      Navigator.pushNamed(
+                        context,
+                        RouteName.AddFlatOwnerForm,
+                        arguments: {'isAddingOwner': true},
+                      );
                     },
                     child: Container(
                       width: 36,

@@ -223,12 +223,15 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                   /// ADD BUTTON
                   GestureDetector(
                     onTap: (){
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => AddNoticeScreen(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider(
+                            create: (_) => EditguardsBloc(),
+                            child: const EditSecurityGuardsForm(isAddingGuard: true),
+                          ),
+                        ),
+                      );
                     },
                     child: Container(
                       width: 36,
