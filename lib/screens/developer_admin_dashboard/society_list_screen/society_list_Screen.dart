@@ -564,82 +564,92 @@ class _SocietyListScreenState extends State<SocietyListScreen>
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
+                    //
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    //   child: Container(
+                    //     width: 36,
+                    //     height: 36,
+                    //     decoration: BoxDecoration(
+                    //       color: AppColors.cardBg,
+                    //       borderRadius: BorderRadius.circular(12),
+                    //       border: Border.all(
+                    //         color: Colors.grey.withOpacity(0.15),
+                    //         width: 1,
+                    //       ),
+                    //       boxShadow: [
+                    //         BoxShadow(
+                    //           color: Colors.black.withOpacity(0.05),
+                    //           blurRadius: 6,
+                    //           offset: const Offset(0, 2),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //     child: const Icon(
+                    //       Icons.arrow_back_ios_rounded,
+                    //       size: 16,
+                    //     ),
+                    //   ),
+                    // ),
+                    const SizedBox(width: 20),
+
+                    /// TITLE + COUNT
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Manage Societies',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w800),
+                        ),
+                        Text(
+                          "${_filteredSocieties.length} Societies",
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+
+                    const Spacer(),
+
+                    /// ADD BUTTON
                     GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
+                      onTap: (){
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => AddNoticeScreen(),
+                        //   ),
+                        // );
                       },
                       child: Container(
                         width: 36,
                         height: 36,
                         decoration: BoxDecoration(
-                          color: AppColors.cardBg,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.06),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back_ios_rounded,
-                          size: 16,
-                          color: AppColors.textDark,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    const Text(
-                      'Societies',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textDark,
-                        letterSpacing: -0.8,
-                      ),
-                    ),
-                    const Spacer(),
-                    ScaleTransition(
-                      scale: _fabAnimation,
-                      child: GestureDetector(
-                        onTap: () {
-                          // Add new society functionality
-                        },
-                        child: Container(
-                          width: 42,
-                          height: 42,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [
-                                AppColors.primaryLight,
-                                AppColors.primaryColor,
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(14),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primaryColor.withOpacity(0.45),
-                                blurRadius: 16,
-                                offset: const Offset(0, 6),
-                              ),
+                          gradient: const LinearGradient(
+                            colors: [
+                              AppColors.primaryLight,
+                              AppColors.primaryColor
                             ],
                           ),
-                          child: const Icon(
-                            Icons.add_rounded,
-                            color: Colors.white,
-                            size: 24,
-                          ),
+                          borderRadius: BorderRadius.circular(14),
                         ),
+                        child: const Icon(Icons.add, color: Colors.white),
                       ),
                     ),
                   ],
                 ),
               ),
+
               const SizedBox(height: 10),
-              const Divider(thickness: 1, height: 1, color: Color(0xFFE5E5E5)),
+
+              const Divider(
+                thickness: 1,
+                height: 1,
+                color: Color(0xFFE5E5E5),
+              ),
             ],
           ),
         ),

@@ -20,42 +20,82 @@ class _ManageUsersScreenState extends State<ManageUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "Manage Users", showBackButton: false),
+      appBar: AppBar(
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        toolbarHeight: 80,
+        titleSpacing: 0,
+        automaticallyImplyLeading: false,
+        title: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  //
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //   },
+                  //   child: Container(
+                  //     width: 36,
+                  //     height: 36,
+                  //     decoration: BoxDecoration(
+                  //       color: AppColors.cardBg,
+                  //       borderRadius: BorderRadius.circular(12),
+                  //       border: Border.all(
+                  //         color: Colors.grey.withOpacity(0.15),
+                  //         width: 1,
+                  //       ),
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //           color: Colors.black.withOpacity(0.05),
+                  //           blurRadius: 6,
+                  //           offset: const Offset(0, 2),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     child: const Icon(
+                  //       Icons.arrow_back_ios_rounded,
+                  //       size: 16,
+                  //     ),
+                  //   ),
+                  // ),
+                  const SizedBox(width: 20),
+
+                  /// TITLE + COUNT
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Manage Property',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w800),
+                      ),
+
+                    ],
+                  ),
+
+                  const Spacer(),
+
+
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            const Divider(
+              thickness: 1,
+              height: 1,
+              color: Color(0xFFE5E5E5),
+            ),
+          ],
+        ),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(Icons.arrow_back),
-                ),
-                SizedBox(width: 8),
-                if(widget.type == 1)
-                  Text(
-                    "Manage Users",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  )
-                else
-                  Text(
-                    "Manage Property",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-              ],
-            ),
-          ),
 
           Expanded(
             child: GridView.count(

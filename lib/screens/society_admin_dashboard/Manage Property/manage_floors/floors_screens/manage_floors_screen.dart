@@ -179,114 +179,113 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
       builder: (context, state) {
         final filtered = state.filteredFloors;
 
-        return SafeArea(
-
-          child: Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              surfaceTintColor: Colors.transparent,
-              toolbarHeight: 80,
-              titleSpacing: 0,
-              automaticallyImplyLeading: false,
-              title: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      children: [
-                        //
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Navigator.pop(context);
-                        //   },
-                        //   child: Container(
-                        //     width: 36,
-                        //     height: 36,
-                        //     decoration: BoxDecoration(
-                        //       color: AppColors.cardBg,
-                        //       borderRadius: BorderRadius.circular(12),
-                        //       border: Border.all(
-                        //         color: Colors.grey.withOpacity(0.15),
-                        //         width: 1,
-                        //       ),
-                        //       boxShadow: [
-                        //         BoxShadow(
-                        //           color: Colors.black.withOpacity(0.05),
-                        //           blurRadius: 6,
-                        //           offset: const Offset(0, 2),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //     child: const Icon(
-                        //       Icons.arrow_back_ios_rounded,
-                        //       size: 16,
-                        //     ),
-                        //   ),
-                        // ),
-                        const SizedBox(width: 20),
-
-                        /// TITLE + COUNT
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Manage Floors',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w800),
-                            ),
-                            Text(
-                              "${filtered.length} Floors",
-                              style: const TextStyle(
-                                  fontSize: 12, color: Colors.grey),
-                            ),
-                          ],
-                        ),
-
-                        const Spacer(),
-
-                        /// ADD BUTTON
-                        GestureDetector(
-                          onTap: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => BlocProvider(
-                                  create: (_) => EditFloorsBloc(),
-                                  child: const EditFloorForm(isAddingFloor: true),
-                                ),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [
-                                  AppColors.primaryLight,
-                                  AppColors.primaryColor
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            child: const Icon(Icons.add, color: Colors.white),
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            surfaceTintColor: Colors.transparent,
+            toolbarHeight: 80,
+            titleSpacing: 0,
+            automaticallyImplyLeading: false,
+            title: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      //
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Navigator.pop(context);
+                      //   },
+                      //   child: Container(
+                      //     width: 36,
+                      //     height: 36,
+                      //     decoration: BoxDecoration(
+                      //       color: AppColors.cardBg,
+                      //       borderRadius: BorderRadius.circular(12),
+                      //       border: Border.all(
+                      //         color: Colors.grey.withOpacity(0.15),
+                      //         width: 1,
+                      //       ),
+                      //       boxShadow: [
+                      //         BoxShadow(
+                      //           color: Colors.black.withOpacity(0.05),
+                      //           blurRadius: 6,
+                      //           offset: const Offset(0, 2),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //     child: const Icon(
+                      //       Icons.arrow_back_ios_rounded,
+                      //       size: 16,
+                      //     ),
+                      //   ),
+                      // ),
+                      const SizedBox(width: 20),
+        
+                      /// TITLE + COUNT
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Manage Floors',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w800),
                           ),
+                          Text(
+                            "${filtered.length} Floors",
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+        
+                      const Spacer(),
+        
+                      /// ADD BUTTON
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (_) => EditFloorsBloc(),
+                                child: const EditFloorForm(isAddingFloor: true),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                AppColors.primaryLight,
+                                AppColors.primaryColor
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: const Icon(Icons.add, color: Colors.white),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-
-                  const SizedBox(height: 10),
-
-                  const Divider(
-                    thickness: 1,
-                    height: 1,
-                    color: Color(0xFFE5E5E5),
-                  ),
-                ],
-              ),
+                ),
+        
+                const SizedBox(height: 10),
+        
+                const Divider(
+                  thickness: 1,
+                  height: 1,
+                  color: Color(0xFFE5E5E5),
+                ),
+              ],
             ),
-            body: Column(
+          ),
+          body: SafeArea(
+            child: Column(
               children: [
                 // Fixed Header
                 Padding(
@@ -294,9 +293,9 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
-
-
+                    
+                    
+                    
                       Container(
                         decoration: BoxDecoration(
                           color: AppColors.cardBg,
@@ -352,9 +351,9 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                           ),
                         ),
                       ),
-
+                    
                       const SizedBox(height: 16),
-
+                    
                       Row(
                         children: [
                           Expanded(
@@ -373,7 +372,7 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                                   ),
                                 ],
                               ),
-
+                    
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: state.selectedTower,
@@ -400,9 +399,9 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                               ),
                             ),
                           ),
-
+                    
                           const SizedBox(width: 12),
-
+                    
                           Expanded(
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -447,9 +446,9 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                           ),
                         ],
                       ),
-
+                    
                       const SizedBox(height: 16),
-
+                    
                       Row(
                         children: [
                           Text(
@@ -516,12 +515,12 @@ class _ManageFloorsScreenContentState extends State<_ManageFloorsScreenContent>
                             ),
                         ],
                       ),
-
+                    
                       const SizedBox(height: 16),
                     ],
                   ),
                 ),
-
+                    
                 // Scrollable List
                 Expanded(
                   child: state.status == Status.loading
