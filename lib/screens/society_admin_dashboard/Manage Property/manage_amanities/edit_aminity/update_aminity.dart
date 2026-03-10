@@ -9,7 +9,9 @@ import 'package:visitorapp/widgets/custom_dropdown.dart';
 import 'amenity_bloc/aminity_bloc.dart';
 
 class EditAminityForm extends StatefulWidget {
-  const EditAminityForm({super.key});
+  final bool isAddingAmenity;
+  
+  const EditAminityForm({super.key, this.isAddingAmenity = false});
 
   @override
   State<EditAminityForm> createState() => _EditAminityFormState();
@@ -27,14 +29,14 @@ class _EditAminityFormState extends State<EditAminityForm> {
     return BlocProvider(
       create: (context) => AminityBloc(),
       child: Scaffold(
-        appBar: const CustomAppBar(title: 'Edit Amenity'),
+        appBar: CustomAppBar(title: widget.isAddingAmenity ? 'Add Amenity' : 'Edit Amenity'),
         body: BlocListener<AminityBloc, AminityState>(
           listenWhen: (previous, current) => previous.submissionStatus != current.submissionStatus,
           listener: (context, state) {
             if (state.submissionStatus == Status.success) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Amenity updated successfully'),
+                SnackBar(
+                  content: Text(widget.isAddingAmenity ? 'Amenity added successfully' : 'Amenity updated successfully'),
                   backgroundColor: AppColors.successGreen,
                 ),
               );
@@ -66,9 +68,9 @@ class _EditAminityFormState extends State<EditAminityForm> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Edit Amenity',
-                          style: TextStyle(
+                        Text(
+                          widget.isAddingAmenity ? 'Add Amenity' : 'Edit Amenity',
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                           ),
@@ -323,7 +325,11 @@ class _EditAminityFormState extends State<EditAminityForm> {
                             ? null
                             : () {
                           if (_formKey.currentState!.validate() && state.isFormValid) {
-                            context.read<AminityBloc>().add(UpdateAmenityEvent());
+                            if (widget.isAddingAmenity) {
+                              context.read<AminityBloc>().add(AddAmenityEvent());
+                            } else {
+                              context.read<AminityBloc>().add(UpdateAmenityEvent());
+                            }
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -342,9 +348,9 @@ class _EditAminityFormState extends State<EditAminityForm> {
                             strokeWidth: 2,
                           ),
                         )
-                            : const Text(
-                          'Update Amenity',
-                          style: TextStyle(
+                            : Text(
+                          widget.isAddingAmenity ? 'Add Amenity' : 'Update Amenity',
+                          style: const TextStyle(
                             color: AppColors.white,
                             fontWeight: FontWeight.w600,
                           ),

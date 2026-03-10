@@ -60,6 +60,14 @@ class AminityBloc extends Bloc<AminityEvent, AminityState> {
         emit(state.copyWith(submissionStatus: Status.success));
       });
     });
+    
+    on<AddAmenityEvent>((event, emit) {
+      emit(state.copyWith(submissionStatus: Status.loading));
+      // Simulate API call
+      Future.delayed(const Duration(seconds: 2), () {
+        emit(state.copyWith(submissionStatus: Status.success));
+      });
+    });
   }
   
   void _validateForm(Emitter<AminityState> emit) {

@@ -31,5 +31,12 @@ class EditFloorsBloc extends Bloc<EditFloorsEvent, EditFloorsState> {
         emit(state.copyWith(status: Status.success));
       });
     });
+    
+    on<AddFloorEvent>((event, emit) {
+      emit(state.copyWith(status: Status.loading));
+      Future.delayed(const Duration(seconds: 2), () {
+        emit(state.copyWith(status: Status.success));
+      });
+    });
   }
 }

@@ -38,6 +38,10 @@ class UpdateWingEvent extends EditwingEvent {
   const UpdateWingEvent();
 }
 
+class AddWingEvent extends EditwingEvent {
+  const AddWingEvent();
+}
+
 class ResetWingFormEvent extends EditwingEvent {
   const ResetWingFormEvent();
 }

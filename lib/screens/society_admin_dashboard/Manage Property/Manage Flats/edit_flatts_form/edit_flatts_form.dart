@@ -9,7 +9,9 @@ import 'package:visitorapp/widgets/custom_dropdown.dart';
 import 'flat_bloc/flat_bloc.dart';
 
 class EditFlatForm extends StatefulWidget {
-  const EditFlatForm({super.key});
+  final bool isAddingFlat;
+  
+  const EditFlatForm({super.key, this.isAddingFlat = false});
 
   @override
   State<EditFlatForm> createState() => _EditFlatFormState();
@@ -23,14 +25,14 @@ class _EditFlatFormState extends State<EditFlatForm> {
     return BlocProvider(
       create: (context) => FlatBloc(),
       child: Scaffold(
-        appBar: const CustomAppBar(title: 'Edit Flat'),
+        appBar: CustomAppBar(title: widget.isAddingFlat ? 'Add Flat' : 'Edit Flat'),
         body: BlocListener<FlatBloc, FlatState>(
           listenWhen: (previous, current) => previous.submissionStatus != current.submissionStatus,
           listener: (context, state) {
             if (state.submissionStatus == Status.success) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Flat updated successfully'),
+                SnackBar(
+                  content: Text(widget.isAddingFlat ? 'Flat added successfully' : 'Flat updated successfully'),
                   backgroundColor: AppColors.successGreen,
                 ),
               );
@@ -62,9 +64,9 @@ class _EditFlatFormState extends State<EditFlatForm> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Edit Flat',
-                          style: TextStyle(
+                        Text(
+                          widget.isAddingFlat ? 'Add Flat' : 'Edit Flat',
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                           ),
@@ -234,7 +236,11 @@ class _EditFlatFormState extends State<EditFlatForm> {
                             ? null
                             : () {
                           if (_formKey.currentState!.validate() && state.isFormValid) {
-                            context.read<FlatBloc>().add(UpdateFlatEvent());
+                            if (widget.isAddingFlat) {
+                              // context.read<FlatBloc>().add(AddFlatEvent());
+                            } else {
+                              context.read<FlatBloc>().add(UpdateFlatEvent());
+                            }
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -253,9 +259,9 @@ class _EditFlatFormState extends State<EditFlatForm> {
                             strokeWidth: 2,
                           ),
                         )
-                            : const Text(
-                          'Update Flat',
-                          style: TextStyle(
+                            : Text(
+                          widget.isAddingFlat ? 'Add Flat' : 'Update Flat',
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
                           ),

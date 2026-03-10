@@ -25,6 +25,14 @@ class EditwingBloc extends Bloc<EditwingEvent, EditwingState> {
         emit(state.copyWith(status: Status.success));
       });
     });
+    on<AddWingEvent>((event, emit) {
+      // Handle API call here
+      emit(state.copyWith(status: Status.loading));
+      // Simulate API call
+      Future.delayed(const Duration(seconds: 2), () {
+        emit(state.copyWith(status: Status.success));
+      });
+    });
     on<ResetWingFormEvent>((event, emit) {
       emit(const EditwingState());
     });

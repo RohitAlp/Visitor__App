@@ -110,70 +110,116 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
     final filtered = _filteredFlats;
 
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        toolbarHeight: 80,
+        titleSpacing: 0,
+        automaticallyImplyLeading: false,
+        title: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  //
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //   },
+                  //   child: Container(
+                  //     width: 36,
+                  //     height: 36,
+                  //     decoration: BoxDecoration(
+                  //       color: AppColors.cardBg,
+                  //       borderRadius: BorderRadius.circular(12),
+                  //       border: Border.all(
+                  //         color: Colors.grey.withOpacity(0.15),
+                  //         width: 1,
+                  //       ),
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //           color: Colors.black.withOpacity(0.05),
+                  //           blurRadius: 6,
+                  //           offset: const Offset(0, 2),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     child: const Icon(
+                  //       Icons.arrow_back_ios_rounded,
+                  //       size: 16,
+                  //     ),
+                  //   ),
+                  // ),
+                  const SizedBox(width: 20),
+
+                  /// TITLE + COUNT
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Manage Flats',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w800),
+                      ),
+                      Text(
+                        "${_filteredFlats.length} Flats",
+                        style: const TextStyle(
+                            fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+
+                  const Spacer(),
+
+                  /// ADD BUTTON
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider(
+                            create: (_) => FlatBloc(),
+                            child: const EditFlatForm(isAddingFlat: true),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            AppColors.primaryLight,
+                            AppColors.primaryColor
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: const Icon(Icons.add, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            const Divider(
+              thickness: 1,
+              height: 1,
+              color: Color(0xFFE5E5E5),
+            ),
+          ],
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
             // Fixed Header
             Column(
               children: [
-                // App Bar
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  child: Row(
-                    children: [
-                      const Text(
-                        'Society Admin',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.textDark,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                      const Spacer(),
-                      Stack(
-                        children: [
-                          Container(
-                            width: 42,
-                            height: 42,
-                            decoration: BoxDecoration(
-                              color: AppColors.cardBg,
-                              borderRadius: BorderRadius.circular(14),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.primaryColor.withOpacity(0.15),
-                                  blurRadius: 12,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Image.asset(
-                              'assets/image/Notice.svg',
-                              width: 22,
-                              height: 22,
-                              color: AppColors.primaryColor,
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Icon(Icons.notifications_outlined, color: AppColors.primaryColor, size: 22);
-                              },
-                            ),
-                          ),
-                          Positioned(
-                            top: 8,
-                            right: 8,
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                color: AppColors.notificationRed,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
 
                 // Header Section
                 Padding(
@@ -181,108 +227,8 @@ class _ManageFlatsScreenState extends State<ManageFlatsScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Header Row
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () => Navigator.maybePop(context),
-                            child: Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: AppColors.cardBg,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.06),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Image.asset(
-                                'assets/image/svgviewer-output.svg',
-                                width: 16,
-                                height: 16,
-                                color: AppColors.textDark,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return const Icon(Icons.arrow_back_ios_rounded, size: 16, color: AppColors.textDark);
-                                },
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Manage Flats',
-                                style: TextStyle(
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.textDark,
-                                  letterSpacing: -0.8,
-                                ),
-                              ),
-                              // Text(
-                              //   '${_allFlats.length} flats',
-                              //   style: const TextStyle(
-                              //     fontSize: 13,
-                              //     color: AppColors.textLight,
-                              //     fontWeight: FontWeight.w500,
-                              //   ),
-                              // ),
-                            ],
-                          ),
-                          const Spacer(),
-                          ScaleTransition(
-                            scale: _fabAnimation,
-                            child: GestureDetector(
-                              onTap: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: const Text('Add new flat'),
-                                    backgroundColor: AppColors.primaryColor,
-                                    behavior: SnackBarBehavior.floating,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                width: 42,
-                                height: 42,
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    colors: [AppColors.primaryLight, AppColors.primaryColor],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
-                                  borderRadius: BorderRadius.circular(14),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AppColors.primaryColor.withOpacity(0.45),
-                                      blurRadius: 16,
-                                      offset: const Offset(0, 6),
-                                    ),
-                                  ],
-                                ),
-                                child: Image.asset(
-                                  'assets/image/edit-05.png',
-                                  width: 24,
-                                  height: 24,
-                                  color: Colors.white,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Icon(Icons.add_rounded, color: Colors.white, size: 24);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
 
-                      const SizedBox(height: 20),
+                      // const SizedBox(height: 20),
 
                       // Search Bar
                       Container(

@@ -53,6 +53,13 @@ class FlatBloc extends Bloc<FlatEvent, FlatState> {
       });
     });
     
+    on<AddFlatEvent>((event, emit) {
+      emit(state.copyWith(submissionStatus: Status.loading));
+      Future.delayed(const Duration(seconds: 2), () {
+        emit(state.copyWith(submissionStatus: Status.success));
+      });
+    });
+    
     add(const InitializeTowersEvent());
   }
   

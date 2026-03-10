@@ -55,8 +55,8 @@ class _DeveloperAdminDashboardScreenState extends State<DeveloperAdminDashboardS
       _DashboardHomePage(userInfo: userInfo),
       Payment(),
       NoticeScreen(),
-      SettingsScreen(),
       ServiceRequestListScreen(),
+      SettingsScreen(),
     ];
     return SafeArea(
       top: false,

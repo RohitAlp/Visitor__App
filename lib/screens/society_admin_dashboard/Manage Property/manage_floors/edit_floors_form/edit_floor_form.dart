@@ -9,7 +9,9 @@ import '../../../../../utils/enum.dart';
 import 'bloc/edit_floors_bloc.dart';
 
 class EditFloorForm extends StatefulWidget {
-  const EditFloorForm({super.key});
+  final bool isAddingFloor;
+  
+  const EditFloorForm({super.key, this.isAddingFloor = false});
 
   @override
   State<EditFloorForm> createState() => _EditFloorFormState();
@@ -25,15 +27,15 @@ class _EditFloorFormState extends State<EditFloorForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Edit Floor'),
+      appBar: CustomAppBar(title: widget.isAddingFloor ? 'Add Floor' : 'Edit Floor'),
 
       body: BlocListener<EditFloorsBloc, EditFloorsState>(
         listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           if (state.status == Status.success) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Wing updated successfully'),
+              SnackBar(
+                content: Text(widget.isAddingFloor ? 'Floor added successfully' : 'Floor updated successfully'),
                 backgroundColor: AppColors.successGreen,
               ),
             );
@@ -67,9 +69,9 @@ class _EditFloorFormState extends State<EditFloorForm> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Edit Wing',
-                          style: TextStyle(
+                        Text(
+                          widget.isAddingFloor ? 'Add Floor' : 'Edit Floor',
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                           ),
@@ -202,7 +204,11 @@ class _EditFloorFormState extends State<EditFloorForm> {
                         if (_formKey.currentState!.validate() &&
                             state.selectedTower.isNotEmpty &&
                             state.wingName.isNotEmpty ) {
-                          context.read<EditFloorsBloc>().add( UpdateWingEvent());
+                          if (widget.isAddingFloor) {
+                            context.read<EditFloorsBloc>().add(AddFloorEvent());
+                          } else {
+                            context.read<EditFloorsBloc>().add(UpdateWingEvent());
+                          }
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -221,9 +227,9 @@ class _EditFloorFormState extends State<EditFloorForm> {
                           strokeWidth: 2,
                         ),
                       )
-                          : const Text(
-                        'Update Floor',
-                        style: TextStyle(
+                          : Text(
+                        widget.isAddingFloor ? 'Add Floor' : 'Update Floor',
+                        style: const TextStyle(
                           color: AppColors.white,
                           fontWeight: FontWeight.w600,
                         ),
