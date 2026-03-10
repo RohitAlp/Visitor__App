@@ -63,3 +63,7 @@ class EditGuardPhotoEvent extends EditguardsEvent {
 class UpdateGuardDetailsEvent extends EditguardsEvent {
   const UpdateGuardDetailsEvent();
 }
+
+class AddGuardEvent extends EditguardsEvent {
+  const AddGuardEvent();
+}

@@ -309,9 +309,15 @@ class _EditSecurityGuardsFormState extends State<EditSecurityGuardsForm> {
                       ? null
                       : () {
                     if (_formKey.currentState!.validate()) {
-                      context.read<EditguardsBloc>().add(
-                        const UpdateGuardDetailsEvent(),
-                      );
+                      if (widget.isAddingGuard) {
+                        context.read<EditguardsBloc>().add(
+                          const AddGuardEvent(),
+                        );
+                      } else {
+                        context.read<EditguardsBloc>().add(
+                          const UpdateGuardDetailsEvent(),
+                        );
+                      }
                     }
                   },
                   child: state.status == Status.loading

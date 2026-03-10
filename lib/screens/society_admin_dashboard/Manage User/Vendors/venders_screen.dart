@@ -478,7 +478,7 @@ class _VendorsScreensState extends State<VendorsScreens>
                         MaterialPageRoute(
                           builder: (_) => BlocProvider(
                             create: (_) => EditVendorBloc(),
-                            child: const EditVendorsForm(),
+                            child: const EditVendorsForm(isAddingVendor: false),
                           ),
                         ),
                       );

@@ -315,9 +315,15 @@ class _EditVendorsFormState extends State<EditVendorsForm> {
                       ? null
                       : () {
                     if (_formKey.currentState!.validate()) {
-                      context.read<EditVendorBloc>().add(
-                        const UpdateVendorDetailsEvent(),
-                      );
+                      if (widget.isAddingVendor) {
+                        context.read<EditVendorBloc>().add(
+                          const AddVendorEvent(),
+                        );
+                      } else {
+                        context.read<EditVendorBloc>().add(
+                          const UpdateVendorDetailsEvent(),
+                        );
+                      }
                     }
                   },
                   child: state.status == Status.loading

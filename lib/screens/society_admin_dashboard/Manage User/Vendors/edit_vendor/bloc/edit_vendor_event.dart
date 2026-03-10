@@ -62,3 +62,7 @@ class VenderPhotoEvent extends EditVendorEvent {
 class UpdateVendorDetailsEvent extends EditVendorEvent {
   const UpdateVendorDetailsEvent();
 }
+
+class AddVendorEvent extends EditVendorEvent {
+  const AddVendorEvent();
+}

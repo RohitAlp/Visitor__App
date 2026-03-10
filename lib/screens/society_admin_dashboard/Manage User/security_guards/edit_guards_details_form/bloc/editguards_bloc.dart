@@ -27,5 +27,11 @@ class EditguardsBloc extends Bloc<EditguardsEvent, EditguardsState> {
     on<EditGuardPhotoEvent>((event, emit) {
       emit(state.copyWith(guardPhotoBase64: event.photoBase64));
     });
+    on<UpdateGuardDetailsEvent>((event, emit) {
+
+    });
+    on<AddGuardEvent>((event, emit) {
+
+    });
   }
 }

@@ -473,7 +473,7 @@ class _SecurityGuardsScreenState extends State<SecurityGuardsScreen>
                         MaterialPageRoute(
                           builder: (_) => BlocProvider(
                             create: (_) => EditguardsBloc(),
-                            child: const EditSecurityGuardsForm(),
+                            child: const EditSecurityGuardsForm(isAddingGuard: false),
                           ),
                         ),
                       );
