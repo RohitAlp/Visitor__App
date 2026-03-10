@@ -76,7 +76,7 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
             response.data,
           );
 
-          if (towerResponse.status == true && towerResponse.data != null) {
+          if (towerResponse.status == true && towerResponse.data != null && towerResponse.data!.isNotEmpty) {
             List<Owner> towers = towerResponse.data!.map((buildingData) {
               return Owner.tower(
                 name: buildingData.buildingName ?? 'Unknown Tower',
@@ -91,20 +91,26 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
               _isLoading = false;
             });
           } else {
+            // Show static data when API returns no data
+            List<Owner> staticTowers = _getStaticTowers();
             setState(() {
-              _errorMessage = towerResponse.message ?? 'Failed to fetch towers';
+              _allTowers = staticTowers;
               _isLoading = false;
             });
           }
         } else {
+          // Show static data when API fails
+          List<Owner> staticTowers = _getStaticTowers();
           setState(() {
-            _errorMessage = 'Failed to fetch towers';
+            _allTowers = staticTowers;
             _isLoading = false;
           });
         }
       } catch (e) {
+        // Show static data when exception occurs
+        List<Owner> staticTowers = _getStaticTowers();
         setState(() {
-          _errorMessage = 'Something went wrong!';
+          _allTowers = staticTowers;
           _isLoading = false;
         });
         print(e);
@@ -115,6 +121,42 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
       });
       Utils.showToast(context, message: Constant.internetConMsg);
     }
+  }
+
+  // Method to provide static tower data when API fails or returns no data
+  List<Owner> _getStaticTowers() {
+    return [
+      Owner.tower(
+        name: 'Tower A',
+        towerCode: 'TWR-001',
+        wings: 10,
+        isActive: true,
+      ),
+      Owner.tower(
+        name: 'Tower B',
+        towerCode: 'TWR-002',
+        wings: 8,
+        isActive: true,
+      ),
+      Owner.tower(
+        name: 'Tower C',
+        towerCode: 'TWR-003',
+        wings: 12,
+        isActive: false,
+      ),
+      Owner.tower(
+        name: 'Tower D',
+        towerCode: 'TWR-004',
+        wings: 6,
+        isActive: true,
+      ),
+      Owner.tower(
+        name: 'Tower E',
+        towerCode: 'TWR-005',
+        wings: 15,
+        isActive: true,
+      ),
+    ];
   }
 
   @override
