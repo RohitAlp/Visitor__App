@@ -3,6 +3,11 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:visitorapp/utils/enum.dart';
 
+import '../../../../../../constants/constant.dart';
+import '../../../../../../constants/utils.dart';
+import '../../../../../../controller/flat_controller.dart';
+import '../../../../../../model/AddFlatResponse.dart';
+
 part 'flat_event.dart';
 part 'flat_state.dart';
 
@@ -53,16 +58,72 @@ class FlatBloc extends Bloc<FlatEvent, FlatState> {
       });
     });
     
-    on<AddFlatEvent>((event, emit) {
+   /* on<AddFlatEvent>((event, emit) {
       emit(state.copyWith(submissionStatus: Status.loading));
       Future.delayed(const Duration(seconds: 2), () {
         emit(state.copyWith(submissionStatus: Status.success));
       });
-    });
-    
+    });*/
+
+    on<AddFlatEvent>(_addFlat);
+
+
     add(const InitializeTowersEvent());
   }
-  
+
+
+  Future<void> _addFlat(
+      AddFlatEvent event,
+      Emitter<FlatState> emit,
+      ) async
+  {
+    if (!await Utils.isConnected()) {
+      emit(
+        state.copyWith(
+          submissionStatus: Status.error,
+          errorMessage: Constant.internetConMsg,
+        ),
+      );
+      return;
+    }
+
+    try {
+      emit(state.copyWith(submissionStatus: Status.loading));
+
+      Map<String, dynamic> data = {
+        "societyId": 7,
+        "buildingId": 1,
+        "wingId": state.selectedWing,
+        "floorId": state.selectedFloor,
+        "unitNumber": "103",
+        "occupancyStatus": "Not Occupied"
+      };
+
+      FlatController controller = FlatController();
+
+      final response = await controller.addFlat(data);
+
+      if (response != null) {
+        AddFlatResponse res = AddFlatResponse.fromJson(response.data);
+
+        if (res.status == true && res.statusCode == 200) {
+          emit(state.copyWith(submissionStatus: Status.success));
+        } else {
+          emit(state.copyWith(submissionStatus: Status.error, errorMessage: res.message));
+        }
+      } else {
+        emit(
+          state.copyWith(
+            submissionStatus: Status.error,
+            errorMessage: "Something went wrong",
+          ),
+        );
+      }
+    } catch (e) {
+      emit(state.copyWith(submissionStatus: Status.error, errorMessage: e.toString()));
+    }
+  }
+
   Future<void> _loadTowers(Emitter<FlatState> emit) async {
     emit(state.copyWith(isLoadingTowers: true));
     

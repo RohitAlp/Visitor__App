@@ -17,6 +17,12 @@ class WingController extends ApiService {
     );
   }
 
+  Future<Response?> addWing(jsonData) async => await requestPOST(
+    path: ApiEndpoints.addWing,
+    data: jsonData,
+    token: '',
+  );
+
 
 
 }

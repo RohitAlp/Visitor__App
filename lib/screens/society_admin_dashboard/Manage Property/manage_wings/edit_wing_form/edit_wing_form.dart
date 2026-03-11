@@ -5,12 +5,18 @@ import 'package:visitorapp/widgets/custom_app_bar.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
 import 'package:visitorapp/widgets/custom_dropdown.dart';
 
+import '../../../../../config/Routes/RouteName.dart';
+import '../../../../../constants/constant.dart';
+import '../../../../../constants/utils.dart';
+import '../../../../../controller/wing_controller.dart';
+import '../../../../../model/AddWingResponse.dart';
 import '../../../../../utils/enum.dart';
 import 'bloc/editwing_bloc.dart';
+import '../../../../../../constants/constant.dart';
 
 class EditWingForm extends StatefulWidget {
   final bool isAddingWing;
-  
+
   const EditWingForm({super.key, this.isAddingWing = false});
 
   @override
@@ -19,19 +25,41 @@ class EditWingForm extends StatefulWidget {
 
 class _EditWingFormState extends State<EditWingForm> {
   final _formKey = GlobalKey<FormState>();
-  
+
   final List<String> towers = ['Tower A', 'Tower B', 'Tower C', 'Tower D'];
   final List<String> wingStatuses = ['Active', 'Inactive', 'Under Maintenance'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: widget.isAddingWing ? 'Add Wing' : 'Edit Wing'),
-      
+      appBar: CustomAppBar(
+        title: widget.isAddingWing ? 'Add Wing' : 'Edit Wing',
+      ),
+
       body: BlocListener<EditwingBloc, EditwingState>(
         listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
+          if (state.status == Status.loading) {
+            Utils.onLoading(context);
+          }
           if (state.status == Status.success) {
+            Navigator.pop(context); // close loader
+            Utils.showToast(
+              context,
+              message: widget.isAddingWing
+                  ? 'Wing added successfully'
+                  : 'Wing updated successfully',
+            );
+
+            Navigator.pushReplacementNamed(context, RouteName.ManageWingScreen);
+          }
+
+          if (state.status == Status.error) {
+            Navigator.pop(context); // close loader
+            Utils.showToast(context, message: state.errorMessage ?? "");
+          }
+
+          /*if (state.status == Status.success) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(widget.isAddingWing ? 'Wing added successfully' : 'Wing updated successfully'),
@@ -39,8 +67,8 @@ class _EditWingFormState extends State<EditWingForm> {
               ),
             );
             Navigator.pop(context);
-          }
-          
+          }*/
+
           if (state.status == Status.error) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -50,7 +78,7 @@ class _EditWingFormState extends State<EditWingForm> {
             );
           }
         },
-        
+
         child: SafeArea(
           child: Container(
             color: AppColors.scaffoldBg,
@@ -76,48 +104,58 @@ class _EditWingFormState extends State<EditWingForm> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        
+
                         _buildLabel('Select Tower'),
                         const SizedBox(height: 8),
                         BlocBuilder<EditwingBloc, EditwingState>(
                           builder: (context, state) {
                             return CustomDropdown(
-                              value: state.selectedTower.isEmpty ? null : state.selectedTower,
+                              value: state.selectedTower.isEmpty
+                                  ? null
+                                  : state.selectedTower,
                               hintText: 'Select Tower',
                               items: towers,
                               onChanged: (String? value) {
                                 if (value != null) {
-                                  context.read<EditwingBloc>().add(SelectTowerEvent(value));
+                                  context.read<EditwingBloc>().add(
+                                    SelectTowerEvent(value),
+                                  );
                                 }
                               },
                             );
                           },
                         ),
-                        
+
                         const SizedBox(height: 20),
-                        
+
                         _buildLabel('Enter Wing Name'),
                         const SizedBox(height: 8),
                         CustomTextField(
                           hintText: 'Enter Wing Name',
                           onChanged: (value) {
-                            context.read<EditwingBloc>().add(EditWingNameEvent(value));
+                            context.read<EditwingBloc>().add(
+                              EditWingNameEvent(value),
+                            );
                           },
                         ),
-                        
+
                         const SizedBox(height: 20),
-                        
+
                         _buildLabel('Wing Status'),
                         const SizedBox(height: 8),
                         BlocBuilder<EditwingBloc, EditwingState>(
                           builder: (context, state) {
                             return CustomDropdown(
-                              value: state.wingStatus.isEmpty ? null : state.wingStatus,
+                              value: state.wingStatus.isEmpty
+                                  ? null
+                                  : state.wingStatus,
                               hintText: 'Select Status',
                               items: wingStatuses,
                               onChanged: (String? value) {
                                 if (value != null) {
-                                  context.read<EditwingBloc>().add(SelectWingStatusEvent(value));
+                                  context.read<EditwingBloc>().add(
+                                    SelectWingStatusEvent(value),
+                                  );
                                 }
                               },
                             );
@@ -132,7 +170,7 @@ class _EditWingFormState extends State<EditWingForm> {
           ),
         ),
       ),
-      
+
       bottomNavigationBar: BlocBuilder<EditwingBloc, EditwingState>(
         builder: (context, state) {
           return SafeArea(
@@ -173,40 +211,46 @@ class _EditWingFormState extends State<EditWingForm> {
                       onPressed: state.status == Status.loading
                           ? null
                           : () {
-                        if (_formKey.currentState!.validate() &&
-                            state.selectedTower.isNotEmpty &&
-                            state.wingName.isNotEmpty &&
-                            state.wingStatus.isNotEmpty) {
-                          if (widget.isAddingWing) {
-                            context.read<EditwingBloc>().add(const AddWingEvent());
-                          } else {
-                            context.read<EditwingBloc>().add(const UpdateWingEvent());
-                          }
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill all required fields'),
-                              backgroundColor: AppColors.warningOrange,
-                            ),
-                          );
-                        }
-                      },
+                              if (_formKey.currentState!.validate() &&
+                                  state.selectedTower.isNotEmpty &&
+                                  state.wingName.isNotEmpty &&
+                                  state.wingStatus.isNotEmpty) {
+                                if (widget.isAddingWing) {
+                                  context.read<EditwingBloc>().add(
+                                    AddWingEvent(1),
+                                  );
+                                } else {
+                                  context.read<EditwingBloc>().add(
+                                    const UpdateWingEvent(),
+                                  );
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Please fill all required fields',
+                                    ),
+                                    backgroundColor: AppColors.warningOrange,
+                                  ),
+                                );
+                              }
+                            },
                       child: state.status == Status.loading
                           ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: AppColors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: AppColors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
                           : Text(
-                        widget.isAddingWing ? 'Add Wing' : 'Update Wing',
-                        style: const TextStyle(
-                          color: AppColors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                              widget.isAddingWing ? 'Add Wing' : 'Update Wing',
+                              style: const TextStyle(
+                                color: AppColors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                     ),
                   ),
                 ],
@@ -229,11 +273,11 @@ class _EditWingFormState extends State<EditWingForm> {
         ),
         children: isRequired
             ? const [
-          TextSpan(
-            text: " *",
-            style: TextStyle(color: AppColors.errorRed),
-          )
-        ]
+                TextSpan(
+                  text: " *",
+                  style: TextStyle(color: AppColors.errorRed),
+                ),
+              ]
             : [],
       ),
     );
