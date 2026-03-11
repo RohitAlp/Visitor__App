@@ -30,5 +30,11 @@ class EditVendorBloc extends Bloc<EditVendorEvent, EditVendorState> {
     on<VenderPhotoEvent> ((event, emit){
       emit(state.copyWith(vendorPhotoBase64: event.photoBase64));
     });
+    on<UpdateVendorDetailsEvent> ((event, emit){
+
+    });
+    on<AddVendorEvent> ((event, emit){
+
+    });
   }
 }

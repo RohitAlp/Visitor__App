@@ -226,7 +226,7 @@ class _DashboardHomePage extends StatelessWidget {
         crossAxisCount: 3,
         crossAxisSpacing: 15,
         mainAxisSpacing: 15,
-        childAspectRatio: 1, // Square tiles usually look cleaner for 3x3 grids
+        childAspectRatio: 1,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
@@ -238,7 +238,15 @@ class _DashboardHomePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SocietyListScreen(),
+                  builder: (context) => const SocietyListScreen(flag: 2),
+                ),
+              );
+            }
+            if (item['label'] == 'Manage User') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SocietyListScreen(flag: 1),
                 ),
               );
             }

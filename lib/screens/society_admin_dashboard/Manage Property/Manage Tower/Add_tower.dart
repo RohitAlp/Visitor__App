@@ -275,108 +275,108 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
   Widget build(BuildContext context) {
     final filtered = _filteredTowers;
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          surfaceTintColor: Colors.transparent,
-          toolbarHeight: 80,
-          titleSpacing: 0,
-          automaticallyImplyLeading: false,
-          title: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    //
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     Navigator.pop(context);
-                    //   },
-                    //   child: Container(
-                    //     width: 36,
-                    //     height: 36,
-                    //     decoration: BoxDecoration(
-                    //       color: AppColors.cardBg,
-                    //       borderRadius: BorderRadius.circular(12),
-                    //       border: Border.all(
-                    //         color: Colors.grey.withOpacity(0.15),
-                    //         width: 1,
-                    //       ),
-                    //       boxShadow: [
-                    //         BoxShadow(
-                    //           color: Colors.black.withOpacity(0.05),
-                    //           blurRadius: 6,
-                    //           offset: const Offset(0, 2),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //     child: const Icon(
-                    //       Icons.arrow_back_ios_rounded,
-                    //       size: 16,
-                    //     ),
-                    //   ),
-                    // ),
-                    const SizedBox(width: 20),
-
-                    /// TITLE + COUNT
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Manage Towers',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w800),
-                        ),
-                        Text(
-                          "${_filteredTowers.length} Towers",
-                          style: const TextStyle(
-                              fontSize: 12, color: Colors.grey),
-                        ),
-                      ],
-                    ),
-
-                    const Spacer(),
-
-                    /// ADD BUTTON
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.pushNamed(
-                          context,
-                          RouteName.AddTowerForm,
-                        );
-                      },
-                      child: Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              AppColors.primaryLight,
-                              AppColors.primaryColor
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: const Icon(Icons.add, color: Colors.white),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        toolbarHeight: 80,
+        titleSpacing: 0,
+        automaticallyImplyLeading: false,
+        title: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  //
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //   },
+                  //   child: Container(
+                  //     width: 36,
+                  //     height: 36,
+                  //     decoration: BoxDecoration(
+                  //       color: AppColors.cardBg,
+                  //       borderRadius: BorderRadius.circular(12),
+                  //       border: Border.all(
+                  //         color: Colors.grey.withOpacity(0.15),
+                  //         width: 1,
+                  //       ),
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //           color: Colors.black.withOpacity(0.05),
+                  //           blurRadius: 6,
+                  //           offset: const Offset(0, 2),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     child: const Icon(
+                  //       Icons.arrow_back_ios_rounded,
+                  //       size: 16,
+                  //     ),
+                  //   ),
+                  // ),
+                  const SizedBox(width: 20),
+    
+                  /// TITLE + COUNT
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Manage Towers',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w800),
                       ),
+                      Text(
+                        "${_filteredTowers.length} Towers",
+                        style: const TextStyle(
+                            fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+    
+                  const Spacer(),
+    
+                  /// ADD BUTTON
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pushNamed(
+                        context,
+                        RouteName.AddTowerForm,
+                      );
+                    },
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            AppColors.primaryLight,
+                            AppColors.primaryColor
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: const Icon(Icons.add, color: Colors.white),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-
-              const SizedBox(height: 10),
-
-              const Divider(
-                thickness: 1,
-                height: 1,
-                color: Color(0xFFE5E5E5),
-              ),
-            ],
-          ),
+            ),
+    
+            const SizedBox(height: 10),
+    
+            const Divider(
+              thickness: 1,
+              height: 1,
+              color: Color(0xFFE5E5E5),
+            ),
+          ],
         ),
-        body: Column(
+      ),
+      body: SafeArea(
+        child: Column(
           children: [
             // Fixed Header
             Padding(
@@ -384,9 +384,9 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
+            
                   const SizedBox(height: 20),
-
+            
                   // Search Bar
                   Container(
                     decoration: BoxDecoration(
@@ -441,9 +441,9 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                       ),
                     ),
                   ),
-
+            
                   const SizedBox(height: 16),
-
+            
                   // Count
                   Row(
                     children: [
@@ -521,12 +521,12 @@ class _ManageTowersScreenState extends State<ManageTowersScreen>
                         ),
                     ],
                   ),
-
+            
                   const SizedBox(height: 16),
                 ],
               ),
             ),
-
+            
             // Scrollable List
             Expanded(
               child: _isLoading
