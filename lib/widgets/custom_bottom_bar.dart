@@ -29,17 +29,9 @@ class CustomAnimatedNavBar extends StatefulWidget {
   final List<NavItemData> items;
   final int selectedIndex;
   final ValueChanged<int> onTap;
-
-  /// Background color of the entire nav bar (white)
   final Color barColor;
-
-  /// Color of the active sliding pill
   final Color pillColor;
-
-  /// Icon + label color inside the active pill
   final Color activeContentColor;
-
-  /// Icon color for unselected items
   final Color inactiveColor;
 
   const CustomAnimatedNavBar({
@@ -50,7 +42,7 @@ class CustomAnimatedNavBar extends StatefulWidget {
     this.barColor = Colors.white,
     this.pillColor = AppColors.appPrimaryColor,
     this.activeContentColor = Colors.white,
-    this.inactiveColor = const Color(0xFF9E9E9E),
+    this.inactiveColor = const Color(0xFFBBBBBB),
   });
 
   @override
@@ -59,34 +51,68 @@ class CustomAnimatedNavBar extends StatefulWidget {
 
 class _CustomAnimatedNavBarState extends State<CustomAnimatedNavBar>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnim;
+  AnimationController? _controller;
+  Animation<double>? _riseAnim;
+  Animation<double>? _scaleAnim;
+  Animation<double>? _shimmerAnim;
+  Animation<double>? _labelFadeAnim;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _buildAnimations();
+  }
+
+  void _buildAnimations() {
+    final controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 350),
+      duration: const Duration(milliseconds: 460),
     );
-    _scaleAnim = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 0.88, end: 1.05), weight: 55),
-      TweenSequenceItem(tween: Tween(begin: 1.05, end: 1.0), weight: 45),
-    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-    _controller.forward();
+
+    final rise = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 14.0, end: -5.0), weight: 60),
+      TweenSequenceItem(tween: Tween(begin: -5.0, end: 0.0), weight: 40),
+    ]).animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
+
+    final scale = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0.82, end: 1.06), weight: 60),
+      TweenSequenceItem(tween: Tween(begin: 1.06, end: 1.0), weight: 40),
+    ]).animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
+
+    final shimmer = Tween<double>(begin: -1.0, end: 2.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: const Interval(0.0, 0.7, curve: Curves.easeOut),
+      ),
+    );
+
+    final labelFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: const Interval(0.4, 1.0, curve: Curves.easeOut),
+      ),
+    );
+
+    _controller = controller;
+    _riseAnim = rise;
+    _scaleAnim = scale;
+    _shimmerAnim = shimmer;
+    _labelFadeAnim = labelFade;
+
+    controller.forward();
   }
 
   @override
   void didUpdateWidget(CustomAnimatedNavBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selectedIndex != widget.selectedIndex) {
-      _controller.forward(from: 0);
+      _controller?.forward(from: 0);
     }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -122,128 +148,261 @@ class _CustomAnimatedNavBarState extends State<CustomAnimatedNavBar>
             Icon(iconData ?? Icons.help_outline, color: color, size: size),
       );
     }
-
     return Icon(iconData, color: color, size: size);
   }
 
   @override
   Widget build(BuildContext context) {
-    const double barHeight = 64.0;
-    const double pillHeight = 40.0;
-    const double pillVerticalPadding = (barHeight - pillHeight) / 2;
-     const double pillHorizontalInset = 5.0;
+    final riseAnim = _riseAnim;
+    final scaleAnim = _scaleAnim;
+    final shimmerAnim = _shimmerAnim;
+    final labelFadeAnim = _labelFadeAnim;
 
-    return Container(
-      height: barHeight,
-      decoration: BoxDecoration(
-        color: widget.barColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 15,
-            offset: const Offset(0, -2),
+    if (riseAnim == null ||
+        scaleAnim == null ||
+        shimmerAnim == null ||
+        labelFadeAnim == null) {
+      return const SizedBox(height: 68);
+    }
+
+    // ── Layout: 68px bar + 20px label zone above = 88px total ──
+    // Stack lets the island float upward (clip: none) while label
+    // sits inside the bar's bottom half — no overflow possible.
+    return SizedBox(
+      height: 68,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          // ── Bar surface ──────────────────────────────────────────────
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                color: widget.barColor,
+                borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(22)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.06),
+                    blurRadius: 28,
+                    offset: const Offset(0, -6),
+                  ),
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 5,
+                    offset: const Offset(0, -1),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ],
-      ),
-      child: LayoutBuilder(builder: (context, constraints) {
-        final double totalWidth = constraints.maxWidth;
-        final int count = widget.items.length;
-        final double itemWidth = totalWidth / count;
-         final double pillWidth = itemWidth - pillHorizontalInset * 2;
-        final double pillLeft =
-            widget.selectedIndex * itemWidth + pillHorizontalInset;
 
-        return Stack(
-          clipBehavior: Clip.none,
-          children: [
-            // ── Inactive tap targets ──
-            Row(
-              children: List.generate(count, (index) {
+          // ── Tab slots ────────────────────────────────────────────────
+          Positioned.fill(
+            child: Row(
+              children: List.generate(widget.items.length, (index) {
                 final bool isActive = index == widget.selectedIndex;
                 return Expanded(
                   child: GestureDetector(
                     onTap: () => widget.onTap(index),
                     behavior: HitTestBehavior.opaque,
-                    child: SizedBox(
-                      height: barHeight,
-                      child: Center(
-                        child: AnimatedOpacity(
-                          duration: const Duration(milliseconds: 180),
-                          // Fade out the bare icon when this slot is active
-                          opacity: isActive ? 0.0 : 1.0,
-                          child: _buildIconWidget(
-                            widget.items[index],
-                            isActive: false,
-                            color: widget.inactiveColor,
-                            size: 22,
+                    child: isActive
+                        ? _FloatingIsland(
+                      item: widget.items[index],
+                      pillColor: widget.pillColor,
+                      activeContentColor: widget.activeContentColor,
+                      riseAnim: riseAnim,
+                      scaleAnim: scaleAnim,
+                      shimmerAnim: shimmerAnim,
+                      labelFadeAnim: labelFadeAnim,
+                      iconBuilder: (item, color, size) =>
+                          _buildIconWidget(
+                            item,
+                            isActive: true,
+                            color: color,
+                            size: size,
                           ),
-                        ),
-                      ),
+                    )
+                        : _InactiveItem(
+                      item: widget.items[index],
+                      color: widget.inactiveColor,
+                      iconBuilder: (item, color, size) =>
+                          _buildIconWidget(
+                            item,
+                            isActive: false,
+                            color: color,
+                            size: size,
+                          ),
                     ),
                   ),
                 );
               }),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
-            // ── Sliding oval pill ──
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOutCubic,
-              left: pillLeft,
-              top: pillVerticalPadding,
-              // Clamp width explicitly so it never exceeds its slot
-              child: ScaleTransition(
-                scale: _scaleAnim,
-                child: Container(
-                  // ClipRect prevents any child overflow bleeding outside
-                  clipBehavior: Clip.hardEdge,
-                  width: pillWidth,
-                  height: pillHeight,
-                  decoration: BoxDecoration(
-                    color: widget.pillColor,
-                    // Perfect oval/stadium shape
-                    borderRadius: BorderRadius.circular(pillHeight / 2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: widget.pillColor.withOpacity(0.28),
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildIconWidget(
-                        widget.items[widget.selectedIndex],
-                        isActive: true,
-                        color: widget.activeContentColor,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 5),
-                      // Flexible + ellipsis = no overflow ever
-                      Flexible(
-                        child: Text(
-                          widget.items[widget.selectedIndex].label,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: TextStyle(
-                            color: widget.activeContentColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.1,
+// ── Inactive: small icon + label, fits entirely within 68px bar ──────────────
+class _InactiveItem extends StatelessWidget {
+  final NavItemData item;
+  final Color color;
+  final Widget Function(NavItemData, Color, double) iconBuilder;
+
+  const _InactiveItem({
+    required this.item,
+    required this.color,
+    required this.iconBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // 68px bar: icon(20) + gap(3) + label(11) + vertical margins = fits fine
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        iconBuilder(item, color, 20),
+        const SizedBox(height: 3),
+        Text(
+          item.label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w500,
+            color: color,
+            letterSpacing: 0.2,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ── Active: island floats UP out of bar, label sits just below island ─────────
+class _FloatingIsland extends StatelessWidget {
+  final NavItemData item;
+  final Color pillColor;
+  final Color activeContentColor;
+  final Animation<double> riseAnim;
+  final Animation<double> scaleAnim;
+  final Animation<double> shimmerAnim;
+  final Animation<double> labelFadeAnim;
+  final Widget Function(NavItemData, Color, double) iconBuilder;
+
+  const _FloatingIsland({
+    required this.item,
+    required this.pillColor,
+    required this.activeContentColor,
+    required this.riseAnim,
+    required this.scaleAnim,
+    required this.shimmerAnim,
+    required this.labelFadeAnim,
+    required this.iconBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context){
+    // Use a Stack so the island can float above bar bounds (Clip.none on parent)
+    // and the label is Positioned at the bottom of the 68px slot — no overflow.
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        // ── Label pinned to bottom of the bar slot ───────────────────
+        Positioned(
+          bottom: 15,
+          left: 0,
+          right: 0,
+          child: FadeTransition(
+            opacity: labelFadeAnim,
+            child: Text(
+              item.label,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+                color: pillColor,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ),
+        ),
+
+        // ── Floating tile rises above the bar ────────────────────────
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: AnimatedBuilder(
+            animation: riseAnim,
+            builder: (context, child) {
+              return Transform.translate(
+                offset: Offset(0, riseAnim.value - 16),
+                child: Transform.scale(
+                  scale: scaleAnim.value,
+                  child: child,
+                ),
+              );
+            },
+            child: Center(
+              child: Container(
+                width: 52,
+                height: 52,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: pillColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: pillColor.withOpacity(0.25),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                    BoxShadow(
+                      color: pillColor.withOpacity(0.12),
+                      blurRadius: 4,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: Stack(
+                  children: [
+                    Center(
+                      child: iconBuilder(item, activeContentColor, 22),
+                    ),
+                    // Shimmer sweep
+                    AnimatedBuilder(
+                      animation: shimmerAnim,
+                      builder: (context, _) {
+                        return Positioned(
+                          top: -10,
+                          bottom: -10,
+                          left: shimmerAnim.value * 80 - 30,
+                          width: 28,
+                          child: Transform.rotate(
+                            angle: -0.32,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.30),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        );
-      }),
+          ),
+        ),
+      ],
     );
   }
 }
