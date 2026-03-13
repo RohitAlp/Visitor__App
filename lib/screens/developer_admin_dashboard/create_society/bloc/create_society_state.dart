@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-class SocietyState extends Equatable {
+import '../../../../utils/enum.dart';
 
+class SocietyState extends Equatable {
   final String societyName;
   final String registrationNumber;
   final String establishedYear;
@@ -16,7 +17,9 @@ class SocietyState extends Equatable {
   final bool isSubmitting;
   final bool isSuccess;
   final bool isFailure;
+  final String? errorMessage;
 
+  final Status submissionStatus;
   const SocietyState({
     this.societyName = '',
     this.registrationNumber = '',
@@ -30,6 +33,8 @@ class SocietyState extends Equatable {
     this.isSubmitting = false,
     this.isSuccess = false,
     this.isFailure = false,
+    this.errorMessage,
+    this.submissionStatus = Status.initial,
   });
 
   SocietyState copyWith({
@@ -45,6 +50,8 @@ class SocietyState extends Equatable {
     bool? isSubmitting,
     bool? isSuccess,
     bool? isFailure,
+    String? errorMessage,
+    Status? submissionStatus,
   }) {
     return SocietyState(
       societyName: societyName ?? this.societyName,
@@ -59,6 +66,8 @@ class SocietyState extends Equatable {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
+      errorMessage: errorMessage,
+      submissionStatus: submissionStatus ?? this.submissionStatus,
     );
   }
 
@@ -76,5 +85,7 @@ class SocietyState extends Equatable {
     isSubmitting,
     isSuccess,
     isFailure,
+    errorMessage,
+    submissionStatus,
   ];
 }

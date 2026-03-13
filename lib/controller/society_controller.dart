@@ -5,7 +5,6 @@ import 'package:visitorapp/networking/dio_client.dart';
 import 'package:visitorapp/model/getSocietyResponse.dart';
 
 class SocietyController extends ApiService {
-
   Future<Response?> getSociety(Map<String, dynamic>? query) async {
     return await requestGET(
       path: ApiEndpoints.getSociety,
@@ -22,4 +21,9 @@ class SocietyController extends ApiService {
     );
   }
 
+  Future<Response?> addSociety(jsonData) async => await requestPOST(
+    path: ApiEndpoints.addSociety,
+    data: jsonData,
+    token: '',
+  );
 }

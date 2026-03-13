@@ -12,6 +12,7 @@ class ApiEndpoints {
   static const String addWing = '/AddWing';
   static const String addFloor = '/AddFloor';
   static const String addFlat = '/AddFlat';
+  static const String addSociety='/AddSociety';
 
 
   // static  String login = 'http://103.118.17.144:8087/api';

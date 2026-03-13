@@ -35,6 +35,7 @@ class EstablishedYearChanged extends SocietyEvent {
 }
 
 class SaveSocietyPressed extends SocietyEvent {}
+
 class StreetAddressChanged extends SocietyEvent {
   final String streetAddress;
   StreetAddressChanged(this.streetAddress);
