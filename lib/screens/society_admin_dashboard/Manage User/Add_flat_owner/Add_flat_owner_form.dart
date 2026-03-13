@@ -9,12 +9,14 @@ class AddFlatOwnerForm extends StatefulWidget {
   final String? initialName;
   final String? initialMobile;
   final String? initialFlatNumber;
-
+  final bool isAddingOwner;
+  
   const AddFlatOwnerForm({
     super.key,
     this.initialName,
     this.initialMobile,
     this.initialFlatNumber,
+    this.isAddingOwner = true,
   });
 
   @override
@@ -64,9 +66,13 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
 
   @override
   Widget build(BuildContext context) {
+    // Check if this is adding a new owner or editing existing one
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final isAddingOwner = args?['isAddingOwner'] ?? true;
+    
     return SafeArea(
       child: Scaffold(
-        appBar:   CustomAppBar(title: 'Add Flat Owner'),
+        appBar:   CustomAppBar(title: isAddingOwner ? 'Add Flat Owner' : 'Edit Flat Owner'),
         body: SafeArea(
           child: Container(
             color: AppColors.scaffoldBg,
@@ -84,9 +90,9 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Personal Details',
-                          style: TextStyle(
+                        Text(
+                          isAddingOwner ? 'Personal Details' : 'Edit Personal Details',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -247,17 +253,17 @@ class _AddFlatOwnerFormState extends State<AddFlatOwnerForm> {
                 final isValid = _formKey.currentState!.validate() && _validateVehicles();
                 if (isValid) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Owner saved'),
+                    SnackBar(
+                      content: Text(isAddingOwner ? 'Flat Owner added successfully' : 'Flat Owner updated successfully'),
                       backgroundColor: AppColors.successGreen,
                     ),
                   );
                   Navigator.pop(context);
                 }
               },
-              child: const Text(
-                'Save Owner',
-                style: TextStyle(
+              child: Text(
+                isAddingOwner ? 'Add Owner' : 'Update Owner',
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
                 ),

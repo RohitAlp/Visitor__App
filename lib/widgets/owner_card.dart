@@ -1015,17 +1015,28 @@ class _OwnerCardState extends State<OwnerCard>
                                                 style: TextStyle(fontSize: 14),
                                               )
                                             : widget.owner.isFlat
-                                            ? Text(
-                                                (widget.owner.floor != null &&
+                                            ? ((widget.owner.floor != null &&
                                                         widget.owner.name
                                                             .toLowerCase()
                                                             .contains('floor'))
-                                                    ? '🏗️'
-                                                    : '🏠',
-
-                                                style: TextStyle(fontSize: 14),
+                                                    ? Image.asset(
+                                                'assets/image/house.png',
+                                                width: 14,
+                                                height: 14,
+                                                fit: BoxFit.contain,
                                               )
-                                            : Text("🏠"),
+                                                    : Image.asset(
+                                                'assets/image/house.png',
+                                                width: 14,
+                                                height: 14,
+                                                fit: BoxFit.contain,
+                                              ))
+                                            : Image.asset(
+                                                'assets/image/house.png',
+                                                width: 14,
+                                                height: 14,
+                                                fit: BoxFit.contain,
+                                              ),
                                       // const SizedBox(width: 4),
                                       if (widget.owner.isFlat)
                                         Row(
@@ -1172,9 +1183,11 @@ class _OwnerCardState extends State<OwnerCard>
                                       children: [
                                         if (!widget.owner.flat.contains('🏠') &&
                                             !widget.owner.flat.contains('🏗️'))
-                                          Text(
-                                            '🏠',
-                                            style: TextStyle(fontSize: 14),
+                                          Image.asset(
+                                            'assets/image/house.png',
+                                            width: 14,
+                                            height: 14,
+                                            fit: BoxFit.contain,
                                           ),
                                         if (!widget.owner.flat.contains('🏠') &&
                                             !widget.owner.flat.contains('🏗️'))

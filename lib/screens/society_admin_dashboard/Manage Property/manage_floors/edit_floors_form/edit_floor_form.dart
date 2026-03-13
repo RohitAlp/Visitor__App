@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visitorapp/constants/app_colors.dart';
+import 'package:visitorapp/controller/floor_controller.dart';
+import 'package:visitorapp/model/AddFloorResponse.dart';
 import 'package:visitorapp/widgets/custom_app_bar.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
 import 'package:visitorapp/widgets/custom_dropdown.dart';
 
+import '../../../../../config/Routes/RouteName.dart';
+import '../../../../../constants/constant.dart';
+import '../../../../../constants/utils.dart';
 import '../../../../../utils/enum.dart';
 import 'bloc/edit_floors_bloc.dart';
 
 class EditFloorForm extends StatefulWidget {
   final bool isAddingFloor;
-  
+
   const EditFloorForm({super.key, this.isAddingFloor = false});
 
   @override
@@ -27,19 +32,38 @@ class _EditFloorFormState extends State<EditFloorForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: widget.isAddingFloor ? 'Add Floor' : 'Edit Floor'),
+      appBar: CustomAppBar(
+        title: widget.isAddingFloor ? 'Add Floor' : 'Edit Floor',
+      ),
 
       body: BlocListener<EditFloorsBloc, EditFloorsState>(
         listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           if (state.status == Status.success) {
-            ScaffoldMessenger.of(context).showSnackBar(
+            if (state.status == Status.loading) {
+              Utils.onLoading(context);
+            }
+
+            Navigator.pop(context); // close loader
+            Utils.showToast(
+              context,
+              message: widget.isAddingFloor
+                  ? 'Floor added successfully'
+                  : 'Floor updated successfully',
+            );
+
+            Navigator.pushReplacementNamed(
+              context,
+              RouteName.ManageFloorsScreen,
+            );
+
+            /*ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(widget.isAddingFloor ? 'Floor added successfully' : 'Floor updated successfully'),
                 backgroundColor: AppColors.successGreen,
               ),
             );
-            Navigator.pop(context);
+            Navigator.pop(context);*/
           }
 
           if (state.status == Status.error) {
@@ -83,12 +107,16 @@ class _EditFloorFormState extends State<EditFloorForm> {
                         BlocBuilder<EditFloorsBloc, EditFloorsState>(
                           builder: (context, state) {
                             return CustomDropdown(
-                              value: state.selectedTower.isEmpty ? null : state.selectedTower,
+                              value: state.selectedTower.isEmpty
+                                  ? null
+                                  : state.selectedTower,
                               hintText: 'Select Tower',
                               items: towers,
                               onChanged: (String? value) {
                                 if (value != null) {
-                                  context.read<EditFloorsBloc>().add(SelectFloorsTowerEvent(value));
+                                  context.read<EditFloorsBloc>().add(
+                                    SelectFloorsTowerEvent(value),
+                                  );
                                 }
                               },
                             );
@@ -102,12 +130,16 @@ class _EditFloorFormState extends State<EditFloorForm> {
                         BlocBuilder<EditFloorsBloc, EditFloorsState>(
                           builder: (context, state) {
                             return CustomDropdown(
-                              value: state.wingName.isEmpty ? null : state.wingName,
+                              value: state.wingName.isEmpty
+                                  ? null
+                                  : state.wingName,
                               hintText: 'Select Wing',
                               items: wings,
                               onChanged: (String? value) {
                                 if (value != null) {
-                                  context.read<EditFloorsBloc>().add(EditWingNameEvent(value));
+                                  context.read<EditFloorsBloc>().add(
+                                    EditWingNameEvent(value),
+                                  );
                                 }
                               },
                             );
@@ -121,7 +153,9 @@ class _EditFloorFormState extends State<EditFloorForm> {
                         CustomTextField(
                           hintText: 'Ground Floor',
                           onChanged: (value) {
-                            context.read<EditFloorsBloc>().add(EditFloorNameEvent(value));
+                            context.read<EditFloorsBloc>().add(
+                              EditFloorNameEvent(value),
+                            );
                           },
                         ),
 
@@ -133,7 +167,9 @@ class _EditFloorFormState extends State<EditFloorForm> {
                           hintText: '0',
                           keyboardType: TextInputType.number,
                           onChanged: (value) {
-                            context.read<EditFloorsBloc>().add(EditFloorNumberEvent(int.tryParse(value) ?? 0));
+                            context.read<EditFloorsBloc>().add(
+                              EditFloorNumberEvent(int.tryParse(value) ?? 0),
+                            );
                           },
                         ),
 
@@ -145,12 +181,13 @@ class _EditFloorFormState extends State<EditFloorForm> {
                           hintText: '4',
                           keyboardType: TextInputType.number,
                           onChanged: (value) {
-                            context.read<EditFloorsBloc>().add(EditTotalFlatsEvent(int.tryParse(value) ?? 0));
+                            context.read<EditFloorsBloc>().add(
+                              EditTotalFlatsEvent(int.tryParse(value) ?? 0),
+                            );
                           },
                         ),
 
                         const SizedBox(height: 20),
-
                       ],
                     ),
                   ),
@@ -201,39 +238,47 @@ class _EditFloorFormState extends State<EditFloorForm> {
                       onPressed: state.status == Status.loading
                           ? null
                           : () {
-                        if (_formKey.currentState!.validate() &&
-                            state.selectedTower.isNotEmpty &&
-                            state.wingName.isNotEmpty ) {
-                          if (widget.isAddingFloor) {
-                            context.read<EditFloorsBloc>().add(AddFloorEvent());
-                          } else {
-                            context.read<EditFloorsBloc>().add(UpdateWingEvent());
-                          }
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill all required fields'),
-                              backgroundColor: AppColors.warningOrange,
-                            ),
-                          );
-                        }
-                      },
+                              if (_formKey.currentState!.validate() &&
+                                  state.selectedTower.isNotEmpty &&
+                                  state.wingName.isNotEmpty) {
+                                if (widget.isAddingFloor) {
+                                  context.read<EditFloorsBloc>().add(
+                                    AddFloorEvent(),
+                                  );
+                                } else {
+                                  context.read<EditFloorsBloc>().add(
+                                    UpdateWingEvent(),
+                                  );
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Please fill all required fields',
+                                    ),
+                                    backgroundColor: AppColors.warningOrange,
+                                  ),
+                                );
+                              }
+                            },
                       child: state.status == Status.loading
                           ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: AppColors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: AppColors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
                           : Text(
-                        widget.isAddingFloor ? 'Add Floor' : 'Update Floor',
-                        style: const TextStyle(
-                          color: AppColors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                              widget.isAddingFloor
+                                  ? 'Add Floor'
+                                  : 'Update Floor',
+                              style: const TextStyle(
+                                color: AppColors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                     ),
                   ),
                 ],
@@ -256,11 +301,11 @@ class _EditFloorFormState extends State<EditFloorForm> {
         ),
         children: isRequired
             ? const [
-          TextSpan(
-            text: " *",
-            style: TextStyle(color: AppColors.errorRed),
-          )
-        ]
+                TextSpan(
+                  text: " *",
+                  style: TextStyle(color: AppColors.errorRed),
+                ),
+              ]
             : [],
       ),
     );

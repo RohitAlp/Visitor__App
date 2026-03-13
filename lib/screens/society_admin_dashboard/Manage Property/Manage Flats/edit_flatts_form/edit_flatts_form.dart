@@ -6,6 +6,8 @@ import 'package:visitorapp/widgets/custom_app_bar.dart';
 import 'package:visitorapp/widgets/text_form_field.dart';
 import 'package:visitorapp/widgets/custom_dropdown.dart';
 
+import '../../../../../config/Routes/RouteName.dart';
+import '../../../../../constants/utils.dart';
 import 'flat_bloc/flat_bloc.dart';
 
 class EditFlatForm extends StatefulWidget {
@@ -30,13 +32,28 @@ class _EditFlatFormState extends State<EditFlatForm> {
           listenWhen: (previous, current) => previous.submissionStatus != current.submissionStatus,
           listener: (context, state) {
             if (state.submissionStatus == Status.success) {
-              ScaffoldMessenger.of(context).showSnackBar(
+
+              if (state.submissionStatus == Status.loading) {
+                Utils.onLoading(context);
+              }
+              /*ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(widget.isAddingFlat ? 'Flat added successfully' : 'Flat updated successfully'),
                   backgroundColor: AppColors.successGreen,
                 ),
               );
-              Navigator.pop(context);
+              Navigator.pop(context);*/
+              Navigator.pop(context); // close loader
+              Utils.showToast(
+                context,
+                message: widget.isAddingFlat ? 'Flat added successfully' : 'Flat updated successfully'
+              );
+
+              Navigator.pushReplacementNamed(
+                context,
+                RouteName.ManageFlatsScreen,
+              );
+
             }
 
             if (state.submissionStatus == Status.error) {
@@ -237,7 +254,7 @@ class _EditFlatFormState extends State<EditFlatForm> {
                             : () {
                           if (_formKey.currentState!.validate() && state.isFormValid) {
                             if (widget.isAddingFlat) {
-                              // context.read<FlatBloc>().add(AddFlatEvent());
+                              context.read<FlatBloc>().add(AddFlatEvent());
                             } else {
                               context.read<FlatBloc>().add(UpdateFlatEvent());
                             }

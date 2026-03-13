@@ -232,12 +232,15 @@ class _VendorsScreensState extends State<VendorsScreens>
                   /// ADD BUTTON
                   GestureDetector(
                     onTap: (){
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => AddNoticeScreen(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider(
+                            create: (_) => EditVendorBloc(),
+                            child: const EditVendorsForm(isAddingVendor: true),
+                          ),
+                        ),
+                      );
                     },
                     child: Container(
                       width: 36,
@@ -475,7 +478,7 @@ class _VendorsScreensState extends State<VendorsScreens>
                         MaterialPageRoute(
                           builder: (_) => BlocProvider(
                             create: (_) => EditVendorBloc(),
-                            child: const EditVendorsForm(),
+                            child: const EditVendorsForm(isAddingVendor: false),
                           ),
                         ),
                       );

@@ -13,6 +13,7 @@ class FlatState extends Equatable {
   final bool isLoadingFloors;
   final bool isFormValid;
   final String? errorMessage;
+
   final Status submissionStatus;
 
   const FlatState({

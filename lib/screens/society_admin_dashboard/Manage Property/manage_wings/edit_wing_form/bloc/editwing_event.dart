@@ -39,7 +39,12 @@ class UpdateWingEvent extends EditwingEvent {
 }
 
 class AddWingEvent extends EditwingEvent {
-  const AddWingEvent();
+  final int buildingId;
+
+  const AddWingEvent(this.buildingId);
+
+  @override
+  List<Object> get props => [buildingId];
 }
 
 class ResetWingFormEvent extends EditwingEvent {

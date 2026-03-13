@@ -1,16 +1,39 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'create_society_event.dart';
+import 'create_society_state.dart';
 
-import '../../../../utils/enum.dart';
+class SocietyBloc extends Bloc<SocietyEvent, SocietyState> {
 
-part 'create_society_event.dart';
-part 'create_society_state.dart';
+  SocietyBloc() : super(const SocietyState()) {
 
-class CreateSocietyBloc extends Bloc<CreateSocietyEvent, CreateSocietyState> {
-  CreateSocietyBloc() : super(CreateSocietyState()) {
-    on<CreateSocietyEvent>((event, emit) {
-     emit(state.copyWith());
+    on<SocietyNameChanged>((event, emit) {
+      emit(state.copyWith(
+        societyName: event.societyName,
+      ));
+    });
+
+    on<RegistrationNumberChanged>((event, emit) {
+      emit(state.copyWith(
+        registrationNumber: event.registrationNumber,
+      ));
+    });
+
+    on<EstablishedYearChanged>((event, emit) {
+      emit(state.copyWith(
+        establishedYear: event.year,
+      ));
+    });
+
+    on<SaveSocietyPressed>((event, emit) async {
+
+      emit(state.copyWith(isSubmitting: true));
+
+      await Future.delayed(const Duration(seconds: 2));
+
+      emit(state.copyWith(
+        isSubmitting: false,
+        isSuccess: true,
+      ));
     });
   }
 }

@@ -9,6 +9,9 @@ class ApiEndpoints {
   static const String getWings = '/GetBuildingList';
   static const String deleteSociety = '/DeleteSociety';
   static const String deleteTower = '/DeleteBuilding';
+  static const String addWing = '/AddWing';
+  static const String addFloor = '/AddFloor';
+  static const String addFlat = '/AddFlat';
 
 
   // static  String login = 'http://103.118.17.144:8087/api';

@@ -107,7 +107,7 @@ class _OtpScreenState extends State<OtpScreen> {
             } else if (verifyOtpResponse.roleId == 4) {
               targetRoute = RouteName.SecurityDashboardScreen;
             } else {
-              targetRoute = RouteName.loginScreen; 
+              targetRoute = RouteName.loginScreen;
             }
 
             Navigator.pushNamedAndRemoveUntil(
@@ -209,10 +209,7 @@ class _OtpScreenState extends State<OtpScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(
-              CupertinoIcons.back,
-              color: Colors.black,
-            ),
+            icon: const Icon(CupertinoIcons.back, color: Colors.black),
             onPressed: () {
               Navigator.pop(context);
             },
