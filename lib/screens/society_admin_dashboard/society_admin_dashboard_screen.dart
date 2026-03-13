@@ -6,6 +6,7 @@ import '../../constants/app_colors.dart';
 import '../../model/VerifyOtpResponse.dart';
 import '../../secure storage/user_info.dart';
 import '../../widgets/custom_bottom_bar.dart';
+import '../Notice/notice_details_screen.dart';
 import '../Notice/notice_screen.dart';
 import '../payment/payment.dart';
 import '../profile/bloc/profile_bloc.dart';
@@ -625,12 +626,22 @@ class _DashboardHomePageState extends State<_DashboardHomePage> {
                                     ),
                                   ],
                                 ),
-                                const Text(
-                                  'Read more →',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xFFBF5B1E),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => NoticeDetailsScreen(notice: notice),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Read more',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFFBF5B1E),
+                                    ),
                                   ),
                                 ),
                               ],
